@@ -20,14 +20,80 @@ const {
 
 const pageTitle = title === siteConfig.title ? title : `${title} - ${siteConfig.title}`;
 const canonical = absoluteUrl(canonicalPath);
+const configuredTheme = siteConfig.theme.defaultMode;
+const initialTheme = configuredTheme === "system" ? undefined : configuredTheme;
 ---
 
 <!doctype html>
-<html lang={locale}>
+<html lang={locale} data-theme={initialTheme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content="InkIsle" />
+    <script
+      is:inline
+      define:vars={{
+        allowUserToggle: siteConfig.theme.allowUserToggle,
+        defaultTheme: siteConfig.theme.defaultMode,
+        storageKey: siteConfig.theme.storageKey
+      }}
+    >
+      (() => {
+        const root = document.documentElement;
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        const isTheme = (value) => value === "light" || value === "dark" || value === "system";
+        const readStoredTheme = () => {
+          if (!allowUserToggle) return undefined;
+          try {
+            const value = window.localStorage.getItem(storageKey);
+            return isTheme(value) ? value : undefined;
+          } catch {
+            return undefined;
+          }
+        };
+        const storeTheme = (mode) => {
+          if (!allowUserToggle) return;
+          try {
+            window.localStorage.setItem(storageKey, mode);
+          } catch {}
+        };
+        const resolveTheme = (mode) => {
+          if (mode === "light" || mode === "dark") return mode;
+          return media.matches ? "dark" : "light";
+        };
+        const applyTheme = (mode) => {
+          const resolvedTheme = resolveTheme(isTheme(mode) ? mode : defaultTheme);
+          root.dataset.theme = resolvedTheme;
+          root.dataset.themeMode = mode;
+          root.style.colorScheme = resolvedTheme;
+          window.dispatchEvent(new CustomEvent("inkisle-theme-change", { detail: { theme: resolvedTheme, mode } }));
+        };
+
+        applyTheme(readStoredTheme() || defaultTheme);
+
+        window.__inkisleTheme = {
+          allowUserToggle,
+          defaultMode: defaultTheme,
+          get theme() {
+            return root.dataset.theme || resolveTheme(defaultTheme);
+          },
+          set(mode) {
+            if (!isTheme(mode)) return;
+            storeTheme(mode);
+            applyTheme(mode);
+          },
+          toggle() {
+            this.set(this.theme === "dark" ? "light" : "dark");
+          }
+        };
+
+        media.addEventListener("change", () => {
+          if (!readStoredTheme() && defaultTheme === "system") {
+            applyTheme("system");
+          }
+        });
+      })();
+    </script>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" href={siteConfig.brand.favicon} />

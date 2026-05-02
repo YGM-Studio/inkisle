@@ -1,4 +1,5 @@
 ---
+import ThemeToggle from "./ThemeToggle.astro";
 import { getLocaleBase, getLocaleLabel, siteConfig } from "../config";
 
 type Props = {
@@ -27,13 +28,16 @@ const brandSubtitle = siteConfig.brand.subtitle || siteConfig.author.name;
     {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
   </nav>
 
-  <nav class="locale-nav" aria-label="Languages">
-    {
-      siteConfig.locales.map((item) => (
-        <a class:list={[item.code === locale && "is-active"]} href={`${getLocaleBase(item.code)}/`}>
-          {getLocaleLabel(item.code)}
-        </a>
-      ))
-    }
-  </nav>
+  <div class="header-actions">
+    <nav class="locale-nav" aria-label="Languages">
+      {
+        siteConfig.locales.map((item) => (
+          <a class:list={[item.code === locale && "is-active"]} href={`${getLocaleBase(item.code)}/`}>
+            {getLocaleLabel(item.code)}
+          </a>
+        ))
+      }
+    </nav>
+    <ThemeToggle locale={locale} />
+  </div>
 </header>

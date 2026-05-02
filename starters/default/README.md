@@ -23,3 +23,7 @@ Site identity is configured in `src/config.ts`. Update `siteConfig.title`,
 `siteConfig.description`, and `siteConfig.brand` to change the header label,
 homepage hero, and favicon. The default favicon lives at `public/favicon.svg`
 and can be replaced or pointed to another asset path.
+
+Color mode is configured with `siteConfig.theme`. Set `defaultMode` to
+`"system"`, `"light"`, or `"dark"`, and set `allowUserToggle` to `false` when
+the site should render a fixed theme without the header toggle.

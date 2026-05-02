@@ -3,6 +3,8 @@ export type LocaleConfig = {
   label: string;
 };
 
+export type ThemeMode = "system" | "light" | "dark";
+
 export type InkIsleConfig = {
   title: string;
   description: string;
@@ -26,6 +28,11 @@ export type InkIsleConfig = {
   };
   pagination: {
     postsPerPage: number;
+  };
+  theme: {
+    defaultMode: ThemeMode;
+    allowUserToggle: boolean;
+    storageKey: string;
   };
 };
 
@@ -54,6 +61,11 @@ export const siteConfig: InkIsleConfig = {
   },
   pagination: {
     postsPerPage: 10
+  },
+  theme: {
+    defaultMode: "system",
+    allowUserToggle: true,
+    storageKey: "inkisle-theme"
   }
 };
 

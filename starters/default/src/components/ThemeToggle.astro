@@ -1,0 +1,54 @@
+---
+import { siteConfig } from "../config";
+
+type Props = {
+  locale: string;
+};
+
+const { locale } = Astro.props;
+const isZh = locale === "zh";
+const labelLight = isZh ? "切换到深色模式" : "Switch to dark mode";
+const labelDark = isZh ? "切换到浅色模式" : "Switch to light mode";
+---
+
+{
+  siteConfig.theme.allowUserToggle && (
+    <button
+      class="theme-toggle"
+      type="button"
+      data-theme-toggle
+      data-label-light={labelLight}
+      data-label-dark={labelDark}
+      aria-label={labelLight}
+      title={labelLight}
+      aria-pressed="false"
+    >
+      <span class="theme-toggle-sun" aria-hidden="true"></span>
+      <span class="theme-toggle-moon" aria-hidden="true"></span>
+    </button>
+  )
+}
+
+<script is:inline>
+  (() => {
+    const button = document.querySelector("[data-theme-toggle]");
+    const themeController = window.__inkisleTheme;
+    if (!button || !themeController) return;
+
+    const syncButton = () => {
+      const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+      const label = currentTheme === "dark" ? button.dataset.labelDark : button.dataset.labelLight;
+      button.dataset.theme = currentTheme;
+      button.setAttribute("aria-label", label || "");
+      button.setAttribute("title", label || "");
+      button.setAttribute("aria-pressed", currentTheme === "dark" ? "true" : "false");
+    };
+
+    button.addEventListener("click", () => {
+      themeController.toggle();
+      syncButton();
+    });
+    window.addEventListener("inkisle-theme-change", syncButton);
+    syncButton();
+  })();
+</script>
