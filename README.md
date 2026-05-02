@@ -6,11 +6,27 @@ It is designed as a static-first blog and content publishing product layer on to
 
 ## Status
 
-InkIsle is at the product planning stage. The first milestone is to replace the existing Hexo personal blog with a minimal Astro-based implementation.
+InkIsle now has a minimal Astro-based prototype. It reads Markdown from the root `content/` directory, pre-renders localized static pages, and generates RSS, sitemap, static search index, JSON Feed, full-site posts JSON, and `llms.txt`.
+
+The first validation milestone is still to replace the existing Hexo personal blog with this implementation.
+
+## Quick Start
+
+```bash
+npm install
+npm run dev
+```
+
+Useful CLI commands:
+
+```bash
+npm exec inkisle -- new post "Post title"
+npm exec inkisle -- new page "About"
+npm exec inkisle -- build
+```
 
 ## Documents
 
 - [Documentation Index](docs/README.md)
 - [Product Brief](docs/product-brief.md)
 - [Technical Plan](docs/technical-plan.md)
-
