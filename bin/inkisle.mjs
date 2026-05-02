@@ -3,11 +3,12 @@ import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
-const defaultStarterRoot = path.join(packageRoot, "starters", "default");
+const contentOnlyStarterRoot = path.join(packageRoot, "starters", "content-only");
+const fullStarterRoot = path.join(packageRoot, "starters", "default");
 const args = process.argv.slice(2);
 const command = args[0];
 
@@ -15,7 +16,7 @@ const help = `
 InkIsle CLI
 
 Usage:
-  inkisle init [dir]
+  inkisle init [dir] [--full]
   inkisle new post "Post title" [--lang en] [--slug custom-slug] [--published]
   inkisle new page "Page title" [--lang en] [--slug about]
   inkisle dev
@@ -35,7 +36,7 @@ async function main() {
   }
 
   if (command === "init") {
-    await initProject(args[1] || "inkisle-site");
+    await initProject(args.slice(1));
     return;
   }
 
@@ -53,10 +54,13 @@ async function main() {
 }
 
 async function initProject(targetDir) {
-  const target = path.resolve(process.cwd(), targetDir);
+  const { positional, options } = parseArgs(targetDir);
+  const targetName = positional[0] || "inkisle-site";
+  const target = path.resolve(process.cwd(), targetName);
+  const starterRoot = options.full ? fullStarterRoot : contentOnlyStarterRoot;
 
-  if (!existsSync(defaultStarterRoot)) {
-    throw new Error(`Default starter not found: ${defaultStarterRoot}`);
+  if (!existsSync(starterRoot)) {
+    throw new Error(`Starter not found: ${starterRoot}`);
   }
 
   if (existsSync(target)) {
@@ -68,23 +72,25 @@ async function initProject(targetDir) {
 
   await fs.mkdir(target, { recursive: true });
 
-  const starterEntries = await fs.readdir(defaultStarterRoot);
+  const starterEntries = await fs.readdir(starterRoot);
   for (const item of starterEntries) {
     if (shouldIgnore(item)) {
       continue;
     }
 
-    await copyPath(path.join(defaultStarterRoot, item), path.join(target, item));
+    await copyPath(path.join(starterRoot, item), path.join(target, item));
   }
 
-  const packageJsonPath = path.join(target, "package.json");
-  const packageJson = JSON.parse(await fs.readFile(packageJsonPath, "utf8"));
-  packageJson.name = path.basename(target);
-  packageJson.private = true;
-  await fs.writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
+  if (options.full) {
+    const packageJsonPath = path.join(target, "package.json");
+    const packageJson = JSON.parse(await fs.readFile(packageJsonPath, "utf8"));
+    packageJson.name = path.basename(target);
+    packageJson.private = true;
+    await fs.writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
+  }
 
-  console.log(`Created InkIsle starter at ${target}`);
-  console.log("Next: npm install && npm run dev");
+  console.log(`Created InkIsle ${options.full ? "full project" : "content site"} at ${target}`);
+  console.log(options.full ? "Next: npm install && npm run dev" : `Next: cd ${targetName} && inkisle dev`);
 }
 
 async function newContent(input) {
@@ -135,10 +141,39 @@ async function newContent(input) {
   console.log(`Created ${filePath}`);
 }
 
-function runAstro(script, extraArgs) {
-  return new Promise((resolve, reject) => {
-    const child = spawn("npx", ["astro", script, ...extraArgs], {
-      cwd: process.cwd(),
+async function runAstro(script, extraArgs) {
+  const siteRoot = process.cwd();
+  const fullProject = isFullProjectRoot(siteRoot);
+  const astroBin = getAstroBin();
+  const userSiteConfig = await loadUserSiteConfig(siteRoot);
+  const renderWorkDir = path.join(fullStarterRoot, ".inkisle-build", path.basename(siteRoot));
+  const renderOutDir = !fullProject && script === "build" ? path.join(renderWorkDir, "dist") : undefined;
+  const renderCacheDir = fullProject ? undefined : path.join(renderWorkDir, ".astro");
+
+  if (renderOutDir) {
+    await fs.rm(renderWorkDir, { recursive: true, force: true });
+  }
+
+  await new Promise((resolve, reject) => {
+    const env = {
+      ...process.env,
+      INKISLE_SITE_ROOT: siteRoot,
+      INKISLE_SITE_CONFIG: JSON.stringify(userSiteConfig),
+      ...(renderOutDir ? { INKISLE_RENDER_OUT_DIR: renderOutDir } : {}),
+      ...(renderCacheDir ? { INKISLE_RENDER_CACHE_DIR: renderCacheDir } : {})
+    };
+    const astroArgs = [
+      script,
+      "--root",
+      fullProject ? siteRoot : fullStarterRoot,
+      ...(fullProject
+        ? []
+        : ["--config", "astro.config.mjs"]),
+      ...extraArgs
+    ];
+    const child = spawn(astroBin, astroArgs, {
+      cwd: fullProject ? siteRoot : fullStarterRoot,
+      env,
       stdio: "inherit",
       shell: process.platform === "win32"
     });
@@ -148,10 +183,67 @@ function runAstro(script, extraArgs) {
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error(`astro ${script} exited with code ${code}`));
+        reject(new Error(`inkisle ${script} exited with code ${code}`));
       }
     });
   });
+
+  if (script === "build" && renderOutDir) {
+    await copyBuildOutput(renderOutDir, path.join(siteRoot, "dist"));
+    await fs.rm(renderWorkDir, { recursive: true, force: true });
+    await removeEmptyDirectory(path.dirname(renderWorkDir));
+  }
+}
+
+function isFullProjectRoot(siteRoot) {
+  return (
+    existsSync(path.join(siteRoot, "astro.config.mjs")) &&
+    existsSync(path.join(siteRoot, "src", "pages"))
+  );
+}
+
+function getAstroBin() {
+  const command = process.platform === "win32" ? "astro.cmd" : "astro";
+  const localBin = path.join(packageRoot, "node_modules", ".bin", command);
+
+  return existsSync(localBin) ? localBin : "astro";
+}
+
+function loadUserSiteConfig(siteRoot) {
+  const configPath = findSiteConfig(siteRoot);
+
+  if (!configPath) {
+    return {};
+  }
+
+  return import(pathToFileURL(configPath).href).then((module) => module.default ?? {});
+}
+
+function findSiteConfig(siteRoot) {
+  const configFiles = [
+    "inkisle.config.mjs",
+    "inkisle.config.js"
+  ];
+
+  return configFiles
+    .map((file) => path.join(siteRoot, file))
+    .find((file) => existsSync(file));
+}
+
+async function copyBuildOutput(source, target) {
+  await fs.rm(target, { recursive: true, force: true });
+  await fs.mkdir(path.dirname(target), { recursive: true });
+  await fs.cp(source, target, { recursive: true, force: true });
+}
+
+async function removeEmptyDirectory(directory) {
+  try {
+    await fs.rmdir(directory);
+  } catch (error) {
+    if (error?.code !== "ENOENT" && error?.code !== "ENOTEMPTY") {
+      throw error;
+    }
+  }
 }
 
 async function copyPath(source, target) {
@@ -176,7 +268,7 @@ async function copyPath(source, target) {
 }
 
 function shouldIgnore(name) {
-  return [".git", "node_modules", "dist", ".astro", "package-lock.json"].includes(name);
+  return [".git", "node_modules", "dist", ".astro", ".inkisle-build", "package-lock.json"].includes(name);
 }
 
 function parseArgs(input) {
@@ -193,6 +285,11 @@ function parseArgs(input) {
 
     if (value === "--force") {
       options.force = true;
+      continue;
+    }
+
+    if (value === "--full") {
+      options.full = true;
       continue;
     }
 

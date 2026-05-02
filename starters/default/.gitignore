@@ -1,9 +1,9 @@
 node_modules/
 dist/
+.inkisle-build/
 .astro/
 .DS_Store
 *.log
 .env
 .env.*
 !.env.example
-

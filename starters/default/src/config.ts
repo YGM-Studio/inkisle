@@ -5,6 +5,14 @@ export type LocaleConfig = {
 
 export type ThemeMode = "system" | "light" | "dark";
 
+type DeepPartial<T> = {
+  [Property in keyof T]?: T[Property] extends Array<unknown>
+    ? T[Property]
+    : T[Property] extends Record<string, unknown>
+      ? DeepPartial<T[Property]>
+      : T[Property];
+};
+
 export type InkIsleConfig = {
   title: string;
   description: string;
@@ -36,7 +44,7 @@ export type InkIsleConfig = {
   };
 };
 
-export const siteConfig: InkIsleConfig = {
+const defaultSiteConfig: InkIsleConfig = {
   title: "墨屿 / InkIsle",
   description: "AI-native Markdown publishing system for static-first blogs and content sites.",
   site: process.env.SITE_URL || "https://inkisle.example",
@@ -69,6 +77,8 @@ export const siteConfig: InkIsleConfig = {
   }
 };
 
+export const siteConfig: InkIsleConfig = mergeConfig(defaultSiteConfig, loadSiteConfigFromEnv());
+
 export function getLocaleCodes() {
   return siteConfig.locales.map((locale) => locale.code);
 }
@@ -100,4 +110,43 @@ export function joinUrl(...parts: Array<string | undefined>) {
 
 export function absoluteUrl(pathname: string) {
   return new URL(pathname, siteConfig.site).toString();
+}
+
+function loadSiteConfigFromEnv(): DeepPartial<InkIsleConfig> {
+  const rawConfig = process.env.INKISLE_SITE_CONFIG;
+
+  if (!rawConfig) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(rawConfig) as DeepPartial<InkIsleConfig>;
+  } catch {
+    return {};
+  }
+}
+
+function mergeConfig<T extends Record<string, unknown>>(base: T, override: DeepPartial<T>): T {
+  const next = { ...base };
+
+  for (const key of Object.keys(override) as Array<keyof T>) {
+    const value = override[key];
+
+    if (value === undefined) {
+      continue;
+    }
+
+    if (isRecord(base[key]) && isRecord(value) && !Array.isArray(value)) {
+      next[key] = mergeConfig(base[key], value as DeepPartial<Record<string, unknown>>) as T[keyof T];
+      continue;
+    }
+
+    next[key] = value as T[keyof T];
+  }
+
+  return next;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }

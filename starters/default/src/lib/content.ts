@@ -179,7 +179,7 @@ function withTrailingSlash(pathname: string) {
 }
 
 async function loadContent(): Promise<ContentStore> {
-  const contentRoot = path.join(process.cwd(), "content");
+  const contentRoot = path.join(getSiteRoot(), "content");
   const files = await fg(["**/*.{md,markdown}"], {
     cwd: contentRoot,
     onlyFiles: true,
@@ -217,6 +217,10 @@ async function loadContent(): Promise<ContentStore> {
     pages,
     all: [...posts, ...pages]
   };
+}
+
+function getSiteRoot() {
+  return process.env.INKISLE_SITE_ROOT || process.cwd();
 }
 
 function parseContentPath(relativePath: string) {
