@@ -338,6 +338,9 @@ function summarize(markdownBody: string) {
   return markdownBody
     .replace(/<!--[\s\S]*?-->/g, " ")
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/https?:\/\/\S+/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/[#>*_`[\]()!-]/g, " ")
     .replace(/\s+/g, " ")
