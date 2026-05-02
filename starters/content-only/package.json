@@ -13,6 +13,6 @@
     "new:page": "node node_modules/inkisle/bin/inkisle.mjs new page"
   },
   "dependencies": {
-    "inkisle": "^0.0.3"
+    "inkisle": "^0.0.4"
   }
 }
