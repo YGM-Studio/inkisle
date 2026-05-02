@@ -19,6 +19,9 @@ export type InkIsleConfig = {
     perPostJson: boolean;
     pageContentUsesTheme: boolean;
   };
+  pagination: {
+    postsPerPage: number;
+  };
 };
 
 export const siteConfig: InkIsleConfig = {
@@ -38,6 +41,9 @@ export const siteConfig: InkIsleConfig = {
     rawMarkdown: false,
     perPostJson: false,
     pageContentUsesTheme: true
+  },
+  pagination: {
+    postsPerPage: 10
   }
 };
 
@@ -73,4 +79,3 @@ export function joinUrl(...parts: Array<string | undefined>) {
 export function absoluteUrl(pathname: string) {
   return new URL(pathname, siteConfig.site).toString();
 }
-

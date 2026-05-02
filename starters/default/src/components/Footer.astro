@@ -1,0 +1,32 @@
+---
+import { getLocaleBase, siteConfig } from "../config";
+
+type Props = {
+  locale: string;
+};
+
+const { locale } = Astro.props;
+const isZh = locale === "zh";
+const footerLinks = [
+  { href: `${getLocaleBase(locale)}/search/`, label: isZh ? "搜索" : "Search" },
+  { href: "/rss.xml", label: "RSS" },
+  { href: "/feed.json", label: "JSON Feed" },
+  { href: "/llms.txt", label: "llms.txt" }
+];
+---
+
+<footer class="site-footer">
+  <div>
+    <strong>{siteConfig.title}</strong>
+    <p>{siteConfig.description}</p>
+  </div>
+
+  <nav aria-label="Footer">
+    {footerLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+
+  <small>
+    &copy; {new Date().getFullYear()} {siteConfig.author.name}. {isZh ? "由 InkIsle 发布。" : "Published with InkIsle."}
+  </small>
+</footer>
+
