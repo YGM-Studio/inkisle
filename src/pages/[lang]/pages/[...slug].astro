@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getLocaleCodes } from "../../../config";
+import { getPages, type ContentEntry } from "../../../lib/content";
+
+export async function getStaticPaths() {
+  const paths = [];
+
+  for (const lang of getLocaleCodes()) {
+    const pages = await getPages(lang);
+    paths.push(
+      ...pages.map((page) => ({
+        params: { lang, slug: page.slug },
+        props: { page }
+      }))
+    );
+  }
+
+  return paths;
+}
+
+const { page } = Astro.props as { page: ContentEntry };
+---
+
+<BaseLayout title={page.title} description={page.summary} locale={page.locale} canonicalPath={page.url}>
+  <article class="page-shell">
+    <header class="page-title">
+      <h1>{page.title}</h1>
+      {page.summary && <p>{page.summary}</p>}
+    </header>
+    <div class="prose" set:html={page.html} />
+  </article>
+</BaseLayout>
+

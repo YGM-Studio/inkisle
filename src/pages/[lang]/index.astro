@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostList from "../../components/PostList.astro";
+import { getLocaleBase, getLocaleCodes, siteConfig } from "../../config";
+import { getPages, getPosts } from "../../lib/content";
+
+export async function getStaticPaths() {
+  return getLocaleCodes().map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const posts = await getPosts(lang);
+const pages = await getPages(lang);
+const aboutPage = pages.find((page) => page.slug === "about");
+const isZh = lang === "zh";
+---
+
+<BaseLayout locale={lang} canonicalPath={`${getLocaleBase(lang)}/`}>
+  <section class="hero">
+    <div>
+      <span class="hero-kicker">{isZh ? "Markdown 发布系统" : "Markdown Publishing"}</span>
+      <h1>{isZh ? "把写作留在 Markdown，把发布交给墨屿。" : "Keep writing in Markdown. Let InkIsle publish it."}</h1>
+      <p>
+        {
+          isZh
+            ? "一个静态优先、AI 友好的内容发布原型，服务个人博客、内容站点和后续文档场景。"
+            : "A static-first, AI-friendly publishing prototype for personal blogs, content sites, and documentation."
+        }
+      </p>
+    </div>
+    <aside class="hero-panel" aria-label={isZh ? "当前能力" : "Current capabilities"}>
+      <dl>
+        <dt>{isZh ? "内容" : "Content"}</dt>
+        <dd>{isZh ? "根目录 content/ Markdown 源文件" : "Root content/ Markdown source files"}</dd>
+        <dt>{isZh ? "输出" : "Outputs"}</dt>
+        <dd>HTML, RSS, JSON Feed, search index, llms.txt</dd>
+        <dt>{isZh ? "语言" : "Locales"}</dt>
+        <dd>{siteConfig.locales.map((locale) => locale.label).join(" / ")}</dd>
+      </dl>
+    </aside>
+  </section>
+
+  <section aria-labelledby="latest-posts">
+    <div class="section-header">
+      <h2 id="latest-posts">{isZh ? "最新文章" : "Latest Posts"}</h2>
+      {aboutPage && <a href={aboutPage.url}>{isZh ? "关于站点" : "About"}</a>}
+    </div>
+    <PostList posts={posts} emptyLabel={isZh ? "还没有公开文章。" : "No published posts yet."} />
+  </section>
+</BaseLayout>
+

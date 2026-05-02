@@ -1,0 +1,39 @@
+---
+import { getLocaleBase, getLocaleLabel, siteConfig } from "../config";
+
+type Props = {
+  locale: string;
+};
+
+const { locale } = Astro.props;
+const navItems = [
+  { href: `${getLocaleBase(locale)}/`, label: locale === "zh" ? "文章" : "Posts" },
+  { href: `${getLocaleBase(locale)}/search/`, label: locale === "zh" ? "搜索" : "Search" },
+  { href: `${getLocaleBase(locale)}/pages/about/`, label: locale === "zh" ? "关于" : "About" }
+];
+---
+
+<header class="site-header">
+  <a class="brand" href={`${getLocaleBase(locale)}/`} aria-label={siteConfig.title}>
+    <span class="brand-mark">Ink</span>
+    <span>
+      <strong>墨屿</strong>
+      <small>InkIsle</small>
+    </span>
+  </a>
+
+  <nav class="main-nav" aria-label="Primary">
+    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+
+  <nav class="locale-nav" aria-label="Languages">
+    {
+      siteConfig.locales.map((item) => (
+        <a class:list={[item.code === locale && "is-active"]} href={`${getLocaleBase(item.code)}/`}>
+          {getLocaleLabel(item.code)}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+

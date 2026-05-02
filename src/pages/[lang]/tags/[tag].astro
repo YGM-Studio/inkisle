@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PostList from "../../../components/PostList.astro";
+import { getLocaleBase, getLocaleCodes } from "../../../config";
+import { getTagIndex } from "../../../lib/content";
+
+export async function getStaticPaths() {
+  const paths = [];
+
+  for (const lang of getLocaleCodes()) {
+    const tags = await getTagIndex(lang);
+    paths.push(
+      ...tags.map((tag) => ({
+        params: { lang, tag: tag.slug },
+        props: { tag }
+      }))
+    );
+  }
+
+  return paths;
+}
+
+const { lang } = Astro.params;
+const { tag } = Astro.props;
+const isZh = lang === "zh";
+---
+
+<BaseLayout
+  title={`${isZh ? "标签" : "Tag"}: ${tag.name}`}
+  description={`${tag.posts.length} posts tagged ${tag.name}`}
+  locale={lang}
+  canonicalPath={`${getLocaleBase(lang)}/tags/${tag.slug}/`}
+>
+  <section class="tag-shell">
+    <header class="page-title">
+      <span class="eyebrow">{isZh ? "标签" : "Tag"}</span>
+      <h1>{tag.name}</h1>
+      <p>{isZh ? `${tag.posts.length} 篇文章` : `${tag.posts.length} posts`}</p>
+    </header>
+    <PostList posts={tag.posts} />
+  </section>
+</BaseLayout>
+

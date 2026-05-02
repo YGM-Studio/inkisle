@@ -1,0 +1,46 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { formatDate, tagUrl, type ContentEntry } from "../lib/content";
+
+type Props = {
+  post: ContentEntry;
+};
+
+const { post } = Astro.props;
+---
+
+<BaseLayout
+  title={post.title}
+  description={post.summary}
+  locale={post.locale}
+  canonicalPath={post.url}
+>
+  <article class="post-shell">
+    <header class="post-hero">
+      <a class="eyebrow" href={`/${post.locale}/`}>Journal</a>
+      <h1>{post.title}</h1>
+      <div class="post-meta">
+        {post.date && <time datetime={post.date}>{formatDate(post.date, post.locale)}</time>}
+        {post.updated && <span>Updated {formatDate(post.updated, post.locale)}</span>}
+        {post.category && <span>{post.category}</span>}
+      </div>
+      {post.summary && <p class="post-summary">{post.summary}</p>}
+      {
+        post.tags.length > 0 && (
+          <nav class="tag-row" aria-label="Tags">
+            {post.tags.map((tag) => (
+              <a href={tagUrl(post.locale, tag)}>{tag}</a>
+            ))}
+          </nav>
+        )
+      }
+    </header>
+
+    <div class="prose" set:html={post.html} />
+
+    <section class="comment-mount" data-inkisle-comments>
+      <slot name="comments" />
+    </section>
+  </article>
+</BaseLayout>
+

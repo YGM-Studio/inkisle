@@ -1,0 +1,20 @@
+---
+import { getLocaleBase, siteConfig } from "../config";
+
+const target = `${getLocaleBase(siteConfig.defaultLocale)}/`;
+---
+
+<!doctype html>
+<html lang={siteConfig.defaultLocale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>{siteConfig.title}</title>
+  </head>
+  <body>
+    <a href={target}>Open {siteConfig.title}</a>
+  </body>
+</html>
+
