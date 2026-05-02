@@ -6,7 +6,9 @@ It is designed as a static-first blog and content publishing product layer on to
 
 ## Status
 
-InkIsle now has a minimal Astro-based starter in `starters/default`. It reads Markdown from a site project's `content/` directory, pre-renders localized static pages, and generates RSS, sitemap, static search index, JSON Feed, full-site posts JSON, and `llms.txt`.
+InkIsle now has a minimal Astro-based renderer and starter. The product direction is content-first: default user projects should expose Markdown content and optional configuration, while the Astro implementation remains internal unless the user asks for the full project.
+
+The renderer reads Markdown from a site's `content/` directory, pre-renders localized static pages, and generates RSS, sitemap, static search index, JSON Feed, full-site posts JSON, and `llms.txt`.
 
 The first validation milestone is still to replace the existing Hexo personal blog with this implementation.
 
@@ -14,7 +16,8 @@ The first validation milestone is still to replace the existing Hexo personal bl
 
 ```text
 bin/inkisle.mjs       # product CLI
-starters/default/     # default Astro publishing starter
+starters/content-only/ # default user-facing starter
+starters/default/     # full Astro publishing project and renderer source
 docs/                 # product and technical planning docs
 ```
 
@@ -31,6 +34,7 @@ Useful CLI commands:
 
 ```bash
 npm exec inkisle -- init my-site
+npm exec inkisle -- init my-full-site --full
 npm exec inkisle -- new post "Post title"
 npm exec inkisle -- new page "About"
 npm exec inkisle -- build

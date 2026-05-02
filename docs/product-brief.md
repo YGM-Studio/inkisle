@@ -26,6 +26,28 @@ It is not just an Astro starter, and it is not a full CMS. It should be a small,
 - AI-friendly public artifacts.
 - Deployment templates that do not lock users into one cloud provider.
 
+## Exposure Model
+
+InkIsle should hide framework complexity by default.
+
+The default user-facing project should be a content repository, not an Astro application. A normal user should be able to publish with only:
+
+```text
+content/
+public/              # optional static assets
+inkisle.config.*     # optional site configuration
+```
+
+The renderer, default theme, Astro pages, layouts, and integrations are implementation details owned by InkIsle. They should be present in the product repository and package, but not copied into every default user project.
+
+InkIsle should expose three levels:
+
+1. Content-only mode: default. Users edit Markdown and optional config/assets only.
+2. Configured theme mode: users choose built-in or packaged themes through config without touching Astro internals.
+3. Full project mode: advanced users explicitly request the full Astro project when they need custom routes, layouts, or low-level integrations.
+
+This keeps the default product simple while preserving an escape hatch for advanced customization.
+
 ## Naming
 
 The selected name is:
@@ -70,7 +92,7 @@ The first version should:
 - Pre-render Markdown posts into HTML.
 - Provide a usable default personal blog theme.
 - Support static-first deployment.
-- Provide a CLI for project initialization and content creation.
+- Provide a CLI for project initialization, content creation, and rendering content-only repositories.
 - Generate RSS, sitemap, static search index, JSON feed, and `llms.txt`.
 
 The initial target is a single-site system. Multi-site and multi-tenant publishing are out of scope for the first phase.
@@ -98,6 +120,7 @@ Configurable but not default:
 - Raw Markdown output.
 - Per-post JSON output.
 - Whether page-like content participates in the theme system.
+- Exposing the full Astro project to the user.
 
 Later:
 
@@ -112,10 +135,10 @@ Later:
 
 ## First Route
 
-1. Build a minimal Astro-based prototype.
+1. Build a minimal Astro-based renderer and full-project starter.
 2. Use the current Hexo personal blog migration as the real validation case.
 3. Create the default personal blog theme.
 4. Add RSS, sitemap, search, JSON feed, and `llms.txt`.
 5. Add CLI initialization and content creation commands.
-6. Revisit theme API, plugin API, and component override after the first migration.
-
+6. Make content-only repositories the default user experience.
+7. Revisit theme API, plugin API, eject, and component override after the first migration.

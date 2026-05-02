@@ -22,7 +22,6 @@ content/posts/my-post.md
 content/en/posts/my-post.md
 content/pages/about.md
 content/en/pages/about.md
-src/pages/custom.astro
 ```
 
 Build output should include language prefixes. If the main language is Chinese:
@@ -39,6 +38,27 @@ Default post URLs do not include dates. Dates are used for sorting only.
 ```
 
 The actual output route may add the language prefix according to site configuration.
+
+## Project Exposure Levels
+
+InkIsle has two starter shapes in V0:
+
+```text
+starters/content-only/  # default user project
+starters/default/       # full Astro project and internal renderer source
+```
+
+The default `inkisle init` should create a content-only project with Markdown, optional config, and optional static assets. It should not copy Astro pages, layouts, components, or Vite configuration.
+
+Advanced users can request the full project:
+
+```bash
+inkisle init my-site --full
+```
+
+In a content-only project, `inkisle dev`, `inkisle build`, and `inkisle preview` should run the internal full Astro renderer against the current working directory as the site root. The renderer reads content from the user's `content/` directory, static assets from the user's `public/` directory when present, and configuration from `inkisle.config.*` when present.
+
+This keeps Astro as the implementation foundation while keeping the product surface small.
 
 ## Frontmatter
 
@@ -156,6 +176,7 @@ Theme sources:
 
 - Local theme directory.
 - npm package theme.
+- Built-in default theme.
 
 Component or slot override can be added later. To keep that path open, internal implementation should keep clear component boundaries:
 
@@ -172,7 +193,7 @@ Page-like content should be supported without turning InkIsle into a CMS.
 Supported forms:
 
 - Markdown pages.
-- Astro or HTML pages.
+- Astro or HTML pages only in full project mode.
 
 Astro/HTML custom pages should have higher priority than Markdown pages when routes conflict.
 
@@ -183,7 +204,8 @@ Whether page-like content participates in the theme system should be configurabl
 V0 commands:
 
 ```bash
-inkisle init
+inkisle init [dir]
+inkisle init [dir] --full
 inkisle new post
 inkisle new page
 inkisle dev
@@ -194,12 +216,20 @@ inkisle preview
 Later commands:
 
 ```bash
+inkisle eject
 inkisle theme
 inkisle translate
 inkisle doctor
 ```
 
 The CLI should make InkIsle feel like a product, not just an exposed Astro project.
+
+Default command behavior:
+
+- `init` creates content-only projects.
+- `init --full` copies the full Astro project.
+- `dev`, `build`, and `preview` run against the current content repository unless already inside a full project.
+- `new` writes Markdown into the current content repository.
 
 ## Deployment Targets
 
@@ -230,4 +260,3 @@ SSR is not a V0 priority. Possible future SSR use cases:
 - Runtime personalization.
 
 For V0, comments should only use a unified mount slot. Built-in comment providers can come later.
-
