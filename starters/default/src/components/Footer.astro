@@ -7,6 +7,12 @@ type Props = {
 
 const { locale } = Astro.props;
 const isZh = locale === "zh";
+const icpFiling = siteConfig.filing.icp?.number?.trim()
+  ? {
+      number: siteConfig.filing.icp.number.trim(),
+      url: siteConfig.filing.icp.url || "https://beian.miit.gov.cn/"
+    }
+  : undefined;
 const footerLinks = [
   { href: `${getLocaleBase(locale)}/search/`, label: isZh ? "搜索" : "Search" },
   { href: "/rss.xml", label: "RSS" },
@@ -26,7 +32,13 @@ const footerLinks = [
   </nav>
 
   <small>
-    &copy; {new Date().getFullYear()} {siteConfig.author.name}. {isZh ? "由 InkIsle 发布。" : "Published with InkIsle."}
+    <span>&copy; {new Date().getFullYear()} {siteConfig.author.name}. {isZh ? "由 InkIsle 发布。" : "Published with InkIsle."}</span>
+    {
+      icpFiling && (
+        <a href={icpFiling.url} target="_blank" rel="noopener noreferrer">
+          {icpFiling.number}
+        </a>
+      )
+    }
   </small>
 </footer>
-

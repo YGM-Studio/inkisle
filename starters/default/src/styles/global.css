@@ -310,6 +310,32 @@ main {
   color: var(--surface);
 }
 
+.home-intro {
+  display: grid;
+  grid-template-columns: minmax(11rem, 0.32fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: end;
+  margin: clamp(2rem, 5vw, 5rem) 0 clamp(2rem, 4vw, 3rem);
+  border-block: 1px solid var(--line);
+  padding: clamp(1.5rem, 4vw, 3.4rem) 0;
+}
+
+.home-intro h1 {
+  margin: 0.65rem 0 0;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.home-intro p {
+  max-width: 48rem;
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--step-1);
+}
+
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
@@ -752,8 +778,15 @@ main {
 }
 
 .site-footer small {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.9rem;
   grid-column: 1 / -1;
   font-size: var(--step--1);
+}
+
+.site-footer small a {
+  font-weight: 700;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -773,6 +806,7 @@ main {
 
 @media (max-width: 780px) {
   .site-header,
+  .home-intro,
   .hero,
   .post-card,
   .pagination,

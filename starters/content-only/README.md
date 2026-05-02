@@ -25,3 +25,15 @@ npm run check
 npm run check:links
 npm run preview
 ```
+
+Footer ICP filing text is optional. Add it to `inkisle.config.mjs` only when you have a filing number:
+
+```js
+export default {
+  filing: {
+    icp: {
+      number: "京ICP备00000000号"
+    }
+  }
+};
+```

@@ -29,6 +29,12 @@ export type InkIsleConfig = {
     name: string;
     url?: string;
   };
+  filing: {
+    icp?: {
+      number: string;
+      url?: string;
+    };
+  };
   features: {
     rawMarkdown: boolean;
     perPostJson: boolean;
@@ -62,6 +68,7 @@ const defaultSiteConfig: InkIsleConfig = {
   author: {
     name: "InkIsle"
   },
+  filing: {},
   features: {
     rawMarkdown: false,
     perPostJson: false,

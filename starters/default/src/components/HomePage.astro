@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
 import { getLocaleBase, siteConfig } from "../config";
-import { getCategoryIndex, getPages, getPosts, getTagIndex } from "../lib/content";
+import { getPages, getPosts } from "../lib/content";
 import { paginate } from "../lib/pagination";
 
 type Props = {
@@ -13,30 +13,18 @@ type Props = {
 const { locale } = Astro.props;
 const posts = await getPosts(locale);
 const pages = await getPages(locale);
-const categories = await getCategoryIndex(locale);
-const tags = await getTagIndex(locale);
 const page = paginate(posts, 1);
 const aboutPage = pages.find((page) => page.slug === "about");
 const isZh = locale === "zh";
 ---
 
 <BaseLayout locale={locale} canonicalPath={`${getLocaleBase(locale)}/`}>
-  <section class="hero">
+  <section class="home-intro" aria-labelledby="home-intro-title">
     <div>
-      <span class="hero-kicker">{isZh ? "博客" : "Blog"}</span>
-      <h1>{siteConfig.title}</h1>
-      <p>{siteConfig.description}</p>
+      <span class="eyebrow">{isZh ? "笔记" : "Notebook"}</span>
+      <h1 id="home-intro-title">{isZh ? "文章" : "Posts"}</h1>
     </div>
-    <aside class="hero-panel" aria-label={isZh ? "站点概览" : "Site overview"}>
-      <dl>
-        <dt>{isZh ? "文章" : "Posts"}</dt>
-        <dd>{isZh ? `${posts.length} 篇` : `${posts.length} published`}</dd>
-        <dt>{isZh ? "分类" : "Categories"}</dt>
-        <dd>{categories.length}</dd>
-        <dt>{isZh ? "标签" : "Tags"}</dt>
-        <dd>{tags.length}</dd>
-      </dl>
-    </aside>
+    <p>{siteConfig.description}</p>
   </section>
 
   <section aria-labelledby="latest-posts">

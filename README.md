@@ -43,6 +43,8 @@ npm exec inkisle -- check
 npm exec inkisle -- check links
 ```
 
+Chinese ICP filing text can be shown in the footer by setting `filing.icp.number` in `inkisle.config.mjs`. It is hidden by default and only renders when a filing number is configured.
+
 ## Release
 
 Publishing is tag-driven. Configure npm Trusted Publishing for `YGM-Studio/inkisle` with workflow filename `publish.yml`, then run:
