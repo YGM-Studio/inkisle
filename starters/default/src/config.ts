@@ -7,6 +7,11 @@ export type InkIsleConfig = {
   title: string;
   description: string;
   site: string;
+  brand: {
+    mark: string;
+    subtitle?: string;
+    favicon: string;
+  };
   defaultLocale: string;
   locales: LocaleConfig[];
   prefixDefaultLocale: boolean;
@@ -28,6 +33,11 @@ export const siteConfig: InkIsleConfig = {
   title: "墨屿 / InkIsle",
   description: "AI-native Markdown publishing system for static-first blogs and content sites.",
   site: process.env.SITE_URL || "https://inkisle.example",
+  brand: {
+    mark: "Ink",
+    subtitle: "InkIsle Starter",
+    favicon: "/favicon.svg"
+  },
   defaultLocale: "zh",
   locales: [
     { code: "zh", label: "中文" },

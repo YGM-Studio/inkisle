@@ -11,14 +11,15 @@ const navItems = [
   { href: `${getLocaleBase(locale)}/search/`, label: locale === "zh" ? "搜索" : "Search" },
   { href: `${getLocaleBase(locale)}/pages/about/`, label: locale === "zh" ? "关于" : "About" }
 ];
+const brandSubtitle = siteConfig.brand.subtitle || siteConfig.author.name;
 ---
 
 <header class="site-header">
   <a class="brand" href={`${getLocaleBase(locale)}/`} aria-label={siteConfig.title}>
-    <span class="brand-mark">Ink</span>
+    <span class="brand-mark" aria-hidden="true">{siteConfig.brand.mark}</span>
     <span>
-      <strong>墨屿</strong>
-      <small>InkIsle</small>
+      <strong>{siteConfig.title}</strong>
+      {brandSubtitle && <small>{brandSubtitle}</small>}
     </span>
   </a>
 
@@ -36,4 +37,3 @@ const navItems = [
     }
   </nav>
 </header>
-

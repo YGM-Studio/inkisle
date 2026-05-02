@@ -90,6 +90,7 @@ main {
   display: inline-flex;
   gap: 0.8rem;
   align-items: center;
+  min-width: 0;
   width: fit-content;
   text-decoration: none;
 }
@@ -107,19 +108,26 @@ main {
   letter-spacing: 0;
 }
 
+.brand span:last-child {
+  min-width: 0;
+}
+
 .brand strong {
   display: block;
+  max-width: 18rem;
   font-family: var(--font-display);
   font-size: 1.02rem;
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .brand small {
   display: block;
+  max-width: 18rem;
   color: var(--ink-muted);
   font-size: 0.72rem;
   line-height: 1.2;
-  text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .main-nav,
@@ -187,13 +195,14 @@ main {
 .hero h1,
 .post-hero h1,
 .page-title h1 {
-  max-width: 11ch;
+  max-width: min(100%, 11ch);
   margin: 0.6rem 0 0;
   font-family: var(--font-display);
   font-size: var(--step-4);
   font-weight: 650;
   letter-spacing: 0;
   line-height: 0.94;
+  overflow-wrap: anywhere;
 }
 
 .post-hero h1,
