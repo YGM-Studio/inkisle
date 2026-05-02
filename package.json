@@ -16,6 +16,13 @@
     "check": "npm run -w @inkisle/starter-default check",
     "preview": "npm run -w @inkisle/starter-default preview"
   },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^6.2.1",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.1"
+  },
   "overrides": {
     "yaml": "^2.8.3"
   }

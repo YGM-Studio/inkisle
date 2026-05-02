@@ -48,7 +48,7 @@ starters/content-only/  # default user project
 starters/default/       # full Astro project and internal renderer source
 ```
 
-The default `inkisle init` should create a content-only project with Markdown, optional config, and optional static assets. It should not copy Astro pages, layouts, components, or Vite configuration.
+The default `inkisle init` should create a lightweight content project with Markdown, `package.json`, npm scripts, optional config, and optional static assets. It should not copy Astro pages, layouts, components, or Vite configuration as editable source.
 
 Advanced users can request the full project:
 
@@ -56,7 +56,7 @@ Advanced users can request the full project:
 inkisle init my-site --full
 ```
 
-In a content-only project, `inkisle dev`, `inkisle build`, and `inkisle preview` should run the internal full Astro renderer against the current working directory as the site root. The renderer reads content from the user's `content/` directory, static assets from the user's `public/` directory when present, and configuration from `inkisle.config.*` when present.
+In a content project, `npm run dev`, `npm run build`, and `npm run preview` should call `inkisle dev`, `inkisle build`, and `inkisle preview`, which run the internal full Astro renderer against the current working directory as the site root. The renderer reads content from the user's `content/` directory, static assets from the user's `public/` directory when present, and configuration from `inkisle.config.*` when present.
 
 This keeps Astro as the implementation foundation while keeping the product surface small.
 
@@ -226,7 +226,7 @@ The CLI should make InkIsle feel like a product, not just an exposed Astro proje
 
 Default command behavior:
 
-- `init` creates content-only projects.
+- `init` creates lightweight content projects with `package.json` and npm scripts.
 - `init --full` copies the full Astro project.
 - `dev`, `build`, and `preview` run against the current content repository unless already inside a full project.
 - `new` writes Markdown into the current content repository.

@@ -6,7 +6,7 @@ It is designed as a static-first blog and content publishing product layer on to
 
 ## Status
 
-InkIsle now has a minimal Astro-based renderer and starter. The product direction is content-first: default user projects should expose Markdown content and optional configuration, while the Astro implementation remains internal unless the user asks for the full project.
+InkIsle now has a minimal Astro-based renderer and starter. The product direction is content-first: default user projects should be lightweight Node projects with Markdown content, npm scripts, and optional configuration, while the Astro source implementation remains internal unless the user asks for the full project.
 
 The renderer reads Markdown from a site's `content/` directory, pre-renders localized static pages, and generates RSS, sitemap, static search index, JSON Feed, full-site posts JSON, and `llms.txt`.
 
@@ -34,6 +34,7 @@ Useful CLI commands:
 
 ```bash
 npm exec inkisle -- init my-site
+cd my-site && npm install && npm run dev
 npm exec inkisle -- init my-full-site --full
 npm exec inkisle -- new post "Post title"
 npm exec inkisle -- new page "About"

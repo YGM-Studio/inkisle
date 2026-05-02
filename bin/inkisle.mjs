@@ -81,16 +81,19 @@ async function initProject(targetDir) {
     await copyPath(path.join(starterRoot, item), path.join(target, item));
   }
 
-  if (options.full) {
-    const packageJsonPath = path.join(target, "package.json");
+  const packageJsonPath = path.join(target, "package.json");
+  if (existsSync(packageJsonPath)) {
     const packageJson = JSON.parse(await fs.readFile(packageJsonPath, "utf8"));
     packageJson.name = path.basename(target);
     packageJson.private = true;
+    if (!options.full && packageJson.dependencies?.inkisle?.startsWith("file:")) {
+      packageJson.dependencies.inkisle = `file:${packageRoot}`;
+    }
     await fs.writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
   }
 
   console.log(`Created InkIsle ${options.full ? "full project" : "content site"} at ${target}`);
-  console.log(options.full ? "Next: npm install && npm run dev" : `Next: cd ${targetName} && inkisle dev`);
+  console.log(`Next: cd ${targetName} && npm install && npm run dev`);
 }
 
 async function newContent(input) {
