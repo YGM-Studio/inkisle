@@ -43,7 +43,7 @@ npm exec inkisle -- build
 
 ## Release
 
-Publishing is tag-driven. Configure the repository secret `NPM_TOKEN`, then run:
+Publishing is tag-driven. Configure npm Trusted Publishing for `YGM-Studio/inkisle` with workflow filename `publish.yml`, then run:
 
 ```bash
 npm run release
