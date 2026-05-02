@@ -78,7 +78,8 @@ async function initProject(targetDir) {
       continue;
     }
 
-    await copyPath(path.join(starterRoot, item), path.join(target, item));
+    const targetItem = item === "gitignore" ? ".gitignore" : item;
+    await copyPath(path.join(starterRoot, item), path.join(target, targetItem));
   }
 
   const packageJsonPath = path.join(target, "package.json");
@@ -86,7 +87,7 @@ async function initProject(targetDir) {
     const packageJson = JSON.parse(await fs.readFile(packageJsonPath, "utf8"));
     packageJson.name = path.basename(target);
     packageJson.private = true;
-    if (!options.full && packageJson.dependencies?.inkisle?.startsWith("file:")) {
+    if (!options.full && packageJson.dependencies?.inkisle && !isInstalledPackage()) {
       packageJson.dependencies.inkisle = `file:${packageRoot}`;
     }
     await fs.writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
@@ -212,6 +213,10 @@ function getAstroBin() {
   return existsSync(localBin) ? localBin : "astro";
 }
 
+function isInstalledPackage() {
+  return path.basename(path.dirname(packageRoot)) === "node_modules";
+}
+
 function loadUserSiteConfig(siteRoot) {
   const configPath = findSiteConfig(siteRoot);
 
@@ -271,7 +276,7 @@ async function copyPath(source, target) {
 }
 
 function shouldIgnore(name) {
-  return [".git", "node_modules", "dist", ".astro", ".inkisle-build", "package-lock.json"].includes(name);
+  return [".git", ".gitignore", "node_modules", "dist", ".astro", ".inkisle-build", "package-lock.json"].includes(name);
 }
 
 function parseArgs(input) {

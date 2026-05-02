@@ -1,12 +1,27 @@
 {
   "name": "inkisle",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.1",
   "type": "module",
   "description": "AI-native Markdown publishing system built on Astro and Vite.",
   "bin": {
-    "inkisle": "./bin/inkisle.mjs"
+    "inkisle": "bin/inkisle.mjs"
   },
+  "files": [
+    "bin/",
+    "docs/",
+    "starters/content-only/content/",
+    "starters/content-only/gitignore",
+    "starters/content-only/package.json",
+    "starters/content-only/README.md",
+    "starters/default/astro.config.mjs",
+    "starters/default/content/",
+    "starters/default/gitignore",
+    "starters/default/package.json",
+    "starters/default/public/",
+    "starters/default/README.md",
+    "starters/default/src/",
+    "starters/default/tsconfig.json"
+  ],
   "workspaces": [
     "starters/default"
   ],
@@ -25,5 +40,8 @@
   },
   "overrides": {
     "yaml": "^2.8.3"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
