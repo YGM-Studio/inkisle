@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostList from "./PostList.astro";
+import { getLocaleBase } from "../config";
+import type { ContentEntry } from "../lib/content";
+
+type Props = {
+  locale: string;
+  item: {
+    name: string;
+    slug: string;
+    posts: ContentEntry[];
+  };
+  type: "tag" | "category";
+};
+
+const { locale, item, type } = Astro.props;
+const isZh = locale === "zh";
+const label = type === "tag" ? (isZh ? "标签" : "Tag") : (isZh ? "分类" : "Category");
+const pathSegment = type === "tag" ? "tags" : "categories";
+---
+
+<BaseLayout
+  title={`${label}: ${item.name}`}
+  description={`${item.posts.length} posts ${type === "tag" ? "tagged" : "in"} ${item.name}`}
+  locale={locale}
+  canonicalPath={`${getLocaleBase(locale)}/${pathSegment}/${item.slug}/`}
+>
+  <section class="tag-shell">
+    <header class="page-title">
+      <span class="eyebrow">{label}</span>
+      <h1>{item.name}</h1>
+      <p>{isZh ? `${item.posts.length} 篇文章` : `${item.posts.length} posts`}</p>
+    </header>
+    <PostList posts={item.posts} />
+  </section>
+</BaseLayout>

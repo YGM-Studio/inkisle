@@ -19,6 +19,16 @@ content/en/posts/my-post.md
 content/en/pages/about.md
 ```
 
+Default-language routes are published without a language prefix by default:
+
+```text
+/
+/posts/my-post/
+/en/posts/my-post/
+```
+
+Set `siteConfig.prefixDefaultLocale` to `true` when every language should use a URL prefix such as `/zh/`.
+
 Site identity is configured in `src/config.ts`. Update `siteConfig.title`,
 `siteConfig.description`, and `siteConfig.brand` to change the header label,
 homepage hero, and favicon. The default favicon lives at `public/favicon.svg`

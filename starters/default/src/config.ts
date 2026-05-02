@@ -58,7 +58,7 @@ const defaultSiteConfig: InkIsleConfig = {
     { code: "zh", label: "中文" },
     { code: "en", label: "English" }
   ],
-  prefixDefaultLocale: true,
+  prefixDefaultLocale: false,
   author: {
     name: "InkIsle"
   },
@@ -97,6 +97,10 @@ export function getLocaleBase(locale: string) {
   }
 
   return `/${locale}`;
+}
+
+export function shouldRedirectDefaultLocalePrefix(locale: string) {
+  return !siteConfig.prefixDefaultLocale && locale === siteConfig.defaultLocale;
 }
 
 export function joinUrl(...parts: Array<string | undefined>) {

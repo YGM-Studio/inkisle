@@ -18,6 +18,8 @@ const cacheDir = process.env.INKISLE_RENDER_CACHE_DIR
   : path.join(siteRoot, ".astro");
 const siteConfig = parseSiteConfig(process.env.INKISLE_SITE_CONFIG);
 const site = process.env.SITE_URL || siteConfig.site || "https://inkisle.example";
+const defaultLocale = siteConfig.defaultLocale || "zh";
+const prefixDefaultLocale = siteConfig.prefixDefaultLocale ?? false;
 
 export default defineConfig({
   root: rendererRoot,
@@ -28,7 +30,7 @@ export default defineConfig({
   site,
   output: "static",
   trailingSlash: "always",
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: shouldIncludeInSitemap })],
   vite: {
     server: {
       fs: {
@@ -37,6 +39,22 @@ export default defineConfig({
     }
   }
 });
+
+function shouldIncludeInSitemap(page) {
+  const pathname = new URL(page).pathname;
+
+  if (!prefixDefaultLocale) {
+    return pathname !== `/${defaultLocale}/` && !pathname.startsWith(`/${defaultLocale}/`);
+  }
+
+  if (pathname === "/") {
+    return false;
+  }
+
+  return !["/posts/", "/pages/", "/page/", "/search/", "/tags/", "/categories/"].some((pathPrefix) => {
+    return pathname === pathPrefix || pathname.startsWith(pathPrefix);
+  });
+}
 
 function parseSiteConfig(rawConfig) {
   if (!rawConfig) {

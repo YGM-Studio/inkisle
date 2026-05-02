@@ -1,0 +1,20 @@
+---
+import RedirectPage from "../../components/RedirectPage.astro";
+import PostLayout from "../../layouts/PostLayout.astro";
+import { siteConfig } from "../../config";
+import { getPosts } from "../../lib/content";
+
+export async function getStaticPaths() {
+  const posts = await getPosts(siteConfig.defaultLocale);
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const redirectTarget = siteConfig.prefixDefaultLocale ? post.url : undefined;
+---
+
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <PostLayout post={post} />}

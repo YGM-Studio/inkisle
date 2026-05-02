@@ -21,4 +21,4 @@ InkIsle, 中文名“墨屿”，是一个 AI-native Markdown publishing system�
 - 默认用户项目主要编辑 `content/`，可按需增加 `public/` 和 `inkisle.config.*`。
 - `starters/content-only` 是默认 starter，`starters/default` 是完整 Astro 工程和内部 renderer。
 - `inkisle init` 默认创建 content-only 项目，`inkisle init --full` 才复制完整 Astro 工程。
-- 当前 renderer 已覆盖站点项目内 `content/` 读取、多语言静态路由、默认个人博客主题、RSS、sitemap、搜索索引、JSON Feed、posts JSON、`llms.txt` 和 CLI 骨架。
+- 当前 renderer 已覆盖站点项目内 `content/` 读取、多语言静态路由、默认语言无 URL 前缀、默认个人博客主题、RSS、sitemap、搜索索引、JSON Feed、posts JSON、`llms.txt` 和 CLI 骨架。

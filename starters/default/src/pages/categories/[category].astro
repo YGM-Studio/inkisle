@@ -1,0 +1,28 @@
+---
+import RedirectPage from "../../components/RedirectPage.astro";
+import TaxonomyPage from "../../components/TaxonomyPage.astro";
+import { getLocaleBase, siteConfig } from "../../config";
+import { getCategoryIndex } from "../../lib/content";
+
+export async function getStaticPaths() {
+  const categories = await getCategoryIndex(siteConfig.defaultLocale);
+
+  return categories.map((category) => ({
+    params: { category: category.slug },
+    props: { category }
+  }));
+}
+
+const { category } = Astro.props;
+const redirectTarget = siteConfig.prefixDefaultLocale
+  ? `${getLocaleBase(siteConfig.defaultLocale)}/categories/${category.slug}/`
+  : undefined;
+---
+
+{
+  redirectTarget ? (
+    <RedirectPage to={redirectTarget} />
+  ) : (
+    <TaxonomyPage locale={siteConfig.defaultLocale} item={category} type="category" />
+  )
+}

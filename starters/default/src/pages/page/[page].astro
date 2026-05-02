@@ -1,0 +1,35 @@
+---
+import PostArchivePage from "../../components/PostArchivePage.astro";
+import RedirectPage from "../../components/RedirectPage.astro";
+import { getLocaleBase, siteConfig } from "../../config";
+import { getPosts } from "../../lib/content";
+import { paginate } from "../../lib/pagination";
+
+export async function getStaticPaths() {
+  const posts = await getPosts(siteConfig.defaultLocale);
+  const totalPages = paginate(posts, 1).totalPages;
+  const paths = [];
+
+  for (let page = 2; page <= totalPages; page += 1) {
+    paths.push({
+      params: { page: String(page) },
+      props: { pageNumber: page }
+    });
+  }
+
+  return paths;
+}
+
+const { pageNumber } = Astro.props;
+const redirectTarget = siteConfig.prefixDefaultLocale
+  ? `${getLocaleBase(siteConfig.defaultLocale)}/page/${pageNumber}/`
+  : undefined;
+---
+
+{
+  redirectTarget ? (
+    <RedirectPage to={redirectTarget} />
+  ) : (
+    <PostArchivePage locale={siteConfig.defaultLocale} pageNumber={pageNumber} />
+  )
+}

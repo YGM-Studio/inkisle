@@ -1,0 +1,28 @@
+---
+import RedirectPage from "../../components/RedirectPage.astro";
+import TaxonomyPage from "../../components/TaxonomyPage.astro";
+import { getLocaleBase, siteConfig } from "../../config";
+import { getTagIndex } from "../../lib/content";
+
+export async function getStaticPaths() {
+  const tags = await getTagIndex(siteConfig.defaultLocale);
+
+  return tags.map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag }
+  }));
+}
+
+const { tag } = Astro.props;
+const redirectTarget = siteConfig.prefixDefaultLocale
+  ? `${getLocaleBase(siteConfig.defaultLocale)}/tags/${tag.slug}/`
+  : undefined;
+---
+
+{
+  redirectTarget ? (
+    <RedirectPage to={redirectTarget} />
+  ) : (
+    <TaxonomyPage locale={siteConfig.defaultLocale} item={tag} type="tag" />
+  )
+}

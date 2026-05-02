@@ -1,20 +1,9 @@
 ---
+import HomePage from "../components/HomePage.astro";
+import RedirectPage from "../components/RedirectPage.astro";
 import { getLocaleBase, siteConfig } from "../config";
 
-const target = `${getLocaleBase(siteConfig.defaultLocale)}/`;
+const redirectTarget = siteConfig.prefixDefaultLocale ? `${getLocaleBase(siteConfig.defaultLocale)}/` : undefined;
 ---
 
-<!doctype html>
-<html lang={siteConfig.defaultLocale}>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="refresh" content={`0;url=${target}`} />
-    <link rel="canonical" href={target} />
-    <link rel="icon" href={siteConfig.brand.favicon} />
-    <title>{siteConfig.title}</title>
-  </head>
-  <body>
-    <a href={target}>Open {siteConfig.title}</a>
-  </body>
-</html>
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <HomePage locale={siteConfig.defaultLocale} />}

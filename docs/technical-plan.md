@@ -24,20 +24,18 @@ content/pages/about.md
 content/en/pages/about.md
 ```
 
-Build output should include language prefixes. If the main language is Chinese:
+Build output should use the same default: the main language is published without a language prefix, while translated languages use language-prefixed routes. If the main language is Chinese:
 
 ```text
-/zh/posts/my-post
+/posts/my-post
 /en/posts/my-post
 ```
 
 Default post URLs do not include dates. Dates are used for sorting only.
 
-```text
-/posts/my-post
-```
+The route model is configurable. `prefixDefaultLocale: false` is the default and produces root-level main-language URLs such as `/`, `/posts/my-post/`, and `/page/2/`. Setting `prefixDefaultLocale: true` restores fully prefixed URLs such as `/zh/` and `/zh/posts/my-post/`.
 
-The actual output route may add the language prefix according to site configuration.
+When the default is unprefixed, prefixed main-language URLs should remain compatibility redirects instead of canonical pages. This avoids a poor first-visit redirect from `/` to `/zh/`, while keeping old `/zh/...` links usable during migration.
 
 ## Project Exposure Levels
 

@@ -1,7 +1,7 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import PostList from "../../../components/PostList.astro";
-import { getLocaleBase, getLocaleCodes } from "../../../config";
+import RedirectPage from "../../../components/RedirectPage.astro";
+import TaxonomyPage from "../../../components/TaxonomyPage.astro";
+import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix } from "../../../config";
 import { getCategoryIndex } from "../../../lib/content";
 
 export async function getStaticPaths() {
@@ -22,22 +22,7 @@ export async function getStaticPaths() {
 
 const { lang } = Astro.params;
 const { category } = Astro.props;
-const isZh = lang === "zh";
+const redirectTarget = shouldRedirectDefaultLocalePrefix(lang) ? `${getLocaleBase(lang)}/categories/${category.slug}/` : undefined;
 ---
 
-<BaseLayout
-  title={`${isZh ? "分类" : "Category"}: ${category.name}`}
-  description={`${category.posts.length} posts in ${category.name}`}
-  locale={lang}
-  canonicalPath={`${getLocaleBase(lang)}/categories/${category.slug}/`}
->
-  <section class="tag-shell">
-    <header class="page-title">
-      <span class="eyebrow">{isZh ? "分类" : "Category"}</span>
-      <h1>{category.name}</h1>
-      <p>{isZh ? `${category.posts.length} 篇文章` : `${category.posts.length} posts`}</p>
-    </header>
-    <PostList posts={category.posts} />
-  </section>
-</BaseLayout>
-
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <TaxonomyPage locale={lang} item={category} type="category" />}

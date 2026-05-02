@@ -1,50 +1,14 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import Pagination from "../../components/Pagination.astro";
-import PostList from "../../components/PostList.astro";
-import { getLocaleBase, getLocaleCodes, siteConfig } from "../../config";
-import { getCategoryIndex, getPages, getPosts, getTagIndex } from "../../lib/content";
-import { paginate } from "../../lib/pagination";
+import HomePage from "../../components/HomePage.astro";
+import RedirectPage from "../../components/RedirectPage.astro";
+import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix } from "../../config";
 
 export async function getStaticPaths() {
   return getLocaleCodes().map((lang) => ({ params: { lang } }));
 }
 
 const { lang } = Astro.params;
-const posts = await getPosts(lang);
-const pages = await getPages(lang);
-const categories = await getCategoryIndex(lang);
-const tags = await getTagIndex(lang);
-const page = paginate(posts, 1);
-const aboutPage = pages.find((page) => page.slug === "about");
-const isZh = lang === "zh";
+const redirectTarget = shouldRedirectDefaultLocalePrefix(lang) ? `${getLocaleBase(lang)}/` : undefined;
 ---
 
-<BaseLayout locale={lang} canonicalPath={`${getLocaleBase(lang)}/`}>
-  <section class="hero">
-    <div>
-      <span class="hero-kicker">{isZh ? "博客" : "Blog"}</span>
-      <h1>{siteConfig.title}</h1>
-      <p>{siteConfig.description}</p>
-    </div>
-    <aside class="hero-panel" aria-label={isZh ? "站点概览" : "Site overview"}>
-      <dl>
-        <dt>{isZh ? "文章" : "Posts"}</dt>
-        <dd>{isZh ? `${posts.length} 篇` : `${posts.length} published`}</dd>
-        <dt>{isZh ? "分类" : "Categories"}</dt>
-        <dd>{categories.length}</dd>
-        <dt>{isZh ? "标签" : "Tags"}</dt>
-        <dd>{tags.length}</dd>
-      </dl>
-    </aside>
-  </section>
-
-  <section aria-labelledby="latest-posts">
-    <div class="section-header">
-      <h2 id="latest-posts">{isZh ? "最新文章" : "Latest Posts"}</h2>
-      {aboutPage && <a href={aboutPage.url}>{isZh ? "关于站点" : "About"}</a>}
-    </div>
-    <PostList posts={page.items} emptyLabel={isZh ? "还没有公开文章。" : "No published posts yet."} />
-    <Pagination locale={lang} currentPage={page.currentPage} totalPages={page.totalPages} />
-  </section>
-</BaseLayout>
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <HomePage locale={lang} />}

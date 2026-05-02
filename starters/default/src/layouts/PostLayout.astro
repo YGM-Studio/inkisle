@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import { getLocaleBase } from "../config";
 import { categoryUrl, formatDate, tagUrl, type ContentEntry } from "../lib/content";
 
 type Props = {
@@ -17,7 +18,7 @@ const { post } = Astro.props;
 >
   <article class="post-shell">
     <header class="post-hero">
-      <a class="eyebrow" href={`/${post.locale}/`}>Journal</a>
+      <a class="eyebrow" href={`${getLocaleBase(post.locale)}/`}>Journal</a>
       <h1>{post.title}</h1>
       <div class="post-meta">
         {post.date && <time datetime={post.date}>{formatDate(post.date, post.locale)}</time>}

@@ -1,111 +1,14 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getLocaleBase, getLocaleCodes } from "../../config";
+import RedirectPage from "../../components/RedirectPage.astro";
+import SearchPage from "../../components/SearchPage.astro";
+import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix } from "../../config";
 
 export async function getStaticPaths() {
   return getLocaleCodes().map((lang) => ({ params: { lang } }));
 }
 
 const { lang } = Astro.params;
-const isZh = lang === "zh";
+const redirectTarget = shouldRedirectDefaultLocalePrefix(lang) ? `${getLocaleBase(lang)}/search/` : undefined;
 ---
 
-<BaseLayout
-  title={isZh ? "搜索" : "Search"}
-  description={isZh ? "搜索公开文章。" : "Search published posts."}
-  locale={lang}
-  canonicalPath={`${getLocaleBase(lang)}/search/`}
->
-  <section class="search-shell" data-search-locale={lang}>
-    <header class="page-title">
-      <h1>{isZh ? "搜索" : "Search"}</h1>
-      <p>{isZh ? "从标题、摘要、标签和正文里查找。" : "Search by title, summary, tags, and body text."}</p>
-    </header>
-    <form class="search-form" role="search">
-      <label for="site-search">{isZh ? "关键词" : "Keywords"}</label>
-      <input id="site-search" type="search" autocomplete="off" placeholder={isZh ? "输入关键词" : "Type to search"} />
-    </form>
-    <ol class="search-results" aria-live="polite"></ol>
-  </section>
-
-  <script>
-    type SearchItem = {
-      title: string;
-      locale: string;
-      url: string;
-      summary: string;
-      tags: string[];
-      text: string;
-    };
-
-    const root = document.querySelector<HTMLElement>("[data-search-locale]");
-    const input = document.querySelector<HTMLInputElement>("#site-search");
-    const results = document.querySelector(".search-results");
-    const locale = root?.getAttribute("data-search-locale") || "en";
-    const messages: Record<string, { empty: string; prompt: string }> = {
-      zh: { empty: "没有匹配结果。", prompt: "输入关键词开始搜索。" },
-      en: { empty: "No matches.", prompt: "Type a keyword to start searching." }
-    };
-
-    const dictionary = messages[locale] || messages.en;
-    let index: SearchItem[] = [];
-
-    function render(items: SearchItem[], message?: string) {
-      if (!results) return;
-      if (message) {
-        results.innerHTML = `<li class="empty-state">${message}</li>`;
-        return;
-      }
-
-      results.innerHTML = items
-        .map(
-          (item) => `
-            <li>
-              <a href="${item.url}">
-                <strong>${item.title}</strong>
-                <span>${item.summary || ""}</span>
-              </a>
-            </li>
-          `
-        )
-        .join("");
-    }
-
-    function search(query: string) {
-      const terms = query
-        .trim()
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
-
-      if (terms.length === 0) {
-        render([], dictionary.prompt);
-        return;
-      }
-
-      const matches = index
-        .filter((item) => item.locale === locale)
-        .map((item) => {
-          const haystack = `${item.title} ${item.summary} ${item.tags.join(" ")} ${item.text}`.toLowerCase();
-          const score = terms.reduce((total, term) => total + (haystack.includes(term) ? 1 : 0), 0);
-          return { item, score };
-        })
-        .filter((result) => result.score > 0)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 20)
-        .map((result) => result.item);
-
-      render(matches, matches.length === 0 ? dictionary.empty : undefined);
-    }
-
-    fetch("/search-index.json")
-      .then((response) => response.json())
-      .then((data) => {
-        index = data.items || [];
-        render([], dictionary.prompt);
-      })
-      .catch(() => render([], dictionary.empty));
-
-    input?.addEventListener("input", () => search(input.value));
-  </script>
-</BaseLayout>
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <SearchPage locale={lang} />}

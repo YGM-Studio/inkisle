@@ -1,8 +1,7 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import Pagination from "../../../components/Pagination.astro";
-import PostList from "../../../components/PostList.astro";
-import { getLocaleBase, getLocaleCodes } from "../../../config";
+import PostArchivePage from "../../../components/PostArchivePage.astro";
+import RedirectPage from "../../../components/RedirectPage.astro";
+import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix } from "../../../config";
 import { getPosts } from "../../../lib/content";
 import { paginate } from "../../../lib/pagination";
 
@@ -26,32 +25,7 @@ export async function getStaticPaths() {
 
 const { lang } = Astro.params;
 const { pageNumber } = Astro.props;
-const posts = await getPosts(lang);
-const page = paginate(posts, pageNumber);
-const isZh = lang === "zh";
+const redirectTarget = shouldRedirectDefaultLocalePrefix(lang) ? `${getLocaleBase(lang)}/page/${pageNumber}/` : undefined;
 ---
 
-<BaseLayout
-  title={isZh ? `文章第 ${page.currentPage} 页` : `Posts Page ${page.currentPage}`}
-  description={isZh ? "继续浏览文章归档。" : "Continue browsing posts."}
-  locale={lang}
-  canonicalPath={`${getLocaleBase(lang)}/page/${page.currentPage}/`}
->
-  <section class="listing-shell" aria-labelledby="paged-posts">
-    <header class="page-title">
-      <span class="eyebrow">{isZh ? "文章" : "Posts"}</span>
-      <h1 id="paged-posts">{isZh ? `第 ${page.currentPage} 页` : `Page ${page.currentPage}`}</h1>
-      <p>
-        {
-          isZh
-            ? `共 ${page.totalItems} 篇文章，当前显示第 ${page.currentPage} / ${page.totalPages} 页。`
-            : `${page.totalItems} posts, page ${page.currentPage} of ${page.totalPages}.`
-        }
-      </p>
-    </header>
-
-    <PostList posts={page.items} />
-    <Pagination locale={lang} currentPage={page.currentPage} totalPages={page.totalPages} />
-  </section>
-</BaseLayout>
-
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <PostArchivePage locale={lang} pageNumber={pageNumber} />}

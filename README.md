@@ -8,7 +8,7 @@ It is designed as a static-first blog and content publishing product layer on to
 
 InkIsle now has a minimal Astro-based renderer and starter. The product direction is content-first: default user projects should be lightweight Node projects with Markdown content, npm scripts, and optional configuration, while the Astro source implementation remains internal unless the user asks for the full project.
 
-The renderer reads Markdown from a site's `content/` directory, pre-renders localized static pages, and generates RSS, sitemap, static search index, JSON Feed, full-site posts JSON, and `llms.txt`.
+The renderer reads Markdown from a site's `content/` directory, pre-renders localized static pages, publishes the default language without a URL prefix by default, and generates RSS, sitemap, static search index, JSON Feed, full-site posts JSON, and `llms.txt`.
 
 The first validation milestone is still to replace the existing Hexo personal blog with this implementation.
 
@@ -40,6 +40,23 @@ npm exec inkisle -- new post "Post title"
 npm exec inkisle -- new page "About"
 npm exec inkisle -- build
 ```
+
+## Release
+
+Publishing is tag-driven. Configure the repository secret `NPM_TOKEN`, then run:
+
+```bash
+npm run release
+```
+
+The release script defaults to a patch bump. It also accepts npm version specs:
+
+```bash
+npm run release -- minor
+npm run release -- 0.0.2
+```
+
+The script updates `package.json`, `package-lock.json`, and the content-only starter dependency, creates a `vX.Y.Z` tag, commits, and pushes the branch and tag. GitHub Actions publishes the package to `https://registry.npmjs.org/` when the tag is pushed.
 
 ## Documents
 

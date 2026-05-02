@@ -1,0 +1,9 @@
+---
+import RedirectPage from "../components/RedirectPage.astro";
+import SearchPage from "../components/SearchPage.astro";
+import { getLocaleBase, siteConfig } from "../config";
+
+const redirectTarget = siteConfig.prefixDefaultLocale ? `${getLocaleBase(siteConfig.defaultLocale)}/search/` : undefined;
+---
+
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <SearchPage locale={siteConfig.defaultLocale} />}

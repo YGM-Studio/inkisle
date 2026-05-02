@@ -29,7 +29,8 @@
     "dev": "npm run -w @inkisle/starter-default dev",
     "build": "npm run -w @inkisle/starter-default build",
     "check": "npm run -w @inkisle/starter-default check",
-    "preview": "npm run -w @inkisle/starter-default preview"
+    "preview": "npm run -w @inkisle/starter-default preview",
+    "release": "node scripts/release.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",
