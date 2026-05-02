@@ -21,6 +21,8 @@ Usage:
   inkisle new page "Page title" [--lang en] [--slug about]
   inkisle dev
   inkisle build
+  inkisle check
+  inkisle check links [--dist dist]
   inkisle preview
 `;
 
@@ -47,6 +49,11 @@ async function main() {
 
   if (["dev", "build", "preview"].includes(command)) {
     await runAstro(command, args.slice(1));
+    return;
+  }
+
+  if (command === "check") {
+    await checkSite(args.slice(1));
     return;
   }
 
@@ -197,6 +204,194 @@ async function runAstro(script, extraArgs) {
     await fs.rm(renderWorkDir, { recursive: true, force: true });
     await removeEmptyDirectory(path.dirname(renderWorkDir));
   }
+}
+
+async function checkSite(input) {
+  const subcommand = input[0];
+
+  if (!subcommand) {
+    await runAstro("build", []);
+    await checkInternalLinks({ distDir: path.join(process.cwd(), "dist") });
+    return;
+  }
+
+  if (subcommand === "links") {
+    const { options } = parseArgs(input.slice(1));
+    await checkInternalLinks({
+      distDir: path.resolve(process.cwd(), options.dist || "dist")
+    });
+    return;
+  }
+
+  throw new Error("Use `inkisle check` or `inkisle check links [--dist dist]`.");
+}
+
+async function checkInternalLinks({ distDir }) {
+  const htmlFiles = await listFiles(distDir, (file) => file.endsWith(".html")).catch(() => {
+    throw new Error(`Missing dist directory: ${distDir}. Run \`inkisle build\` before \`inkisle check links\`.`);
+  });
+  const localOrigin = "https://inkisle.local";
+  const maxReportedFailures = 80;
+  const existsCache = new Map();
+  const failures = [];
+  let checkedLinks = 0;
+
+  for (const sourceFile of htmlFiles) {
+    const html = await fs.readFile(sourceFile, "utf8");
+    const staticHtml = maskScriptAndStyleBlocks(html);
+
+    for (const link of extractAnchorHrefs(staticHtml)) {
+      const targetUrl = toInternalUrl(link.href, sourceFile, distDir, localOrigin);
+      if (!targetUrl) {
+        continue;
+      }
+
+      checkedLinks += 1;
+
+      const resolvedTarget = await resolveDistTarget(targetUrl.pathname, distDir, existsCache);
+      if (!resolvedTarget) {
+        failures.push({
+          sourceFile,
+          line: lineNumberAt(html, link.index),
+          href: link.href,
+          pathname: safeDecodeURIComponent(targetUrl.pathname)
+        });
+      }
+    }
+  }
+
+  if (failures.length > 0) {
+    console.error(`Found ${failures.length} broken internal link(s):`);
+
+    for (const failure of failures.slice(0, maxReportedFailures)) {
+      console.error(
+        `- ${formatRelative(process.cwd(), failure.sourceFile)}:${failure.line} ${failure.href} -> ${failure.pathname}`
+      );
+    }
+
+    if (failures.length > maxReportedFailures) {
+      console.error(`...and ${failures.length - maxReportedFailures} more.`);
+    }
+
+    throw new Error("Internal link check failed.");
+  }
+
+  console.log(`Checked ${checkedLinks} internal link(s) across ${htmlFiles.length} HTML file(s). No broken links found.`);
+}
+
+async function listFiles(root, predicate) {
+  const files = [];
+  const entries = await fs.readdir(root, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const absolutePath = path.join(root, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...await listFiles(absolutePath, predicate));
+      continue;
+    }
+
+    if (entry.isFile() && predicate(absolutePath)) {
+      files.push(absolutePath);
+    }
+  }
+
+  return files.sort((a, b) => a.localeCompare(b));
+}
+
+function extractAnchorHrefs(html) {
+  const links = [];
+  const anchorPattern = /<a\b[^>]*?\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/gi;
+
+  for (const match of html.matchAll(anchorPattern)) {
+    links.push({
+      href: match[1] ?? match[2] ?? match[3] ?? "",
+      index: match.index ?? 0
+    });
+  }
+
+  return links;
+}
+
+function maskScriptAndStyleBlocks(html) {
+  return html.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, (block) => block.replace(/[^\n]/g, " "));
+}
+
+function toInternalUrl(rawHref, sourceFile, distDir, localOrigin) {
+  const href = rawHref.trim();
+  if (
+    !href ||
+    href.startsWith("#") ||
+    href.startsWith("?") ||
+    href.startsWith("//") ||
+    /^[a-z][a-z0-9+.-]*:/i.test(href)
+  ) {
+    return undefined;
+  }
+
+  try {
+    const sourcePath = `/${formatRelative(distDir, sourceFile)}`;
+    return new URL(href, new URL(sourcePath, localOrigin));
+  } catch {
+    return undefined;
+  }
+}
+
+async function resolveDistTarget(pathname, distDir, existsCache) {
+  const decodedPathname = safeDecodeURIComponent(pathname);
+  const trimmedPathname = decodedPathname.replace(/^\/+/, "");
+  const relativeCandidates = trimmedPathname
+    ? decodedPathname.endsWith("/")
+      ? [path.join(trimmedPathname, "index.html")]
+      : [trimmedPathname, path.join(trimmedPathname, "index.html")]
+    : ["index.html"];
+
+  for (const relativeCandidate of relativeCandidates) {
+    const absoluteCandidate = path.resolve(distDir, relativeCandidate);
+    if (!isInside(distDir, absoluteCandidate)) {
+      continue;
+    }
+
+    if (await fileExists(absoluteCandidate, existsCache)) {
+      return absoluteCandidate;
+    }
+  }
+
+  return undefined;
+}
+
+async function fileExists(file, existsCache) {
+  if (!existsCache.has(file)) {
+    existsCache.set(
+      file,
+      fs.stat(file).then(
+        (stat) => stat.isFile(),
+        () => false
+      )
+    );
+  }
+
+  return existsCache.get(file);
+}
+
+function lineNumberAt(text, index) {
+  return text.slice(0, index).split("\n").length;
+}
+
+function formatRelative(root, file) {
+  return path.relative(root, file).split(path.sep).join("/");
+}
+
+function safeDecodeURIComponent(value) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function isInside(parent, child) {
+  const relativePath = path.relative(parent, child);
+  return !relativePath.startsWith("..") && !path.isAbsolute(relativePath);
 }
 
 function isFullProjectRoot(siteRoot) {

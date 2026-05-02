@@ -21,5 +21,7 @@ Main-language content is published without a URL prefix by default. Translated c
 npm install
 npm run dev
 npm run build
+npm run check
+npm run check:links
 npm run preview
 ```

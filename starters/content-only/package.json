@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "node node_modules/inkisle/bin/inkisle.mjs dev",
     "build": "node node_modules/inkisle/bin/inkisle.mjs build",
+    "check": "node node_modules/inkisle/bin/inkisle.mjs check",
+    "check:links": "node node_modules/inkisle/bin/inkisle.mjs check links",
     "preview": "node node_modules/inkisle/bin/inkisle.mjs preview",
     "new:post": "node node_modules/inkisle/bin/inkisle.mjs new post",
     "new:page": "node node_modules/inkisle/bin/inkisle.mjs new page"

@@ -39,6 +39,8 @@ npm exec inkisle -- init my-full-site --full
 npm exec inkisle -- new post "Post title"
 npm exec inkisle -- new page "About"
 npm exec inkisle -- build
+npm exec inkisle -- check
+npm exec inkisle -- check links
 ```
 
 ## Release
