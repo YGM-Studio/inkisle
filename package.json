@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "type": "module",
   "description": "AI-native Markdown publishing system built on Astro and Vite.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YGM-Studio/inkisle.git"
+  },
   "bin": {
     "inkisle": "bin/inkisle.mjs"
   },
