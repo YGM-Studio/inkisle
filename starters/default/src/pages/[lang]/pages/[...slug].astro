@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 const { page } = Astro.props as { page: ContentEntry };
 ---
 
-<BaseLayout title={page.title} description={page.summary} locale={page.locale} canonicalPath={page.url}>
+<BaseLayout title={page.title} description={page.summary || page.excerpt} locale={page.locale} canonicalPath={page.url}>
   <article class="page-shell">
     <header class="page-title">
       <h1>{page.title}</h1>
@@ -31,4 +31,3 @@ const { page } = Astro.props as { page: ContentEntry };
     <div class="prose" set:html={page.html} />
   </article>
 </BaseLayout>
-

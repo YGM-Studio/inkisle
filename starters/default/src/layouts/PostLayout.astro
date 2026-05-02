@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import { formatDate, tagUrl, type ContentEntry } from "../lib/content";
+import { categoryUrl, formatDate, tagUrl, type ContentEntry } from "../lib/content";
 
 type Props = {
   post: ContentEntry;
@@ -11,7 +11,7 @@ const { post } = Astro.props;
 
 <BaseLayout
   title={post.title}
-  description={post.summary}
+  description={post.summary || post.excerpt}
   locale={post.locale}
   canonicalPath={post.url}
 >
@@ -22,7 +22,7 @@ const { post } = Astro.props;
       <div class="post-meta">
         {post.date && <time datetime={post.date}>{formatDate(post.date, post.locale)}</time>}
         {post.updated && <span>Updated {formatDate(post.updated, post.locale)}</span>}
-        {post.category && <span>{post.category}</span>}
+        {post.category && <a href={categoryUrl(post.locale, post.category)}>{post.category}</a>}
       </div>
       {post.summary && <p class="post-summary">{post.summary}</p>}
       {
@@ -43,4 +43,3 @@ const { post } = Astro.props;
     </section>
   </article>
 </BaseLayout>
-

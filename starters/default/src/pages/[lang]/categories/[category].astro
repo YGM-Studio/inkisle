@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PostList from "../../../components/PostList.astro";
+import { getLocaleBase, getLocaleCodes } from "../../../config";
+import { getCategoryIndex } from "../../../lib/content";
+
+export async function getStaticPaths() {
+  const paths = [];
+
+  for (const lang of getLocaleCodes()) {
+    const categories = await getCategoryIndex(lang);
+    paths.push(
+      ...categories.map((category) => ({
+        params: { lang, category: category.slug },
+        props: { category }
+      }))
+    );
+  }
+
+  return paths;
+}
+
+const { lang } = Astro.params;
+const { category } = Astro.props;
+const isZh = lang === "zh";
+---
+
+<BaseLayout
+  title={`${isZh ? "分类" : "Category"}: ${category.name}`}
+  description={`${category.posts.length} posts in ${category.name}`}
+  locale={lang}
+  canonicalPath={`${getLocaleBase(lang)}/categories/${category.slug}/`}
+>
+  <section class="tag-shell">
+    <header class="page-title">
+      <span class="eyebrow">{isZh ? "分类" : "Category"}</span>
+      <h1>{category.name}</h1>
+      <p>{isZh ? `${category.posts.length} 篇文章` : `${category.posts.length} posts`}</p>
+    </header>
+    <PostList posts={category.posts} />
+  </section>
+</BaseLayout>
+

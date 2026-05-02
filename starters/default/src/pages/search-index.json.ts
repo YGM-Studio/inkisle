@@ -12,11 +12,10 @@ export async function GET() {
       locale: post.locale,
       url: post.url,
       date: post.date,
-      summary: post.summary,
+      summary: post.summary || post.excerpt,
       tags: post.tags,
       category: post.category,
       text: post.text
     }))
   });
 }
-

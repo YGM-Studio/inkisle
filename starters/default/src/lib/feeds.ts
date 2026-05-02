@@ -13,7 +13,7 @@ export function toRssXml(posts: ContentEntry[]) {
         `<link>${escapeXml(link)}</link>`,
         `<guid>${escapeXml(link)}</guid>`,
         `<pubDate>${escapeXml(pubDate)}</pubDate>`,
-        `<description>${escapeXml(post.summary)}</description>`,
+        `<description>${escapeXml(post.summary || post.excerpt)}</description>`,
         "</item>"
       ].join("");
     })
@@ -44,7 +44,7 @@ export function toJsonFeed(posts: ContentEntry[]) {
       id: absoluteUrl(post.url),
       url: absoluteUrl(post.url),
       title: post.title,
-      summary: post.summary,
+      summary: post.summary || post.excerpt,
       content_html: post.html,
       date_published: post.date ? new Date(post.date).toISOString() : undefined,
       date_modified: post.updated ? new Date(post.updated).toISOString() : undefined,
@@ -62,7 +62,7 @@ export function publicPost(post: ContentEntry) {
     url: absoluteUrl(post.url),
     date: post.date,
     updated: post.updated,
-    summary: post.summary,
+    summary: post.summary || post.excerpt,
     tags: post.tags,
     category: post.category,
     text: post.text
@@ -77,4 +77,3 @@ function escapeXml(value: string) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;");
 }
-

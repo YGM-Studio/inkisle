@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
+const defaultStarterRoot = path.join(packageRoot, "starters", "default");
 const args = process.argv.slice(2);
 const command = args[0];
 
@@ -54,6 +55,10 @@ async function main() {
 async function initProject(targetDir) {
   const target = path.resolve(process.cwd(), targetDir);
 
+  if (!existsSync(defaultStarterRoot)) {
+    throw new Error(`Default starter not found: ${defaultStarterRoot}`);
+  }
+
   if (existsSync(target)) {
     const existing = await fs.readdir(target);
     if (existing.length > 0) {
@@ -63,25 +68,20 @@ async function initProject(targetDir) {
 
   await fs.mkdir(target, { recursive: true });
 
-  const allowList = [
-    "astro.config.mjs",
-    "tsconfig.json",
-    "README.md",
-    "docs",
-    "src",
-    "content",
-    "bin",
-    ".gitignore"
-  ];
+  const starterEntries = await fs.readdir(defaultStarterRoot);
+  for (const item of starterEntries) {
+    if (shouldIgnore(item)) {
+      continue;
+    }
 
-  for (const item of allowList) {
-    await copyPath(path.join(packageRoot, item), path.join(target, item));
+    await copyPath(path.join(defaultStarterRoot, item), path.join(target, item));
   }
 
-  const packageJson = JSON.parse(await fs.readFile(path.join(packageRoot, "package.json"), "utf8"));
+  const packageJsonPath = path.join(target, "package.json");
+  const packageJson = JSON.parse(await fs.readFile(packageJsonPath, "utf8"));
   packageJson.name = path.basename(target);
   packageJson.private = true;
-  await fs.writeFile(path.join(target, "package.json"), `${JSON.stringify(packageJson, null, 2)}\n`);
+  await fs.writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
 
   console.log(`Created InkIsle starter at ${target}`);
   console.log("Next: npm install && npm run dev");
@@ -230,4 +230,3 @@ function slugify(value) {
 function escapeYaml(value) {
   return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
-

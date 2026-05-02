@@ -1,5 +1,5 @@
 ---
-import { formatDate, tagUrl, type ContentEntry } from "../lib/content";
+import { categoryUrl, formatDate, tagUrl, type ContentEntry } from "../lib/content";
 
 type Props = {
   posts: ContentEntry[];
@@ -17,12 +17,12 @@ const { posts, emptyLabel = "No posts yet." } = Astro.props;
           <article class="post-card">
             <div class="post-card-meta">
               {post.date && <time datetime={post.date}>{formatDate(post.date, post.locale)}</time>}
-              {post.category && <span>{post.category}</span>}
+              {post.category && <a href={categoryUrl(post.locale, post.category)}>{post.category}</a>}
             </div>
             <h2>
               <a href={post.url}>{post.title}</a>
             </h2>
-            {post.summary && <p>{post.summary}</p>}
+            {post.excerpt && <p>{post.excerpt}</p>}
             {post.tags.length > 0 && (
               <nav class="tag-row" aria-label={`Tags for ${post.title}`}>
                 {post.tags.map((tag) => (
@@ -38,4 +38,3 @@ const { posts, emptyLabel = "No posts yet." } = Astro.props;
     <p class="empty-state">{emptyLabel}</p>
   )
 }
-

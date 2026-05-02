@@ -7,24 +7,14 @@
   "bin": {
     "inkisle": "./bin/inkisle.mjs"
   },
+  "workspaces": [
+    "starters/default"
+  ],
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro check && astro build",
-    "check": "astro check",
-    "preview": "astro preview"
-  },
-  "dependencies": {
-    "@astrojs/sitemap": "^3.7.2",
-    "astro": "^6.2.1",
-    "fast-glob": "^3.3.3",
-    "gray-matter": "^4.0.3",
-    "markdown-it": "^14.1.1"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@types/markdown-it": "^14.1.2",
-    "@types/node": "^25.6.0",
-    "typescript": "^6.0.3"
+    "dev": "npm run -w @inkisle/starter-default dev",
+    "build": "npm run -w @inkisle/starter-default build",
+    "check": "npm run -w @inkisle/starter-default check",
+    "preview": "npm run -w @inkisle/starter-default preview"
   },
   "overrides": {
     "yaml": "^2.8.3"

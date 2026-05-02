@@ -13,7 +13,7 @@ export async function GET() {
     "## Content",
     "",
     ...posts.map((post) => {
-      const summary = post.summary ? ` - ${post.summary}` : "";
+      const summary = post.excerpt ? ` - ${post.excerpt}` : "";
       return `- [${post.title}](${absoluteUrl(post.url)})${summary}`;
     }),
     "",
@@ -35,4 +35,3 @@ export async function GET() {
     }
   });
 }
-

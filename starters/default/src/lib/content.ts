@@ -25,7 +25,8 @@ export type ContentEntry = {
   title: string;
   date?: string;
   updated?: string;
-  summary: string;
+  summary?: string;
+  excerpt: string;
   tags: string[];
   category?: string;
   draft: boolean;
@@ -49,6 +50,7 @@ type Frontmatter = {
   summary?: unknown;
   tags?: unknown;
   category?: unknown;
+  categories?: unknown;
   draft?: unknown;
   slug?: unknown;
 };
@@ -85,21 +87,46 @@ export async function getPageBySlug(locale: string, slug: string) {
 
 export async function getTagIndex(locale: string) {
   const posts = await getPosts(locale);
-  const tags = new Map<string, ContentEntry[]>();
+  const tags = new Map<string, { name: string; posts: ContentEntry[] }>();
 
   for (const post of posts) {
     for (const tag of post.tags) {
-      const current = tags.get(tag) ?? [];
-      current.push(post);
-      tags.set(tag, current);
+      const slug = tagToSlug(tag);
+      const current = tags.get(slug) ?? { name: tag, posts: [] };
+      current.posts.push(post);
+      tags.set(slug, current);
     }
   }
 
   return Array.from(tags.entries())
-    .map(([name, taggedPosts]) => ({
-      name,
-      slug: tagToSlug(name),
-      posts: taggedPosts
+    .map(([slug, tag]) => ({
+      name: tag.name,
+      slug,
+      posts: tag.posts
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function getCategoryIndex(locale: string) {
+  const posts = await getPosts(locale);
+  const categories = new Map<string, { name: string; posts: ContentEntry[] }>();
+
+  for (const post of posts) {
+    if (!post.category) {
+      continue;
+    }
+
+    const slug = taxonomyToSlug(post.category);
+    const current = categories.get(slug) ?? { name: post.category, posts: [] };
+    current.posts.push(post);
+    categories.set(slug, current);
+  }
+
+  return Array.from(categories.entries())
+    .map(([slug, category]) => ({
+      name: category.name,
+      slug,
+      posts: category.posts
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
@@ -113,16 +140,22 @@ export function pageUrl(locale: string, slug: string) {
 }
 
 export function tagUrl(locale: string, tag: string) {
-  return withTrailingSlash(joinUrl(getLocaleBase(locale), "tags", tagToSlug(tag)));
+  return withTrailingSlash(joinUrl(getLocaleBase(locale), "tags", taxonomyToSlug(tag)));
+}
+
+export function categoryUrl(locale: string, category: string) {
+  return withTrailingSlash(joinUrl(getLocaleBase(locale), "categories", taxonomyToSlug(category)));
 }
 
 export function tagToSlug(tag: string) {
-  return encodeURIComponent(
-    tag
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-  );
+  return taxonomyToSlug(tag);
+}
+
+function taxonomyToSlug(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-");
 }
 
 export function formatDate(date?: string, locale = siteConfig.defaultLocale) {
@@ -224,8 +257,10 @@ function normalizeEntry(
 
   const fileSlug = slugFromPath(parsedPath.pathSegments);
   const slug = asString(frontmatter.slug) || fileSlug;
-  const html = markdown.render(body);
-  const summary = asString(frontmatter.summary) || summarize(body);
+  const summary = asString(frontmatter.summary);
+  const bodyWithoutMoreMarker = removeMoreMarker(body);
+  const excerpt = summary || summarize(excerptSource(body));
+  const html = markdown.render(bodyWithoutMoreMarker);
 
   return {
     kind: parsedPath.kind,
@@ -235,10 +270,11 @@ function normalizeEntry(
     date: asDateString(frontmatter.date),
     updated: asDateString(frontmatter.updated),
     summary,
+    excerpt,
     tags: asStringArray(frontmatter.tags),
-    category: asString(frontmatter.category),
+    category: asString(frontmatter.category) ?? asStringArray(frontmatter.categories)[0],
     draft: frontmatter.draft === true,
-    body,
+    body: bodyWithoutMoreMarker,
     html,
     text: toPlainText(html),
     url:
@@ -265,6 +301,13 @@ function asString(value: unknown) {
 }
 
 function asStringArray(value: unknown) {
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
   if (!Array.isArray(value)) {
     return [];
   }
@@ -293,11 +336,24 @@ function asDateString(value: unknown) {
 
 function summarize(markdownBody: string) {
   return markdownBody
+    .replace(/<!--[\s\S]*?-->/g, " ")
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/<[^>]+>/g, " ")
     .replace(/[#>*_`[\]()!-]/g, " ")
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, 180);
+}
+
+function excerptSource(markdownBody: string) {
+  const [beforeMore] = markdownBody.split(/<!--\s*more\s*-->/i);
+  const excerpt = beforeMore?.trim();
+
+  return excerpt || markdownBody;
+}
+
+function removeMoreMarker(markdownBody: string) {
+  return markdownBody.replace(/<!--\s*more\s*-->/gi, "");
 }
 
 function toPlainText(html: string) {
