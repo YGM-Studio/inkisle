@@ -30,9 +30,6 @@ export default defineConfig({
   trailingSlash: "always",
   integrations: [sitemap()],
   vite: {
-    ssr: {
-      noExternal: true
-    },
     server: {
       fs: {
         allow: [rendererRoot, siteRoot]
