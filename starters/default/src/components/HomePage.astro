@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
 import { getLocaleBase, siteConfig } from "../config";
-import { getPages, getPosts } from "../lib/content";
+import { getPosts } from "../lib/content";
 import { paginate } from "../lib/pagination";
 
 type Props = {
@@ -12,25 +12,18 @@ type Props = {
 
 const { locale } = Astro.props;
 const posts = await getPosts(locale);
-const pages = await getPages(locale);
 const page = paginate(posts, 1);
-const aboutPage = pages.find((page) => page.slug === "about");
 const isZh = locale === "zh";
 ---
 
 <BaseLayout locale={locale} canonicalPath={`${getLocaleBase(locale)}/`}>
   <section class="home-intro" aria-labelledby="home-intro-title">
-    <div>
-      <span class="eyebrow">{isZh ? "笔记" : "Notebook"}</span>
-      <h1 id="home-intro-title">{isZh ? "文章" : "Posts"}</h1>
-    </div>
-    <p>{siteConfig.description}</p>
+    <h1 id="home-intro-title">{siteConfig.description}</h1>
   </section>
 
   <section aria-labelledby="latest-posts">
     <div class="section-header">
       <h2 id="latest-posts">{isZh ? "最新文章" : "Latest Posts"}</h2>
-      {aboutPage && <a href={aboutPage.url}>{isZh ? "关于站点" : "About"}</a>}
     </div>
     <PostList posts={page.items} emptyLabel={isZh ? "还没有公开文章。" : "No published posts yet."} />
     <Pagination locale={locale} currentPage={page.currentPage} totalPages={page.totalPages} />
