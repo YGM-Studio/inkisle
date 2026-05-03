@@ -671,6 +671,41 @@ main {
   padding-top: 1.5rem;
 }
 
+.not-found {
+  display: grid;
+  gap: 1rem;
+  max-width: 44rem;
+  margin: clamp(3rem, 10vw, 8rem) auto clamp(4rem, 12vw, 10rem);
+  padding-inline: var(--page-gutter);
+}
+
+.not-found p {
+  margin: 0;
+  color: var(--moss-strong);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 800;
+}
+
+.not-found h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.not-found a {
+  width: fit-content;
+  border: 1px solid color-mix(in oklch, var(--moss) 55%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in oklch, var(--moss) 10%, var(--surface-raised));
+  color: var(--moss-strong);
+  padding: 0.75rem 0.95rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
 .search-form {
   display: grid;
   gap: 0.7rem;

@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { existsSync } from "node:fs";
+import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -30,7 +31,7 @@ export default defineConfig({
   site,
   output: "static",
   trailingSlash: "always",
-  integrations: [sitemap({ filter: shouldIncludeInSitemap })],
+  integrations: [sitemap({ filter: shouldIncludeInSitemap }), deploymentFilesIntegration(siteConfig)],
   vite: {
     server: {
       fs: {
@@ -66,4 +67,62 @@ function parseSiteConfig(rawConfig) {
   } catch {
     return {};
   }
+}
+
+function deploymentFilesIntegration(config) {
+  return {
+    name: "inkisle-deployment-files",
+    hooks: {
+      "astro:build:done": async ({ dir }) => {
+        const distDir = fileURLToPath(dir);
+        await writeDeploymentFiles(distDir, config);
+      }
+    }
+  };
+}
+
+async function writeDeploymentFiles(distDir, config) {
+  const redirects = normalizeRedirects(config.redirects);
+  if (redirects.length > 0) {
+    await fs.writeFile(
+      path.join(distDir, "_redirects"),
+      `${redirects.map((rule) => `${rule.from} ${rule.to} ${rule.status}`).join("\n")}\n`
+    );
+  }
+
+  await fs.writeFile(
+    path.join(distDir, "_headers"),
+    [
+      "/manifest.json",
+      "  Content-Type: application/manifest+json; charset=utf-8",
+      "",
+      "/manifest.webmanifest",
+      "  Content-Type: application/manifest+json; charset=utf-8",
+      "",
+      "/sw.js",
+      "  Cache-Control: no-cache",
+      "  Content-Type: application/javascript; charset=utf-8",
+      "",
+      "/404.html",
+      "  X-Robots-Tag: noindex",
+      ""
+    ].join("\n")
+  );
+}
+
+function normalizeRedirects(rawRedirects) {
+  if (!Array.isArray(rawRedirects)) {
+    return [];
+  }
+
+  return rawRedirects.filter((rule) => {
+    return (
+      rule &&
+      typeof rule.from === "string" &&
+      rule.from.startsWith("/") &&
+      typeof rule.to === "string" &&
+      rule.to.startsWith("/") &&
+      [301, 302, 307, 308].includes(Number(rule.status))
+    );
+  });
 }

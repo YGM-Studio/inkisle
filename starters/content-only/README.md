@@ -40,3 +40,30 @@ export default {
   }
 };
 ```
+
+Optional Baidu analytics and PWA settings also live in `inkisle.config.mjs`.
+InkIsle emits real `/404.html`, `/manifest.json`, `/manifest.webmanifest`,
+and `/sw.js` files during build. Search engine verification files that must
+live at the site root can be placed in `public/`, or generated from config:
+
+```js
+export default {
+  analytics: {
+    baidu: {
+      id: "your-baidu-analytics-id"
+    }
+  },
+  verificationFiles: [
+    {
+      path: "/baidu_verify_example.html",
+      content: "verification-code"
+    }
+  ],
+  pwa: {
+    enabled: true,
+    registerServiceWorker: true,
+    name: "My site",
+    shortName: "Site"
+  }
+};
+```

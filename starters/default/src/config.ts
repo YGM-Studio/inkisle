@@ -6,6 +6,44 @@ export type LocaleConfig = {
 export type ThemeMode = "system" | "light" | "dark";
 export type LocalizedText = string | Record<string, string>;
 
+export type StaticFileConfig = {
+  path: string;
+  content: string;
+  contentType?: string;
+};
+
+export type RedirectRuleConfig = {
+  from: string;
+  to: string;
+  status: 301 | 302 | 307 | 308;
+};
+
+export type WebManifestIconConfig = {
+  src: string;
+  sizes: string;
+  type?: string;
+  purpose?: string;
+};
+
+export type PwaConfig = {
+  enabled: boolean;
+  registerServiceWorker: boolean;
+  manifestPath: string;
+  serviceWorkerPath: string;
+  name?: string;
+  shortName?: string;
+  display: "standalone" | "fullscreen" | "minimal-ui" | "browser";
+  backgroundColor: string;
+  themeColor: string;
+  icons: WebManifestIconConfig[];
+};
+
+export type AnalyticsConfig = {
+  baidu?: {
+    id: string;
+  };
+};
+
 type DeepPartial<T> = {
   [Property in keyof T]?: T[Property] extends Array<unknown>
     ? T[Property]
@@ -41,6 +79,10 @@ export type InkIsleConfig = {
     perPostJson: boolean;
     pageContentUsesTheme: boolean;
   };
+  analytics: AnalyticsConfig;
+  verificationFiles: StaticFileConfig[];
+  redirects: RedirectRuleConfig[];
+  pwa: PwaConfig;
   pagination: {
     postsPerPage: number;
   };
@@ -77,6 +119,25 @@ const defaultSiteConfig: InkIsleConfig = {
     rawMarkdown: false,
     perPostJson: false,
     pageContentUsesTheme: true
+  },
+  analytics: {},
+  verificationFiles: [],
+  redirects: [],
+  pwa: {
+    enabled: false,
+    registerServiceWorker: false,
+    manifestPath: "/manifest.json",
+    serviceWorkerPath: "/sw.js",
+    display: "standalone",
+    backgroundColor: "#f3efe2",
+    themeColor: "#16251f",
+    icons: [
+      {
+        src: "/favicon.svg",
+        sizes: "any",
+        type: "image/svg+xml"
+      }
+    ]
   },
   pagination: {
     postsPerPage: 10

@@ -43,3 +43,22 @@ the site should render a fixed theme without the header toggle.
 
 Footer ICP filing text is optional. Set `siteConfig.filing.icp.number` when a
 site needs to show a filing number; it is hidden by default.
+
+Optional browser integration is configured with `siteConfig.pwa`. InkIsle
+always emits real `/manifest.json`, `/manifest.webmanifest`, and `/sw.js`
+files so these paths do not fall through to the homepage. Set `pwa.enabled`
+and `pwa.registerServiceWorker` to `true` only when the site should register
+the service worker.
+
+Baidu analytics can be enabled with `siteConfig.analytics.baidu.id`. Search
+engine verification files can be generated at the site root through
+`siteConfig.verificationFiles`, for example:
+
+```js
+verificationFiles: [
+  {
+    path: "/baidu_verify_example.html",
+    content: "verification-code"
+  }
+]
+```

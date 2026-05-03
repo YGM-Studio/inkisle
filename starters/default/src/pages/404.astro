@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getLocaleBase, siteConfig } from "../config";
+
+const locale = siteConfig.defaultLocale;
+const isZh = locale === "zh";
+const homeUrl = `${getLocaleBase(locale)}/`;
+---
+
+<BaseLayout
+  title={isZh ? "页面未找到" : "Page not found"}
+  description={isZh ? "这个页面不存在或已经移动。" : "This page does not exist or has moved."}
+  locale={locale}
+  canonicalPath="/404.html"
+  robots="noindex, follow"
+>
+  <section class="not-found" aria-labelledby="not-found-title">
+    <p>{isZh ? "404" : "404"}</p>
+    <h1 id="not-found-title">{isZh ? "页面未找到" : "Page not found"}</h1>
+    <a href={homeUrl}>{isZh ? "回到首页" : "Back to home"}</a>
+  </section>
+</BaseLayout>
