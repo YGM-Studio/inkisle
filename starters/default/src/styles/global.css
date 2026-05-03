@@ -78,6 +78,7 @@
 }
 
 html {
+  min-height: 100%;
   background: var(--surface);
   color: var(--ink);
   font-family: var(--font-body);
@@ -87,6 +88,10 @@ html {
 }
 
 body {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100svh;
+  flex-direction: column;
   min-width: 320px;
   margin: 0;
   background:
@@ -123,6 +128,7 @@ svg {
 }
 
 main {
+  flex: 1 0 auto;
   width: min(1160px, calc(100% - var(--space-page) * 2));
   margin: 0 auto;
 }
@@ -839,6 +845,7 @@ main {
 }
 
 .site-footer {
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) auto;
   gap: clamp(1rem, 3vw, 2rem);
