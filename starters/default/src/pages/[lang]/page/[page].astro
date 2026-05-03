@@ -1,9 +1,9 @@
 ---
-import PostArchivePage from "../../../components/PostArchivePage.astro";
 import RedirectPage from "../../../components/RedirectPage.astro";
-import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix } from "../../../config";
+import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix, siteConfig } from "../../../config";
 import { getPosts } from "../../../lib/content";
 import { paginate } from "../../../lib/pagination";
+import { getActiveTheme } from "../../../themes/registry";
 
 export async function getStaticPaths() {
   const paths = [];
@@ -26,6 +26,7 @@ export async function getStaticPaths() {
 const { lang } = Astro.params;
 const { pageNumber } = Astro.props;
 const redirectTarget = shouldRedirectDefaultLocalePrefix(lang) ? `${getLocaleBase(lang)}/page/${pageNumber}/` : undefined;
+const PostArchivePage = (await getActiveTheme(siteConfig.theme.name)).components.PostArchivePage;
 ---
 
 {redirectTarget ? <RedirectPage to={redirectTarget} /> : <PostArchivePage locale={lang} pageNumber={pageNumber} />}

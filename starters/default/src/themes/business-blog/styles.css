@@ -1,0 +1,768 @@
+html[data-inkisle-theme="business-blog"] {
+  color-scheme: light;
+  --page: oklch(98% 0.01 180);
+  --page-soft: oklch(94% 0.025 170);
+  --panel: oklch(99% 0.005 180);
+  --panel-strong: oklch(93% 0.018 178);
+  --ink: oklch(22% 0.034 245);
+  --ink-muted: oklch(43% 0.028 245);
+  --ink-soft: oklch(55% 0.025 240);
+  --line: oklch(84% 0.018 178);
+  --line-strong: oklch(73% 0.026 176);
+  --green: oklch(42% 0.11 158);
+  --green-strong: oklch(34% 0.118 158);
+  --violet: oklch(45% 0.15 285);
+  --gold: oklch(64% 0.13 82);
+  --red: oklch(54% 0.15 28);
+  --shadow: 0 18px 42px oklch(35% 0.04 250 / 10%);
+  --font-body: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --space-page: clamp(1rem, 3vw, 2rem);
+  --content-width: 1160px;
+  --measure: 72ch;
+}
+html[data-inkisle-theme="business-blog"][data-theme="dark"] {
+  color-scheme: dark;
+  --page: oklch(17% 0.026 190);
+  --page-soft: oklch(21% 0.03 188);
+  --panel: oklch(23% 0.032 188);
+  --panel-strong: oklch(28% 0.036 186);
+  --ink: oklch(92% 0.014 165);
+  --ink-muted: oklch(74% 0.025 165);
+  --ink-soft: oklch(64% 0.025 165);
+  --line: oklch(35% 0.035 188);
+  --line-strong: oklch(45% 0.04 186);
+  --green: oklch(72% 0.13 158);
+  --green-strong: oklch(82% 0.12 155);
+  --violet: oklch(77% 0.13 288);
+  --gold: oklch(76% 0.13 82);
+  --red: oklch(72% 0.14 28);
+  --shadow: 0 18px 42px oklch(5% 0.02 250 / 32%);
+}
+html[data-inkisle-theme="business-blog"] * {
+  box-sizing: border-box;
+}
+html[data-inkisle-theme="business-blog"] {
+  min-height: 100%;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 100%;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+html[data-inkisle-theme="business-blog"] body {
+  min-width: 320px;
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0;
+  background:
+    linear-gradient(180deg, var(--page-soft), transparent 28rem),
+    var(--page);
+}
+html[data-inkisle-theme="business-blog"] body,
+html[data-inkisle-theme="business-blog"] button,
+html[data-inkisle-theme="business-blog"] input {
+  font: inherit;
+}
+html[data-inkisle-theme="business-blog"] a {
+  color: inherit;
+  text-decoration-color: color-mix(in oklch, currentColor 30%, transparent);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+html[data-inkisle-theme="business-blog"] a:hover {
+  color: var(--green-strong);
+  text-decoration-color: currentColor;
+}
+html[data-inkisle-theme="business-blog"] img,
+html[data-inkisle-theme="business-blog"] svg {
+  max-width: 100%;
+}
+html[data-inkisle-theme="business-blog"] :focus-visible {
+  outline: 3px solid color-mix(in oklch, var(--gold) 70%, transparent);
+  outline-offset: 3px;
+}
+html[data-inkisle-theme="business-blog"] main,
+html[data-inkisle-theme="business-blog"] .header-frame,
+html[data-inkisle-theme="business-blog"] .site-footer {
+  width: min(var(--content-width), calc(100% - var(--space-page) * 2));
+  margin-inline: auto;
+}
+html[data-inkisle-theme="business-blog"] main {
+  padding-block: 2.5rem 4rem;
+}
+html[data-inkisle-theme="business-blog"] .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid color-mix(in oklch, var(--line) 82%, transparent);
+  background: color-mix(in oklch, var(--page) 88%, transparent);
+  backdrop-filter: blur(18px);
+}
+html[data-inkisle-theme="business-blog"] .header-frame {
+  display: grid;
+  grid-template-columns: minmax(13rem, 1fr) auto minmax(15rem, 1fr);
+  gap: 1rem;
+  align-items: center;
+  padding-block: 0.85rem;
+}
+html[data-inkisle-theme="business-blog"] .brand {
+  display: inline-flex;
+  min-width: 0;
+  gap: 0.75rem;
+  align-items: center;
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .brand-mark {
+  display: grid;
+  width: 2.55rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--page);
+  font-weight: 800;
+  line-height: 1;
+}
+html[data-inkisle-theme="business-blog"] .brand-copy {
+  min-width: 0;
+}
+html[data-inkisle-theme="business-blog"] .brand-copy strong,
+html[data-inkisle-theme="business-blog"] .footer-brand strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+html[data-inkisle-theme="business-blog"] .brand-copy small {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+html[data-inkisle-theme="business-blog"] .main-nav,
+html[data-inkisle-theme="business-blog"] .header-actions,
+html[data-inkisle-theme="business-blog"] .locale-nav,
+html[data-inkisle-theme="business-blog"] .locale-menu nav,
+html[data-inkisle-theme="business-blog"] .tag-row,
+html[data-inkisle-theme="business-blog"] .article-meta,
+html[data-inkisle-theme="business-blog"] .resource-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.85rem;
+  align-items: center;
+}
+html[data-inkisle-theme="business-blog"] .main-nav {
+  justify-content: center;
+}
+html[data-inkisle-theme="business-blog"] .header-actions {
+  justify-content: end;
+}
+html[data-inkisle-theme="business-blog"] .main-nav a,
+html[data-inkisle-theme="business-blog"] .locale-nav a,
+html[data-inkisle-theme="business-blog"] .locale-menu summary,
+html[data-inkisle-theme="business-blog"] .locale-menu nav a,
+html[data-inkisle-theme="business-blog"] .header-cta,
+html[data-inkisle-theme="business-blog"] .resource-meta a,
+html[data-inkisle-theme="business-blog"] .tag-row a {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .main-nav a:hover,
+html[data-inkisle-theme="business-blog"] .locale-nav a:hover,
+html[data-inkisle-theme="business-blog"] .locale-nav a.is-active,
+html[data-inkisle-theme="business-blog"] .locale-menu summary:hover,
+html[data-inkisle-theme="business-blog"] .locale-menu nav a:hover,
+html[data-inkisle-theme="business-blog"] .locale-menu nav a.is-active,
+html[data-inkisle-theme="business-blog"] .resource-meta a:hover,
+html[data-inkisle-theme="business-blog"] .tag-row a:hover {
+  color: var(--green-strong);
+}
+html[data-inkisle-theme="business-blog"] .locale-nav a.is-active,
+html[data-inkisle-theme="business-blog"] .locale-menu nav a.is-active {
+  font-weight: 700;
+}
+html[data-inkisle-theme="business-blog"] .locale-menu {
+  position: relative;
+}
+html[data-inkisle-theme="business-blog"] .locale-menu summary {
+  cursor: pointer;
+  list-style: none;
+}
+html[data-inkisle-theme="business-blog"] .locale-menu summary::-webkit-details-marker {
+  display: none;
+}
+html[data-inkisle-theme="business-blog"] .locale-menu nav {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.65rem);
+  display: grid;
+  min-width: 9rem;
+  padding: 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+html[data-inkisle-theme="business-blog"] .locale-menu nav a {
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+}
+html[data-inkisle-theme="business-blog"] .locale-menu nav a:hover {
+  background: var(--panel-strong);
+}
+html[data-inkisle-theme="business-blog"] .header-cta,
+html[data-inkisle-theme="business-blog"] .button-primary,
+html[data-inkisle-theme="business-blog"] .button-secondary,
+html[data-inkisle-theme="business-blog"] .article-cta a {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: 750;
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .header-cta {
+  padding-inline: 0.85rem;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+}
+html[data-inkisle-theme="business-blog"] .button-primary,
+html[data-inkisle-theme="business-blog"] .article-cta a {
+  padding-inline: 1rem;
+  background: var(--green-strong);
+  color: oklch(98% 0.01 96);
+}
+html[data-inkisle-theme="business-blog"] .button-primary:hover,
+html[data-inkisle-theme="business-blog"] .article-cta a:hover {
+  background: var(--green);
+  color: oklch(98% 0.01 96);
+}
+html[data-inkisle-theme="business-blog"] .button-secondary {
+  padding-inline: 1rem;
+  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  color: var(--ink);
+}
+html[data-inkisle-theme="business-blog"] .theme-toggle {
+  position: relative;
+  display: inline-grid;
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+}
+html[data-inkisle-theme="business-blog"] .theme-toggle-sun,
+html[data-inkisle-theme="business-blog"] .theme-toggle-moon {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+html[data-inkisle-theme="business-blog"] .theme-toggle-sun {
+  border: 2px solid currentColor;
+  border-radius: 999px;
+}
+html[data-inkisle-theme="business-blog"] .theme-toggle-moon {
+  border-radius: 999px;
+  box-shadow: -0.28rem 0 0 0 currentColor;
+  transform: translateX(0.3rem);
+}
+html[data-inkisle-theme="business-blog"] .theme-toggle[data-theme="light"] .theme-toggle-moon,
+html[data-inkisle-theme="business-blog"] .theme-toggle[data-theme="dark"] .theme-toggle-sun {
+  opacity: 0;
+  transform: scale(0.8);
+}
+html[data-inkisle-theme="business-blog"] .business-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.72fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: stretch;
+  padding-block: clamp(2rem, 6vw, 5rem);
+}
+html[data-inkisle-theme="business-blog"] .hero-copy {
+  align-self: center;
+}
+html[data-inkisle-theme="business-blog"] .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--green-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+html[data-inkisle-theme="business-blog"] .hero-copy h1,
+html[data-inkisle-theme="business-blog"] .article-hero h1,
+html[data-inkisle-theme="business-blog"] .page-title h1,
+html[data-inkisle-theme="business-blog"] .not-found h1 {
+  max-width: 13ch;
+  margin: 0.6rem 0 0;
+  font-family: var(--font-display);
+  font-size: 4rem;
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+html[data-inkisle-theme="business-blog"] .hero-copy p,
+html[data-inkisle-theme="business-blog"] .page-title p,
+html[data-inkisle-theme="business-blog"] .article-summary {
+  max-width: 42rem;
+  margin: 1.1rem 0 0;
+  color: var(--ink-muted);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+html[data-inkisle-theme="business-blog"] .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.45rem;
+}
+html[data-inkisle-theme="business-blog"] .featured-insight {
+  align-self: end;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid var(--line);
+  border-top: 6px solid var(--gold);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+html[data-inkisle-theme="business-blog"] .featured-insight > span {
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+html[data-inkisle-theme="business-blog"] .featured-insight h2 {
+  margin: 0.7rem 0 0;
+  font-size: 1.55rem;
+  line-height: 1.18;
+}
+html[data-inkisle-theme="business-blog"] .featured-insight h2 a,
+html[data-inkisle-theme="business-blog"] .resource-body h2 a {
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .featured-insight p {
+  margin: 0.85rem 0 0;
+  color: var(--ink-muted);
+}
+html[data-inkisle-theme="business-blog"] .featured-insight div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 1rem;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+html[data-inkisle-theme="business-blog"] .featured-insight strong {
+  color: var(--violet);
+}
+html[data-inkisle-theme="business-blog"] .briefing-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--line);
+}
+html[data-inkisle-theme="business-blog"] .briefing-strip a {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 7rem;
+  padding: 1rem;
+  background: var(--panel);
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .briefing-strip span {
+  color: var(--green-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+html[data-inkisle-theme="business-blog"] .briefing-strip strong {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+html[data-inkisle-theme="business-blog"] .content-band,
+html[data-inkisle-theme="business-blog"] .category-lanes,
+html[data-inkisle-theme="business-blog"] .listing-shell,
+html[data-inkisle-theme="business-blog"] .search-shell,
+html[data-inkisle-theme="business-blog"] .page-shell,
+html[data-inkisle-theme="business-blog"] .article-shell {
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+html[data-inkisle-theme="business-blog"] .section-header,
+html[data-inkisle-theme="business-blog"] .page-title {
+  max-width: 46rem;
+  margin-bottom: 1.5rem;
+}
+html[data-inkisle-theme="business-blog"] .section-header h2,
+html[data-inkisle-theme="business-blog"] .article-cta h2 {
+  margin: 0.35rem 0 0;
+  font-size: 2rem;
+  line-height: 1.12;
+}
+html[data-inkisle-theme="business-blog"] .resource-list,
+html[data-inkisle-theme="business-blog"] .search-results {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+html[data-inkisle-theme="business-blog"] .resource-card {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.28fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+html[data-inkisle-theme="business-blog"] .resource-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow);
+}
+html[data-inkisle-theme="business-blog"] .resource-meta {
+  align-content: start;
+  align-items: start;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+html[data-inkisle-theme="business-blog"] .resource-body h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.22;
+}
+html[data-inkisle-theme="business-blog"] .resource-body p {
+  margin: 0.55rem 0 0;
+  color: var(--ink-muted);
+}
+html[data-inkisle-theme="business-blog"] .tag-row {
+  margin-top: 0.85rem;
+}
+html[data-inkisle-theme="business-blog"] .tag-row a {
+  padding: 0.22rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--panel-strong) 68%, transparent);
+}
+html[data-inkisle-theme="business-blog"] .category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+html[data-inkisle-theme="business-blog"] .category-grid a {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .category-grid span {
+  color: var(--gold);
+  font-size: 2rem;
+  font-weight: 850;
+  line-height: 1;
+}
+html[data-inkisle-theme="business-blog"] .category-grid strong {
+  align-self: end;
+}
+html[data-inkisle-theme="business-blog"] .pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+html[data-inkisle-theme="business-blog"] .pagination ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+html[data-inkisle-theme="business-blog"] .pagination a {
+  display: inline-flex;
+  min-width: 2.35rem;
+  min-height: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .pagination a.is-current {
+  border-color: var(--green-strong);
+  background: var(--green-strong);
+  color: oklch(98% 0.01 180);
+}
+html[data-inkisle-theme="business-blog"] .pagination a.is-disabled {
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+html[data-inkisle-theme="business-blog"] .article-shell,
+html[data-inkisle-theme="business-blog"] .page-shell {
+  width: min(100%, 860px);
+  margin-inline: auto;
+}
+html[data-inkisle-theme="business-blog"] .article-hero,
+html[data-inkisle-theme="business-blog"] .page-title {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1.5rem;
+}
+html[data-inkisle-theme="business-blog"] .article-hero h1,
+html[data-inkisle-theme="business-blog"] .page-title h1,
+html[data-inkisle-theme="business-blog"] .not-found h1 {
+  max-width: 16ch;
+  font-size: 3rem;
+  line-height: 1.05;
+}
+html[data-inkisle-theme="business-blog"] .article-meta {
+  margin-top: 1rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+html[data-inkisle-theme="business-blog"] .article-meta a {
+  color: var(--green-strong);
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .prose {
+  max-width: var(--measure);
+  margin: 2rem auto 0;
+  font-size: 1.05rem;
+  line-height: 1.78;
+}
+html[data-inkisle-theme="business-blog"] .prose > * + * {
+  margin-top: 1.05em;
+}
+html[data-inkisle-theme="business-blog"] .prose h1,
+html[data-inkisle-theme="business-blog"] .prose h2,
+html[data-inkisle-theme="business-blog"] .prose h3 {
+  margin-top: 2.2em;
+  color: var(--ink);
+  line-height: 1.2;
+}
+html[data-inkisle-theme="business-blog"] .prose h1 {
+  font-size: 2rem;
+}
+html[data-inkisle-theme="business-blog"] .prose h2 {
+  font-size: 1.6rem;
+}
+html[data-inkisle-theme="business-blog"] .prose h3 {
+  font-size: 1.25rem;
+}
+html[data-inkisle-theme="business-blog"] .prose p,
+html[data-inkisle-theme="business-blog"] .prose li,
+html[data-inkisle-theme="business-blog"] .prose blockquote {
+  color: var(--ink-muted);
+}
+html[data-inkisle-theme="business-blog"] .prose strong {
+  color: var(--ink);
+}
+html[data-inkisle-theme="business-blog"] .prose ul,
+html[data-inkisle-theme="business-blog"] .prose ol {
+  padding-left: 1.35rem;
+}
+html[data-inkisle-theme="business-blog"] .prose blockquote {
+  margin-inline: 0;
+  padding: 0.2rem 0 0.2rem 1rem;
+  border-left: 4px solid var(--gold);
+}
+html[data-inkisle-theme="business-blog"] .prose code {
+  border-radius: 6px;
+  background: var(--panel-strong);
+  color: var(--violet);
+  font-size: 0.92em;
+  padding: 0.12rem 0.3rem;
+}
+html[data-inkisle-theme="business-blog"] .prose pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: oklch(18% 0.028 248);
+  color: oklch(94% 0.015 96);
+}
+html[data-inkisle-theme="business-blog"] .prose pre code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+html[data-inkisle-theme="business-blog"] .article-cta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+html[data-inkisle-theme="business-blog"] .article-cta span {
+  color: var(--green-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+html[data-inkisle-theme="business-blog"] .article-cta h2 {
+  font-size: 1.35rem;
+}
+html[data-inkisle-theme="business-blog"] .comment-mount:empty {
+  display: none;
+}
+html[data-inkisle-theme="business-blog"] .search-form {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 42rem;
+  margin-bottom: 1.5rem;
+}
+html[data-inkisle-theme="business-blog"] .search-form label {
+  color: var(--ink-muted);
+  font-weight: 700;
+}
+html[data-inkisle-theme="business-blog"] .search-form input {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding-inline: 0.9rem;
+}
+html[data-inkisle-theme="business-blog"] .search-results a {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .search-results span,
+html[data-inkisle-theme="business-blog"] .empty-state {
+  color: var(--ink-muted);
+}
+html[data-inkisle-theme="business-blog"] .not-found {
+  display: grid;
+  min-height: 50vh;
+  place-content: center;
+  justify-items: start;
+}
+html[data-inkisle-theme="business-blog"] .not-found > span {
+  color: var(--gold);
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1;
+}
+html[data-inkisle-theme="business-blog"] .site-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  align-items: start;
+  padding-block: 2rem;
+  border-top: 1px solid var(--line);
+}
+html[data-inkisle-theme="business-blog"] .footer-brand p {
+  max-width: 36rem;
+  margin: 0.45rem 0 0;
+  color: var(--ink-muted);
+}
+html[data-inkisle-theme="business-blog"] .site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.9rem;
+  justify-content: end;
+}
+html[data-inkisle-theme="business-blog"] .site-footer nav a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+html[data-inkisle-theme="business-blog"] .site-footer small {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.9rem;
+  color: var(--ink-soft);
+}
+@media (max-width: 900px) {
+html[data-inkisle-theme="business-blog"] .header-frame,
+html[data-inkisle-theme="business-blog"] .business-hero,
+html[data-inkisle-theme="business-blog"] .site-footer {
+    grid-template-columns: 1fr;
+  }
+html[data-inkisle-theme="business-blog"] .main-nav,
+html[data-inkisle-theme="business-blog"] .header-actions,
+html[data-inkisle-theme="business-blog"] .site-footer nav {
+    justify-content: start;
+  }
+html[data-inkisle-theme="business-blog"] .business-hero {
+    padding-top: 2rem;
+  }
+html[data-inkisle-theme="business-blog"] .hero-copy h1 {
+    font-size: 3rem;
+  }
+html[data-inkisle-theme="business-blog"] .briefing-strip,
+html[data-inkisle-theme="business-blog"] .category-grid {
+    grid-template-columns: 1fr;
+  }
+html[data-inkisle-theme="business-blog"] .resource-card {
+    grid-template-columns: 1fr;
+  }
+
+
+}
+@media (max-width: 620px) {
+html[data-inkisle-theme="business-blog"] main {
+    padding-block: 1.25rem 3rem;
+  }
+html[data-inkisle-theme="business-blog"] .header-frame {
+    gap: 0.75rem;
+  }
+html[data-inkisle-theme="business-blog"] .hero-copy h1,
+html[data-inkisle-theme="business-blog"] .article-hero h1,
+html[data-inkisle-theme="business-blog"] .page-title h1,
+html[data-inkisle-theme="business-blog"] .not-found h1 {
+    font-size: 2.35rem;
+  }
+html[data-inkisle-theme="business-blog"] .hero-actions,
+html[data-inkisle-theme="business-blog"] .article-cta,
+html[data-inkisle-theme="business-blog"] .pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+html[data-inkisle-theme="business-blog"] .button-primary,
+html[data-inkisle-theme="business-blog"] .button-secondary,
+html[data-inkisle-theme="business-blog"] .article-cta a {
+    width: 100%;
+  }
+html[data-inkisle-theme="business-blog"] .locale-menu nav {
+    left: 0;
+    right: auto;
+  }
+
+
+}

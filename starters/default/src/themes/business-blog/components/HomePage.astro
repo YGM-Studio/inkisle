@@ -1,0 +1,93 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Pagination from "./Pagination.astro";
+import PostList from "./PostList.astro";
+import { getLocaleBase, getSiteDescription, siteConfig } from "../../../config";
+import { formatDate, getCategoryIndex, getPosts } from "../../../lib/content";
+import { paginate } from "../../../lib/pagination";
+
+type Props = {
+  locale: string;
+};
+
+const { locale } = Astro.props;
+const posts = await getPosts(locale);
+const page = paginate(posts, 1);
+const categories = (await getCategoryIndex(locale)).slice(0, 4);
+const featured = posts[0];
+const secondaryPosts = posts.slice(1, 4);
+const isZh = locale === "zh";
+const homeDescription = getSiteDescription(locale);
+const localeBase = getLocaleBase(locale);
+---
+
+<BaseLayout locale={locale} canonicalPath={`${localeBase}/`} description={homeDescription}>
+  <section class="business-hero" aria-labelledby="home-intro-title">
+    <div class="hero-copy">
+      <span class="eyebrow">{isZh ? "商业内容中心" : "Business Knowledge Hub"}</span>
+      <h1 id="home-intro-title">{siteConfig.title}</h1>
+      <p>{homeDescription}</p>
+      <div class="hero-actions">
+        <a class="button-primary" href="#latest-posts">{isZh ? "阅读最新文章" : "Read latest"}</a>
+        <a class="button-secondary" href={`${localeBase}/search/`}>{isZh ? "搜索资源" : "Search resources"}</a>
+      </div>
+    </div>
+
+    {
+      featured && (
+        <article class="featured-insight">
+          <span>{isZh ? "精选" : "Featured"}</span>
+          <h2>
+            <a href={featured.url}>{featured.title}</a>
+          </h2>
+          {(featured.summary || featured.excerpt) && <p>{featured.summary || featured.excerpt}</p>}
+          <div>
+            {featured.date && <time datetime={featured.date}>{formatDate(featured.date, locale)}</time>}
+            {featured.category && <strong>{featured.category}</strong>}
+          </div>
+        </article>
+      )
+    }
+  </section>
+
+  {
+    secondaryPosts.length > 0 && (
+      <section class="briefing-strip" aria-label={isZh ? "重点文章" : "Priority reads"}>
+        {secondaryPosts.map((post) => (
+          <a href={post.url}>
+            <span>{post.category || (isZh ? "文章" : "Article")}</span>
+            <strong>{post.title}</strong>
+          </a>
+        ))}
+      </section>
+    )
+  }
+
+  <section class="content-band" aria-labelledby="latest-posts">
+    <div class="section-header">
+      <span class="eyebrow">{isZh ? "资源库" : "Resource Library"}</span>
+      <h2 id="latest-posts">{isZh ? "最新洞察" : "Latest Insights"}</h2>
+    </div>
+    <PostList posts={page.items} emptyLabel={isZh ? "还没有公开文章。" : "No published posts yet."} />
+    <Pagination locale={locale} currentPage={page.currentPage} totalPages={page.totalPages} />
+  </section>
+
+  {
+    categories.length > 0 && (
+      <section class="category-lanes" aria-labelledby="category-lanes-title">
+        <div class="section-header">
+          <span class="eyebrow">{isZh ? "主题" : "Topics"}</span>
+          <h2 id="category-lanes-title">{isZh ? "按业务主题浏览" : "Browse by business topic"}</h2>
+        </div>
+        <div class="category-grid">
+          {categories.map((category) => (
+            <a href={`${localeBase}/categories/${category.slug}/`}>
+              <span>{category.posts.length}</span>
+              <strong>{category.name}</strong>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

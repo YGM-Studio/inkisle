@@ -87,6 +87,7 @@ export type InkIsleConfig = {
     postsPerPage: number;
   };
   theme: {
+    name: string;
     defaultMode: ThemeMode;
     allowUserToggle: boolean;
     storageKey: string;
@@ -143,6 +144,7 @@ const defaultSiteConfig: InkIsleConfig = {
     postsPerPage: 10
   },
   theme: {
+    name: "personal",
     defaultMode: "system",
     allowUserToggle: true,
     storageKey: "inkisle-theme"

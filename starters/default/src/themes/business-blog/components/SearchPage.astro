@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getLocaleBase } from "../config";
+import { getLocaleBase } from "../../../config";
 
 type Props = {
   locale: string;
@@ -18,8 +18,8 @@ const isZh = locale === "zh";
 >
   <section class="search-shell" data-search-locale={locale}>
     <header class="page-title">
-      <h1>{isZh ? "搜索" : "Search"}</h1>
-      <p>{isZh ? "从标题、摘要、标签和正文里查找。" : "Search by title, summary, tags, and body text."}</p>
+      <span class="eyebrow">{isZh ? "资源搜索" : "Resource Search"}</span>
+      <h1>{isZh ? "查找洞察、主题和文章" : "Find insights, topics, and articles"}</h1>
     </header>
     <form class="search-form" role="search">
       <label for="site-search">{isZh ? "关键词" : "Keywords"}</label>

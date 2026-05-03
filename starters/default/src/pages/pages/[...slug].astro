@@ -1,8 +1,8 @@
 ---
-import MarkdownPage from "../../components/MarkdownPage.astro";
 import RedirectPage from "../../components/RedirectPage.astro";
 import { siteConfig } from "../../config";
 import { getPages, type ContentEntry } from "../../lib/content";
+import { getActiveTheme } from "../../themes/registry";
 
 export async function getStaticPaths() {
   const pages = await getPages(siteConfig.defaultLocale);
@@ -15,6 +15,7 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props as { page: ContentEntry };
 const redirectTarget = siteConfig.prefixDefaultLocale ? page.url : undefined;
+const MarkdownPage = (await getActiveTheme(siteConfig.theme.name)).components.MarkdownPage;
 ---
 
 {redirectTarget ? <RedirectPage to={redirectTarget} /> : <MarkdownPage page={page} />}

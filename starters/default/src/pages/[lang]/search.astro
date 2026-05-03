@@ -1,7 +1,7 @@
 ---
 import RedirectPage from "../../components/RedirectPage.astro";
-import SearchPage from "../../components/SearchPage.astro";
-import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix } from "../../config";
+import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix, siteConfig } from "../../config";
+import { getActiveTheme } from "../../themes/registry";
 
 export async function getStaticPaths() {
   return getLocaleCodes().map((lang) => ({ params: { lang } }));
@@ -9,6 +9,7 @@ export async function getStaticPaths() {
 
 const { lang } = Astro.params;
 const redirectTarget = shouldRedirectDefaultLocalePrefix(lang) ? `${getLocaleBase(lang)}/search/` : undefined;
+const SearchPage = (await getActiveTheme(siteConfig.theme.name)).components.SearchPage;
 ---
 
 {redirectTarget ? <RedirectPage to={redirectTarget} /> : <SearchPage locale={lang} />}

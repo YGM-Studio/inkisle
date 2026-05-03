@@ -1,8 +1,8 @@
 ---
 import RedirectPage from "../../components/RedirectPage.astro";
-import TaxonomyPage from "../../components/TaxonomyPage.astro";
 import { getLocaleBase, siteConfig } from "../../config";
 import { getTagIndex } from "../../lib/content";
+import { getActiveTheme } from "../../themes/registry";
 
 export async function getStaticPaths() {
   const tags = await getTagIndex(siteConfig.defaultLocale);
@@ -17,6 +17,7 @@ const { tag } = Astro.props;
 const redirectTarget = siteConfig.prefixDefaultLocale
   ? `${getLocaleBase(siteConfig.defaultLocale)}/tags/${tag.slug}/`
   : undefined;
+const TaxonomyPage = (await getActiveTheme(siteConfig.theme.name)).components.TaxonomyPage;
 ---
 
 {

@@ -2,9 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
-import { getLocaleBase, getSiteDescription } from "../config";
-import { getPosts } from "../lib/content";
-import { paginate } from "../lib/pagination";
+import { getLocaleBase, getSiteDescription } from "../../../config";
+import { getPosts } from "../../../lib/content";
+import { paginate } from "../../../lib/pagination";
 
 type Props = {
   locale: string;

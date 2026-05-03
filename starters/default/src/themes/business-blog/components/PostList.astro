@@ -1,0 +1,42 @@
+---
+import { categoryUrl, formatDate, tagUrl, type ContentEntry } from "../../../lib/content";
+
+type Props = {
+  posts: ContentEntry[];
+  emptyLabel?: string;
+};
+
+const { posts, emptyLabel = "No posts yet." } = Astro.props;
+---
+
+{
+  posts.length > 0 ? (
+    <ol class="resource-list">
+      {posts.map((post) => (
+        <li>
+          <article class="resource-card">
+            <div class="resource-meta">
+              {post.date && <time datetime={post.date}>{formatDate(post.date, post.locale)}</time>}
+              {post.category && <a href={categoryUrl(post.locale, post.category)}>{post.category}</a>}
+            </div>
+            <div class="resource-body">
+              <h2>
+                <a href={post.url}>{post.title}</a>
+              </h2>
+              {(post.summary || post.excerpt) && <p>{post.summary || post.excerpt}</p>}
+              {post.tags.length > 0 && (
+                <nav class="tag-row" aria-label={`Tags for ${post.title}`}>
+                  {post.tags.slice(0, 4).map((tag) => (
+                    <a href={tagUrl(post.locale, tag)}>{tag}</a>
+                  ))}
+                </nav>
+              )}
+            </div>
+          </article>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="empty-state">{emptyLabel}</p>
+  )
+}

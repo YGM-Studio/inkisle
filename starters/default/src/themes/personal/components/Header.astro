@@ -1,0 +1,65 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import { getLocaleBase, getLocaleLabel, siteConfig } from "../../../config";
+import { getPages } from "../../../lib/content";
+
+type Props = {
+  locale: string;
+};
+
+const { locale } = Astro.props;
+const pages = await getPages(locale);
+const aboutPage = pages.find((page) => page.slug === "about");
+const navItems = [
+  { href: `${getLocaleBase(locale)}/`, label: locale === "zh" ? "文章" : "Posts" },
+  { href: `${getLocaleBase(locale)}/search/`, label: locale === "zh" ? "搜索" : "Search" }
+];
+
+if (aboutPage) {
+  navItems.push({ href: aboutPage.url, label: locale === "zh" ? "关于" : "About" });
+}
+const brandSubtitle = siteConfig.brand.subtitle || siteConfig.author.name;
+const compactLocaleSelector = siteConfig.locales.length > 2;
+---
+
+<header class="site-header">
+  <div class="header-top">
+    <a class="brand" href={`${getLocaleBase(locale)}/`} aria-label={siteConfig.title}>
+      <span class="brand-mark" aria-hidden="true">{siteConfig.brand.mark}</span>
+      <span>
+        <strong>{siteConfig.title}</strong>
+        {brandSubtitle && <small>{brandSubtitle}</small>}
+      </span>
+    </a>
+
+    <div class="header-actions">
+      {
+        compactLocaleSelector ? (
+          <details class="locale-menu">
+            <summary>{getLocaleLabel(locale)}</summary>
+            <nav aria-label="Languages">
+              {siteConfig.locales.map((item) => (
+                <a class:list={[item.code === locale && "is-active"]} href={`${getLocaleBase(item.code)}/`}>
+                  {getLocaleLabel(item.code)}
+                </a>
+              ))}
+            </nav>
+          </details>
+        ) : (
+          <nav class="locale-nav" aria-label="Languages">
+            {siteConfig.locales.map((item) => (
+              <a class:list={[item.code === locale && "is-active"]} href={`${getLocaleBase(item.code)}/`}>
+                {getLocaleLabel(item.code)}
+              </a>
+            ))}
+          </nav>
+        )
+      }
+      <ThemeToggle locale={locale} />
+    </div>
+  </div>
+
+  <nav class="main-nav" aria-label="Primary">
+    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+</header>

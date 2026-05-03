@@ -2,9 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
-import { getLocaleBase } from "../config";
-import { getPosts } from "../lib/content";
-import { paginate } from "../lib/pagination";
+import { getLocaleBase } from "../../../config";
+import { getPosts } from "../../../lib/content";
+import { paginate } from "../../../lib/pagination";
 
 type Props = {
   locale: string;
@@ -25,7 +25,7 @@ const isZh = locale === "zh";
 >
   <section class="listing-shell" aria-labelledby="paged-posts">
     <header class="page-title">
-      <span class="eyebrow">{isZh ? "文章" : "Posts"}</span>
+      <span class="eyebrow">{isZh ? "资源库" : "Resource Library"}</span>
       <h1 id="paged-posts">{isZh ? `第 ${page.currentPage} 页` : `Page ${page.currentPage}`}</h1>
       <p>
         {

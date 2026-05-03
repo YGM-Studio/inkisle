@@ -29,6 +29,24 @@ npm run check:links
 npm run preview
 ```
 
+## Theme
+
+InkIsle ships with built-in themes. The default is `personal`. Use
+`business-blog` for a more commercial blog or resource-center presentation:
+
+```js
+export default {
+  theme: {
+    name: "business-blog",
+    defaultMode: "light",
+    allowUserToggle: false
+  }
+};
+```
+
+`name` selects the visual theme. `defaultMode`, `allowUserToggle`, and
+`storageKey` control light/dark/system color mode behavior.
+
 Footer ICP filing text is optional. Add it to `inkisle.config.mjs` only when you have a filing number:
 
 ```js

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import type { ContentEntry } from "../lib/content";
+import type { ContentEntry } from "../../../lib/content";
 
 type Props = {
   page: ContentEntry;
@@ -12,6 +12,7 @@ const { page } = Astro.props;
 <BaseLayout title={page.title} description={page.summary || page.excerpt} locale={page.locale} canonicalPath={page.url}>
   <article class="page-shell">
     <header class="page-title">
+      <span class="eyebrow">{page.locale === "zh" ? "页面" : "Page"}</span>
       <h1>{page.title}</h1>
       {page.summary && <p>{page.summary}</p>}
     </header>

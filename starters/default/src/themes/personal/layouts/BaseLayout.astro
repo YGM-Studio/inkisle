@@ -1,0 +1,147 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { absoluteUrl, getSiteDescription, siteConfig } from "../../../config";
+import "../styles.css";
+
+type Props = {
+  title?: string;
+  description?: string;
+  locale: string;
+  canonicalPath?: string;
+  robots?: string;
+};
+
+const {
+  title = siteConfig.title,
+  locale,
+  canonicalPath = "/",
+  robots
+} = Astro.props;
+
+const description = Astro.props.description ?? getSiteDescription(locale);
+const pageTitle = title === siteConfig.title ? title : `${title} - ${siteConfig.title}`;
+const canonical = absoluteUrl(canonicalPath);
+const configuredTheme = siteConfig.theme.defaultMode;
+const initialTheme = configuredTheme === "system" ? undefined : configuredTheme;
+const baiduAnalyticsId = siteConfig.analytics.baidu?.id?.trim();
+const manifestPath = siteConfig.pwa.manifestPath || "/manifest.json";
+const serviceWorkerPath = siteConfig.pwa.serviceWorkerPath || "/sw.js";
+---
+
+<!doctype html>
+<html lang={locale} data-theme={initialTheme} data-inkisle-theme="personal">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content="InkIsle" />
+    <script
+      is:inline
+      define:vars={{
+        allowUserToggle: siteConfig.theme.allowUserToggle,
+        defaultTheme: siteConfig.theme.defaultMode,
+        storageKey: siteConfig.theme.storageKey
+      }}
+    >
+      (() => {
+        const root = document.documentElement;
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        const isTheme = (value) => value === "light" || value === "dark" || value === "system";
+        const readStoredTheme = () => {
+          if (!allowUserToggle) return undefined;
+          try {
+            const value = window.localStorage.getItem(storageKey);
+            return isTheme(value) ? value : undefined;
+          } catch {
+            return undefined;
+          }
+        };
+        const storeTheme = (mode) => {
+          if (!allowUserToggle) return;
+          try {
+            window.localStorage.setItem(storageKey, mode);
+          } catch {}
+        };
+        const resolveTheme = (mode) => {
+          if (mode === "light" || mode === "dark") return mode;
+          return media.matches ? "dark" : "light";
+        };
+        const applyTheme = (mode) => {
+          const resolvedTheme = resolveTheme(isTheme(mode) ? mode : defaultTheme);
+          root.dataset.theme = resolvedTheme;
+          root.dataset.themeMode = mode;
+          root.style.colorScheme = resolvedTheme;
+          window.dispatchEvent(new CustomEvent("inkisle-theme-change", { detail: { theme: resolvedTheme, mode } }));
+        };
+
+        applyTheme(readStoredTheme() || defaultTheme);
+
+        window.__inkisleTheme = {
+          allowUserToggle,
+          defaultMode: defaultTheme,
+          get theme() {
+            return root.dataset.theme || resolveTheme(defaultTheme);
+          },
+          set(mode) {
+            if (!isTheme(mode)) return;
+            storeTheme(mode);
+            applyTheme(mode);
+          },
+          toggle() {
+            this.set(this.theme === "dark" ? "light" : "dark");
+          }
+        };
+
+        media.addEventListener("change", () => {
+          if (!readStoredTheme() && defaultTheme === "system") {
+            applyTheme("system");
+          }
+        });
+      })();
+    </script>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {robots && <meta name="robots" content={robots} />}
+    <link rel="icon" href={siteConfig.brand.favicon} />
+    <link rel="canonical" href={canonical} />
+    <link rel="manifest" href={manifestPath} />
+    <meta name="theme-color" content={siteConfig.pwa.themeColor} />
+    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.title} RSS`} href="/rss.xml" />
+    <link rel="alternate" type="application/feed+json" title={`${siteConfig.title} JSON Feed`} href="/feed.json" />
+    {
+      baiduAnalyticsId && (
+        <script
+          is:inline
+          define:vars={{ baiduAnalyticsId }}
+        >
+          window._hmt = window._hmt || [];
+          (() => {
+            const script = document.createElement("script");
+            script.async = true;
+            script.src = `https://hm.baidu.com/hm.js?${baiduAnalyticsId}`;
+            const firstScript = document.getElementsByTagName("script")[0];
+            firstScript?.parentNode?.insertBefore(script, firstScript);
+          })();
+        </script>
+      )
+    }
+    {
+      siteConfig.pwa.enabled && siteConfig.pwa.registerServiceWorker && (
+        <script is:inline define:vars={{ serviceWorkerPath }}>
+          if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+              navigator.serviceWorker.register(serviceWorkerPath).catch(() => {});
+            });
+          }
+        </script>
+      )
+    }
+  </head>
+  <body>
+    <Header locale={locale} />
+    <main>
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>
