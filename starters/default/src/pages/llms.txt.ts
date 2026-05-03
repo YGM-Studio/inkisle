@@ -1,4 +1,4 @@
-import { absoluteUrl, siteConfig } from "../config";
+import { absoluteUrl, getSiteDescription, siteConfig } from "../config";
 import { getPages, getPosts } from "../lib/content";
 
 export async function GET() {
@@ -8,7 +8,7 @@ export async function GET() {
   const lines = [
     `# ${siteConfig.title}`,
     "",
-    `> ${siteConfig.description}`,
+    `> ${getSiteDescription()}`,
     "",
     "## Content",
     "",

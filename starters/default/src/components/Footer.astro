@@ -1,5 +1,5 @@
 ---
-import { getLocaleBase, siteConfig } from "../config";
+import { getLocaleBase, getSiteDescription, siteConfig } from "../config";
 
 type Props = {
   locale: string;
@@ -7,6 +7,7 @@ type Props = {
 
 const { locale } = Astro.props;
 const isZh = locale === "zh";
+const siteDescription = getSiteDescription(locale);
 const icpFiling = siteConfig.filing.icp?.number?.trim()
   ? {
       number: siteConfig.filing.icp.number.trim(),
@@ -24,7 +25,7 @@ const footerLinks = [
 <footer class="site-footer">
   <div>
     <strong>{siteConfig.title}</strong>
-    <p>{siteConfig.description}</p>
+    <p>{siteDescription}</p>
   </div>
 
   <nav aria-label="Footer">

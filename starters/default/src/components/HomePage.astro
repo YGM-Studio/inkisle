@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
-import { getLocaleBase, siteConfig } from "../config";
+import { getLocaleBase, getSiteDescription } from "../config";
 import { getPosts } from "../lib/content";
 import { paginate } from "../lib/pagination";
 
@@ -14,11 +14,12 @@ const { locale } = Astro.props;
 const posts = await getPosts(locale);
 const page = paginate(posts, 1);
 const isZh = locale === "zh";
+const homeDescription = getSiteDescription(locale);
 ---
 
-<BaseLayout locale={locale} canonicalPath={`${getLocaleBase(locale)}/`}>
+<BaseLayout locale={locale} canonicalPath={`${getLocaleBase(locale)}/`} description={homeDescription}>
   <section class="home-intro" aria-labelledby="home-intro-title">
-    <h1 id="home-intro-title">{siteConfig.description}</h1>
+    <h1 id="home-intro-title">{homeDescription}</h1>
   </section>
 
   <section aria-labelledby="latest-posts">

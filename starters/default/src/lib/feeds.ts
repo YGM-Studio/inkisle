@@ -1,7 +1,8 @@
-import { absoluteUrl, siteConfig } from "../config";
+import { absoluteUrl, getSiteDescription, siteConfig } from "../config";
 import type { ContentEntry } from "./content";
 
 export function toRssXml(posts: ContentEntry[]) {
+  const description = getSiteDescription();
   const items = posts
     .map((post) => {
       const link = absoluteUrl(post.url);
@@ -25,7 +26,7 @@ export function toRssXml(posts: ContentEntry[]) {
     "<channel>",
     `<title>${escapeXml(siteConfig.title)}</title>`,
     `<link>${escapeXml(siteConfig.site)}</link>`,
-    `<description>${escapeXml(siteConfig.description)}</description>`,
+    `<description>${escapeXml(description)}</description>`,
     items,
     "</channel>",
     "</rss>"
@@ -33,12 +34,14 @@ export function toRssXml(posts: ContentEntry[]) {
 }
 
 export function toJsonFeed(posts: ContentEntry[]) {
+  const description = getSiteDescription();
+
   return {
     version: "https://jsonfeed.org/version/1.1",
     title: siteConfig.title,
     home_page_url: siteConfig.site,
     feed_url: absoluteUrl("/feed.json"),
-    description: siteConfig.description,
+    description,
     authors: [{ name: siteConfig.author.name, url: siteConfig.author.url }],
     items: posts.map((post) => ({
       id: absoluteUrl(post.url),

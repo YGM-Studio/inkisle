@@ -1,7 +1,7 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { absoluteUrl, siteConfig } from "../config";
+import { absoluteUrl, getSiteDescription, siteConfig } from "../config";
 import "../styles/global.css";
 
 type Props = {
@@ -13,11 +13,11 @@ type Props = {
 
 const {
   title = siteConfig.title,
-  description = siteConfig.description,
   locale,
   canonicalPath = "/"
 } = Astro.props;
 
+const description = Astro.props.description ?? getSiteDescription(locale);
 const pageTitle = title === siteConfig.title ? title : `${title} - ${siteConfig.title}`;
 const canonical = absoluteUrl(canonicalPath);
 const configuredTheme = siteConfig.theme.defaultMode;

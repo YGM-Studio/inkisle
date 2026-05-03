@@ -4,6 +4,7 @@ export type LocaleConfig = {
 };
 
 export type ThemeMode = "system" | "light" | "dark";
+export type LocalizedText = string | Record<string, string>;
 
 type DeepPartial<T> = {
   [Property in keyof T]?: T[Property] extends Array<unknown>
@@ -15,7 +16,7 @@ type DeepPartial<T> = {
 
 export type InkIsleConfig = {
   title: string;
-  description: string;
+  description: LocalizedText;
   site: string;
   brand: {
     mark: string;
@@ -52,7 +53,10 @@ export type InkIsleConfig = {
 
 const defaultSiteConfig: InkIsleConfig = {
   title: "墨屿 / InkIsle",
-  description: "AI-native Markdown publishing system for static-first blogs and content sites.",
+  description: {
+    zh: "为静态博客和内容站打造的 AI 友好 Markdown 发布系统。",
+    en: "AI-native Markdown publishing system for static-first blogs and content sites."
+  },
   site: process.env.SITE_URL || "https://inkisle.example",
   brand: {
     mark: "Ink",
@@ -94,6 +98,10 @@ export function getLocaleLabel(code: string) {
   return siteConfig.locales.find((locale) => locale.code === code)?.label ?? code;
 }
 
+export function getSiteDescription(locale = siteConfig.defaultLocale) {
+  return resolveLocalizedText(siteConfig.description, locale);
+}
+
 export function isKnownLocale(code: string) {
   return getLocaleCodes().includes(code);
 }
@@ -123,6 +131,14 @@ export function absoluteUrl(pathname: string) {
   return new URL(pathname, siteConfig.site).toString();
 }
 
+function resolveLocalizedText(value: LocalizedText, locale: string) {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  return value[locale] ?? value[siteConfig.defaultLocale] ?? Object.values(value).find(Boolean) ?? "";
+}
+
 function loadSiteConfigFromEnv(): DeepPartial<InkIsleConfig> {
   const rawConfig = process.env.INKISLE_SITE_CONFIG;
 
@@ -147,7 +163,7 @@ function mergeConfig<T extends Record<string, unknown>>(base: T, override: DeepP
       continue;
     }
 
-    if (isRecord(base[key]) && isRecord(value) && !Array.isArray(value)) {
+    if (key !== "description" && isRecord(base[key]) && isRecord(value) && !Array.isArray(value)) {
       next[key] = mergeConfig(base[key], value as DeepPartial<Record<string, unknown>>) as T[keyof T];
       continue;
     }

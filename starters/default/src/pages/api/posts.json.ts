@@ -1,4 +1,4 @@
-import { siteConfig } from "../../config";
+import { getSiteDescription, siteConfig } from "../../config";
 import { getPosts } from "../../lib/content";
 import { publicPost } from "../../lib/feeds";
 
@@ -7,9 +7,8 @@ export async function GET() {
 
   return Response.json({
     title: siteConfig.title,
-    description: siteConfig.description,
+    description: getSiteDescription(),
     generatedAt: new Date().toISOString(),
     items: posts.map(publicPost)
   });
 }
-
