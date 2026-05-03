@@ -15,7 +15,7 @@ export type StaticFileConfig = {
 export type RedirectRuleConfig = {
   from: string;
   to: string;
-  status: 301 | 302 | 307 | 308;
+  status?: 301 | 302 | 303 | 307 | 308;
 };
 
 export type WebManifestIconConfig = {

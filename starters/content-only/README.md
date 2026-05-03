@@ -41,6 +41,26 @@ export default {
 };
 ```
 
+URL migration redirects can also be configured in `inkisle.config.mjs`. Build
+output includes a `_redirects` file that Cloudflare Pages can use for 301s.
+`status` defaults to `301`:
+
+```js
+export default {
+  redirects: [
+    {
+      from: "/前端/NPM小技巧/",
+      to: "/posts/2020/NPM小技巧/",
+      status: 301
+    },
+    {
+      from: "/posts/NPM小技巧/",
+      to: "/posts/2020/NPM小技巧/"
+    }
+  ]
+};
+```
+
 Optional Baidu analytics and PWA settings also live in `inkisle.config.mjs`.
 InkIsle emits real `/404.html`, `/manifest.json`, `/manifest.webmanifest`,
 and `/sw.js` files during build. Search engine verification files that must

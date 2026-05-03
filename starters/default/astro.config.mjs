@@ -86,7 +86,7 @@ async function writeDeploymentFiles(distDir, config) {
   if (redirects.length > 0) {
     await fs.writeFile(
       path.join(distDir, "_redirects"),
-      `${redirects.map((rule) => `${rule.from} ${rule.to} ${rule.status}`).join("\n")}\n`
+      `${redirects.map(formatRedirectRule).join("\n")}\n`
     );
   }
 
@@ -115,14 +115,83 @@ function normalizeRedirects(rawRedirects) {
     return [];
   }
 
-  return rawRedirects.filter((rule) => {
-    return (
-      rule &&
-      typeof rule.from === "string" &&
-      rule.from.startsWith("/") &&
-      typeof rule.to === "string" &&
-      rule.to.startsWith("/") &&
-      [301, 302, 307, 308].includes(Number(rule.status))
-    );
-  });
+  const seen = new Set();
+  const redirects = [];
+
+  for (const rule of rawRedirects) {
+    if (!rule || typeof rule.from !== "string" || typeof rule.to !== "string") {
+      continue;
+    }
+
+    const from = normalizeRedirectPath(rule.from);
+    const to = normalizeRedirectTarget(rule.to);
+    const status = normalizeRedirectStatus(rule.status);
+
+    if (!from || !to) {
+      continue;
+    }
+
+    if (seen.has(from)) {
+      continue;
+    }
+
+    seen.add(from);
+    redirects.push({ from, to, status });
+  }
+
+  return redirects;
+}
+
+function formatRedirectRule(rule) {
+  return `${encodeRedirectPath(rule.from)} ${encodeRedirectTarget(rule.to)} ${rule.status}`;
+}
+
+function normalizeRedirectPath(value) {
+  const trimmed = value.trim();
+  if (!trimmed.startsWith("/") || /[\r\n\t]/.test(trimmed)) {
+    return undefined;
+  }
+
+  return trimmed;
+}
+
+function normalizeRedirectTarget(value) {
+  const trimmed = value.trim();
+  if (!trimmed || /[\r\n\t]/.test(trimmed)) {
+    return undefined;
+  }
+
+  if (trimmed.startsWith("/")) {
+    return trimmed;
+  }
+
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === "http:" || url.protocol === "https:" ? trimmed : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function normalizeRedirectStatus(value) {
+  const status = Number(value ?? 301);
+  return [301, 302, 303, 307, 308].includes(status) ? status : 301;
+}
+
+function encodeRedirectPath(value) {
+  return encodeURI(value).replace(/%25([0-9A-Fa-f]{2})/g, "%$1");
+}
+
+function encodeRedirectTarget(value) {
+  if (value.startsWith("/")) {
+    return encodeRedirectPath(value);
+  }
+
+  try {
+    const url = new URL(value);
+    url.pathname = encodeRedirectPath(url.pathname);
+    return url.toString();
+  } catch {
+    return value;
+  }
 }

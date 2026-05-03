@@ -62,3 +62,21 @@ verificationFiles: [
   }
 ]
 ```
+
+URL migration redirects can be generated with `siteConfig.redirects`. InkIsle
+emits these rules to `_redirects` for static hosts such as Cloudflare Pages.
+Use `301` for permanent URL changes. `status` defaults to `301`:
+
+```js
+redirects: [
+  {
+    from: "/前端/NPM小技巧/",
+    to: "/posts/2020/NPM小技巧/",
+    status: 301
+  },
+  {
+    from: "/posts/NPM小技巧/",
+    to: "/posts/2020/NPM小技巧/"
+  }
+]
+```
