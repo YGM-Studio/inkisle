@@ -7,7 +7,7 @@ tags:
   - InkIsle
   - Markdown
 category: "Product"
-draft: false
+published: true
 ---
 
 墨屿是一个静态优先的 Markdown 发布系统。这个原型先解决最小闭环：内容保存在 Markdown 里，构建时预渲染为 HTML，同时产出 RSS、JSON Feed、搜索索引和 `llms.txt`。

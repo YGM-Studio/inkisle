@@ -30,6 +30,7 @@ export type ContentEntry = {
   tags: string[];
   category?: string;
   draft: boolean;
+  published: boolean;
   body: string;
   html: string;
   text: string;
@@ -52,6 +53,7 @@ type Frontmatter = {
   category?: unknown;
   categories?: unknown;
   draft?: unknown;
+  published?: unknown;
   slug?: unknown;
 };
 
@@ -202,7 +204,7 @@ async function loadContent(): Promise<ContentStore> {
 
   const visibleEntries = entries
     .filter((entry): entry is ContentEntry => Boolean(entry))
-    .filter((entry) => includeDrafts() || !entry.draft);
+    .filter((entry) => includeDrafts() || isPublishedEntry(entry));
 
   const posts = visibleEntries
     .filter((entry) => entry.kind === "post")
@@ -278,6 +280,7 @@ function normalizeEntry(
     tags: asStringArray(frontmatter.tags),
     category: asString(frontmatter.category) ?? asStringArray(frontmatter.categories)[0],
     draft: frontmatter.draft === true,
+    published: frontmatter.published !== false,
     body: bodyWithoutMoreMarker,
     html,
     text: toPlainText(html),
@@ -287,6 +290,10 @@ function normalizeEntry(
         : pageUrl(parsedPath.locale, slug),
     sourcePath
   };
+}
+
+function isPublishedEntry(entry: ContentEntry) {
+  return !entry.draft && entry.published;
 }
 
 function slugFromPath(pathSegments: string[]) {

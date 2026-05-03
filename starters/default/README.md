@@ -27,6 +27,9 @@ Default-language routes are published without a language prefix by default:
 /en/posts/my-post/
 ```
 
+Set `published: false` in Markdown frontmatter to keep a post or page out of
+production builds and public indexes until it is ready.
+
 Set `siteConfig.prefixDefaultLocale` to `true` when every language should use a URL prefix such as `/zh/`.
 
 Site identity is configured in `src/config.ts`. Update `siteConfig.title`,

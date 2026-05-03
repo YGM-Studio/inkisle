@@ -7,7 +7,7 @@ tags:
   - InkIsle
   - Markdown
 category: "Product"
-draft: false
+published: true
 ---
 
 墨屿是一个静态优先的 Markdown 发布系统。默认项目只暴露 `content/`，你可以专注写作，不需要理解 Astro 工程结构。

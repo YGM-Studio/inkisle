@@ -7,7 +7,7 @@ tags:
   - InkIsle
   - Markdown
 category: "Product"
-draft: false
+published: true
 ---
 
 InkIsle is a static-first Markdown publishing system. The default project only exposes `content/`, so you can focus on writing without learning the Astro project structure.

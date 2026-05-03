@@ -7,7 +7,7 @@ tags:
   - InkIsle
   - Markdown
 category: "Product"
-draft: false
+published: true
 ---
 
 InkIsle is a static-first Markdown publishing system. This prototype starts with the smallest useful loop: keep content in Markdown, pre-render HTML at build time, and generate RSS, JSON Feed, search index, and `llms.txt`.

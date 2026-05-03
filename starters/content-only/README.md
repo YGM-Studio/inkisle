@@ -15,6 +15,9 @@ The Astro renderer, theme source, routes, and build integration live inside the 
 
 Main-language content is published without a URL prefix by default. Translated content uses a language prefix, for example `/en/posts/my-post/`.
 
+Set `published: false` in Markdown frontmatter to keep a post or page out of
+production builds and public indexes until it is ready.
+
 ## Commands
 
 ```bash

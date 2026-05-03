@@ -131,7 +131,6 @@ async function newContent(input) {
   }
 
   await fs.mkdir(contentDir, { recursive: true });
-  const draft = type === "post" && !options.published;
   const frontmatter =
     type === "post"
       ? [
@@ -142,7 +141,7 @@ async function newContent(input) {
           'summary: ""',
           "tags: []",
           "category:",
-          `draft: ${draft ? "true" : "false"}`,
+          `published: ${options.published ? "true" : "false"}`,
           "---",
           ""
         ]
