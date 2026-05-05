@@ -684,6 +684,15 @@ html[data-inkisle-theme="personal"] .site-footer {
   }html[data-inkisle-theme="personal"] .hero {
     min-height: auto;
     align-items: start;
+  }html[data-inkisle-theme="personal"] .hero h1,
+html[data-inkisle-theme="personal"] .post-hero h1,
+html[data-inkisle-theme="personal"] .page-title h1,
+html[data-inkisle-theme="personal"] .not-found h1 {
+    line-height: 1.12;
+  }html[data-inkisle-theme="personal"] .post-card h2,
+html[data-inkisle-theme="personal"] .prose h2,
+html[data-inkisle-theme="personal"] .prose h3 {
+    line-height: 1.18;
   }html[data-inkisle-theme="personal"] .post-card p,
 html[data-inkisle-theme="personal"] .post-card .tag-row {
     grid-column: auto;
