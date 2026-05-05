@@ -1,6 +1,6 @@
 {
   "name": "inkisle",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "type": "module",
   "description": "AI-native Markdown publishing system built on Astro and Vite.",
   "repository": {
