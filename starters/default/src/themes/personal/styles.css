@@ -76,6 +76,7 @@ html[data-inkisle-theme="personal"] {
   font-size: 100%;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
+  touch-action: manipulation;
 }html[data-inkisle-theme="personal"] body {
   display: flex;
   min-height: 100vh;

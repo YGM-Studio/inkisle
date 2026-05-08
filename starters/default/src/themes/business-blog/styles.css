@@ -50,6 +50,7 @@ html[data-inkisle-theme="business-blog"] {
   font-size: 100%;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
+  touch-action: manipulation;
 }
 html[data-inkisle-theme="business-blog"] body {
   min-width: 320px;
