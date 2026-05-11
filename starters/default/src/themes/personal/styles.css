@@ -420,10 +420,14 @@ html[data-inkisle-theme="personal"] .post-meta {
 }html[data-inkisle-theme="personal"] .post-shell,
 html[data-inkisle-theme="personal"] .page-shell,
 html[data-inkisle-theme="personal"] .search-shell,
-html[data-inkisle-theme="personal"] .tag-shell,
-html[data-inkisle-theme="personal"] .listing-shell {
+html[data-inkisle-theme="personal"] .tag-shell {
   width: min(820px, 100%);
   margin: 0 auto;
+}html[data-inkisle-theme="personal"] .post-shell,
+html[data-inkisle-theme="personal"] .page-shell,
+html[data-inkisle-theme="personal"] .search-shell,
+html[data-inkisle-theme="personal"] .tag-shell,
+html[data-inkisle-theme="personal"] .listing-shell {
   padding: clamp(2rem, 6vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
 }html[data-inkisle-theme="personal"] .post-hero,
 html[data-inkisle-theme="personal"] .page-title {
