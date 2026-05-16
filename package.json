@@ -3,9 +3,27 @@
   "version": "0.0.13",
   "type": "module",
   "description": "AI-native Markdown publishing system built on Astro and Vite.",
+  "license": "MIT",
+  "author": "YGM Studio",
+  "homepage": "https://github.com/YGM-Studio/inkisle#readme",
+  "bugs": {
+    "url": "https://github.com/YGM-Studio/inkisle/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YGM-Studio/inkisle.git"
+  },
+  "keywords": [
+    "astro",
+    "markdown",
+    "static-site",
+    "publishing",
+    "blog",
+    "llms-txt",
+    "ai-native"
+  ],
+  "engines": {
+    "node": ">=20.19.0"
   },
   "bin": {
     "inkisle": "bin/inkisle.mjs"
@@ -33,12 +51,14 @@
     "dev": "npm run -w @inkisle/starter-default dev",
     "build": "npm run -w @inkisle/starter-default build",
     "check": "npm run -w @inkisle/starter-default check",
+    "check:links": "node bin/inkisle.mjs check links --dist starters/default/dist",
+    "ci": "npm run check && npm run build && npm run check:links && npm audit --audit-level=high",
     "preview": "npm run -w @inkisle/starter-default preview",
     "release": "node scripts/release.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",
-    "astro": "^6.2.1",
+    "astro": "^6.3.3",
     "fast-glob": "^3.3.3",
     "gray-matter": "^4.0.3",
     "markdown-it": "^14.1.1"

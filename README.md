@@ -6,7 +6,9 @@ It is designed as a static-first blog and content publishing product layer on to
 
 ## Status
 
-InkIsle now has a minimal Astro-based renderer and starter. The product direction is content-first: default user projects should be lightweight Node projects with Markdown content, npm scripts, and optional configuration, while the Astro source implementation remains internal unless the user asks for the full project.
+InkIsle is an early alpha project. The current release has a minimal Astro-based renderer, starter projects, CLI workflow, and static outputs, but public APIs and theme boundaries may still change before a stable release.
+
+The product direction is content-first: default user projects should be lightweight Node projects with Markdown content, npm scripts, and optional configuration, while the Astro source implementation remains internal unless the user asks for the full project.
 
 The renderer reads Markdown from a site's `content/` directory, pre-renders localized static pages, publishes the default language without a URL prefix by default, supports built-in `personal` and `business-blog` themes, and generates RSS, sitemap, static search index, JSON Feed, full-site posts JSON, and `llms.txt`.
 
@@ -30,6 +32,8 @@ npm run dev
 
 The root scripts run against `starters/default` through npm workspaces.
 
+Requires Node.js 20.19 or newer.
+
 Useful CLI commands:
 
 ```bash
@@ -42,6 +46,17 @@ npm exec inkisle -- build
 npm exec inkisle -- check
 npm exec inkisle -- check links
 ```
+
+## Quality Checks
+
+```bash
+npm run check
+npm run build
+npm run check:links
+npm audit --audit-level=high
+```
+
+`npm run ci` runs the same checks used by GitHub Actions.
 
 Chinese ICP filing text can be shown in the footer by setting `filing.icp.number` in `inkisle.config.mjs`. It is hidden by default and only renders when a filing number is configured.
 
@@ -67,3 +82,11 @@ The script updates `package.json`, `package-lock.json`, and the content-only sta
 - [Documentation Index](docs/README.md)
 - [Product Brief](docs/product-brief.md)
 - [Technical Plan](docs/technical-plan.md)
+
+## Contributing
+
+Issues and pull requests are welcome while the project is in alpha. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes.
+
+## License
+
+InkIsle is released under the [MIT License](LICENSE).

@@ -41,7 +41,7 @@ function main() {
   ensureTagDoesNotExist(tag);
   updateStarterDependency(version);
 
-  run("npm", ["run", "build"]);
+  run("npm", ["run", "ci"]);
   run("npm", ["pack", "--dry-run", "--registry=https://registry.npmjs.org/"]);
 
   run("git", ["add", "package.json", "package-lock.json", "starters/content-only/package.json"]);
