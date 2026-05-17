@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getLocaleBase } from "../../../config";
+import { getLocaleBase, sitePath } from "../../../config";
 
 type Props = {
   locale: string;
@@ -8,6 +8,7 @@ type Props = {
 
 const { locale } = Astro.props;
 const isZh = locale === "zh";
+const searchIndexPath = sitePath("/search-index.json");
 ---
 
 <BaseLayout
@@ -16,7 +17,7 @@ const isZh = locale === "zh";
   locale={locale}
   canonicalPath={`${getLocaleBase(locale)}/search/`}
 >
-  <section class="search-shell" data-search-locale={locale}>
+  <section class="search-shell" data-search-locale={locale} data-search-index={searchIndexPath}>
     <header class="page-title">
       <span class="eyebrow">{isZh ? "资源搜索" : "Resource Search"}</span>
       <h1>{isZh ? "查找洞察、主题和文章" : "Find insights, topics, and articles"}</h1>
@@ -42,6 +43,7 @@ const isZh = locale === "zh";
     const input = document.querySelector<HTMLInputElement>("#site-search");
     const results = document.querySelector(".search-results");
     const locale = root?.getAttribute("data-search-locale") || "en";
+    const searchIndexPath = root?.getAttribute("data-search-index") || "/search-index.json";
     const messages: Record<string, { empty: string; prompt: string }> = {
       zh: { empty: "没有匹配结果。", prompt: "输入关键词开始搜索。" },
       en: { empty: "No matches.", prompt: "Type a keyword to start searching." }
@@ -98,7 +100,7 @@ const isZh = locale === "zh";
       render(matches, matches.length === 0 ? dictionary.empty : undefined);
     }
 
-    fetch("/search-index.json")
+    fetch(searchIndexPath)
       .then((response) => response.json())
       .then((data) => {
         index = data.items || [];

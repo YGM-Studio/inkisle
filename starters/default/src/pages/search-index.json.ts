@@ -1,4 +1,4 @@
-import { siteConfig } from "../config";
+import { siteConfig, sitePath } from "../config";
 import { getPosts } from "../lib/content";
 
 export async function GET() {
@@ -10,7 +10,7 @@ export async function GET() {
     items: posts.map((post) => ({
       title: post.title,
       locale: post.locale,
-      url: post.url,
+      url: sitePath(post.url),
       date: post.date,
       summary: post.summary || post.excerpt,
       tags: post.tags,

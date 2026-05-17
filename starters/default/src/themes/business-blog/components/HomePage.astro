@@ -2,8 +2,8 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
-import { getLocaleBase, getSiteDescription, siteConfig } from "../../../config";
-import { formatDate, getCategoryIndex, getPosts } from "../../../lib/content";
+import { getLocaleBase, getSiteDescription, siteConfig, sitePath } from "../../../config";
+import { contentHref, formatDate, getCategoryIndex, getPosts } from "../../../lib/content";
 import { paginate } from "../../../lib/pagination";
 
 type Props = {
@@ -29,7 +29,7 @@ const localeBase = getLocaleBase(locale);
       <p>{homeDescription}</p>
       <div class="hero-actions">
         <a class="button-primary" href="#latest-posts">{isZh ? "阅读最新文章" : "Read latest"}</a>
-        <a class="button-secondary" href={`${localeBase}/search/`}>{isZh ? "搜索资源" : "Search resources"}</a>
+        <a class="button-secondary" href={sitePath(`${localeBase}/search/`)}>{isZh ? "搜索资源" : "Search resources"}</a>
       </div>
     </div>
 
@@ -38,7 +38,7 @@ const localeBase = getLocaleBase(locale);
         <article class="featured-insight">
           <span>{isZh ? "精选" : "Featured"}</span>
           <h2>
-            <a href={featured.url}>{featured.title}</a>
+            <a href={contentHref(featured)}>{featured.title}</a>
           </h2>
           {(featured.summary || featured.excerpt) && <p>{featured.summary || featured.excerpt}</p>}
           <div>
@@ -54,7 +54,7 @@ const localeBase = getLocaleBase(locale);
     secondaryPosts.length > 0 && (
       <section class="briefing-strip" aria-label={isZh ? "重点文章" : "Priority reads"}>
         {secondaryPosts.map((post) => (
-          <a href={post.url}>
+          <a href={contentHref(post)}>
             <span>{post.category || (isZh ? "文章" : "Article")}</span>
             <strong>{post.title}</strong>
           </a>
@@ -81,7 +81,7 @@ const localeBase = getLocaleBase(locale);
         </div>
         <div class="category-grid">
           {categories.map((category) => (
-            <a href={`${localeBase}/categories/${category.slug}/`}>
+            <a href={sitePath(`${localeBase}/categories/${category.slug}/`)}>
               <span>{category.posts.length}</span>
               <strong>{category.name}</strong>
             </a>

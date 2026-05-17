@@ -1,5 +1,5 @@
 ---
-import { absoluteUrl, siteConfig } from "../config";
+import { absoluteUrl, siteConfig, sitePath } from "../config";
 
 type Props = {
   to: string;
@@ -8,6 +8,7 @@ type Props = {
 
 const { to, title = siteConfig.title } = Astro.props;
 const canonical = absoluteUrl(to);
+const target = sitePath(to);
 ---
 
 <!doctype html>
@@ -17,13 +18,13 @@ const canonical = absoluteUrl(to);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="refresh" content={`0;url=${to}`} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href={siteConfig.brand.favicon} />
+    <link rel="icon" href={sitePath(siteConfig.brand.favicon)} />
     <title>{title}</title>
-    <script is:inline define:vars={{ to }}>
-      window.location.replace(to);
+    <script is:inline define:vars={{ target }}>
+      window.location.replace(target);
     </script>
   </head>
   <body>
-    <a href={to}>Continue to {to}</a>
+    <a href={target}>Continue to {target}</a>
   </body>
 </html>

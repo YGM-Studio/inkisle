@@ -56,6 +56,7 @@ export type InkIsleConfig = {
   title: string;
   description: LocalizedText;
   site: string;
+  base?: string;
   brand: {
     mark: string;
     subtitle?: string;
@@ -101,6 +102,7 @@ const defaultSiteConfig: InkIsleConfig = {
     en: "AI-native Markdown publishing system for static-first blogs and content sites."
   },
   site: process.env.SITE_URL || "https://inkisle.example",
+  base: "/",
   brand: {
     mark: "Ink",
     subtitle: "InkIsle Starter",
@@ -190,8 +192,28 @@ export function joinUrl(...parts: Array<string | undefined>) {
   return `/${cleaned.join("/")}`;
 }
 
+export function sitePath(pathname = "/") {
+  const trimmedPathname = pathname.trim();
+  if (isExternalOrSpecialUrl(trimmedPathname)) {
+    return trimmedPathname;
+  }
+
+  const base = normalizeBasePath(siteConfig.base);
+  const path = normalizePathname(trimmedPathname);
+
+  if (base === "/") {
+    return path;
+  }
+
+  if (path === "/") {
+    return `${base}/`;
+  }
+
+  return `${base}${path}`;
+}
+
 export function absoluteUrl(pathname: string) {
-  return new URL(pathname, siteConfig.site).toString();
+  return new URL(sitePath(pathname), siteConfig.site).toString();
 }
 
 function resolveLocalizedText(value: LocalizedText, locale: string) {
@@ -239,4 +261,31 @@ function mergeConfig<T extends Record<string, unknown>>(base: T, override: DeepP
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function normalizeBasePath(value: string | undefined) {
+  if (!value) {
+    return "/";
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === "/") {
+    return "/";
+  }
+
+  return `/${trimmed.replace(/^\/+|\/+$/g, "")}`;
+}
+
+function normalizePathname(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "/";
+  }
+
+  const path = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return path.replace(/\/{2,}/g, "/");
+}
+
+function isExternalOrSpecialUrl(value: string) {
+  return /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(value);
 }

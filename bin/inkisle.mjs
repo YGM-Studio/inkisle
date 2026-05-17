@@ -22,7 +22,7 @@ Usage:
   inkisle dev
   inkisle build
   inkisle check
-  inkisle check links [--dist dist]
+  inkisle check links [--dist dist] [--base /base]
   inkisle preview
 `;
 
@@ -210,25 +210,32 @@ async function checkSite(input) {
 
   if (!subcommand) {
     await runAstro("build", []);
-    await checkInternalLinks({ distDir: path.join(process.cwd(), "dist") });
+    const userSiteConfig = await loadUserSiteConfig(process.cwd());
+    await checkInternalLinks({
+      distDir: path.join(process.cwd(), "dist"),
+      base: userSiteConfig.base
+    });
     return;
   }
 
   if (subcommand === "links") {
     const { options } = parseArgs(input.slice(1));
+    const userSiteConfig = await loadUserSiteConfig(process.cwd());
     await checkInternalLinks({
-      distDir: path.resolve(process.cwd(), options.dist || "dist")
+      distDir: path.resolve(process.cwd(), options.dist || "dist"),
+      base: options.base ?? userSiteConfig.base
     });
     return;
   }
 
-  throw new Error("Use `inkisle check` or `inkisle check links [--dist dist]`.");
+  throw new Error("Use `inkisle check` or `inkisle check links [--dist dist] [--base /base]`.");
 }
 
-async function checkInternalLinks({ distDir }) {
+async function checkInternalLinks({ distDir, base = "/" }) {
   const htmlFiles = await listFiles(distDir, (file) => file.endsWith(".html")).catch(() => {
     throw new Error(`Missing dist directory: ${distDir}. Run \`inkisle build\` before \`inkisle check links\`.`);
   });
+  const normalizedBase = normalizeBasePath(base);
   const localOrigin = "https://inkisle.local";
   const maxReportedFailures = 80;
   const existsCache = new Map();
@@ -247,7 +254,7 @@ async function checkInternalLinks({ distDir }) {
 
       checkedLinks += 1;
 
-      const resolvedTarget = await resolveDistTarget(targetUrl.pathname, distDir, existsCache);
+      const resolvedTarget = await resolveDistTarget(targetUrl.pathname, distDir, existsCache, normalizedBase);
       if (!resolvedTarget) {
         failures.push({
           sourceFile,
@@ -335,9 +342,14 @@ function toInternalUrl(rawHref, sourceFile, distDir, localOrigin) {
   }
 }
 
-async function resolveDistTarget(pathname, distDir, existsCache) {
+async function resolveDistTarget(pathname, distDir, existsCache, base = "/") {
   const decodedPathname = safeDecodeURIComponent(pathname);
-  const trimmedPathname = decodedPathname.replace(/^\/+/, "");
+  const routePathname = stripBasePath(decodedPathname, base);
+  if (routePathname === undefined) {
+    return undefined;
+  }
+
+  const trimmedPathname = routePathname.replace(/^\/+/, "");
   const relativeCandidates = trimmedPathname
     ? decodedPathname.endsWith("/")
       ? [path.join(trimmedPathname, "index.html")]
@@ -353,6 +365,35 @@ async function resolveDistTarget(pathname, distDir, existsCache) {
     if (await fileExists(absoluteCandidate, existsCache)) {
       return absoluteCandidate;
     }
+  }
+
+  return undefined;
+}
+
+function normalizeBasePath(value) {
+  if (!value || typeof value !== "string") {
+    return "/";
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === "/") {
+    return "/";
+  }
+
+  return `/${trimmed.replace(/^\/+|\/+$/g, "")}`;
+}
+
+function stripBasePath(pathname, base) {
+  if (base === "/") {
+    return pathname;
+  }
+
+  if (pathname === base) {
+    return "/";
+  }
+
+  if (pathname.startsWith(`${base}/`)) {
+    return pathname.slice(base.length) || "/";
   }
 
   return undefined;

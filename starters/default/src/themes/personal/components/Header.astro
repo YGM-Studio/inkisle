@@ -1,6 +1,6 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
-import { getLocaleBase, getLocaleLabel, siteConfig } from "../../../config";
+import { getLocaleBase, getLocaleLabel, siteConfig, sitePath } from "../../../config";
 import { getPages } from "../../../lib/content";
 
 type Props = {
@@ -11,12 +11,12 @@ const { locale } = Astro.props;
 const pages = await getPages(locale);
 const aboutPage = pages.find((page) => page.slug === "about");
 const navItems = [
-  { href: `${getLocaleBase(locale)}/`, label: locale === "zh" ? "文章" : "Posts" },
-  { href: `${getLocaleBase(locale)}/search/`, label: locale === "zh" ? "搜索" : "Search" }
+  { href: sitePath(`${getLocaleBase(locale)}/`), label: locale === "zh" ? "文章" : "Posts" },
+  { href: sitePath(`${getLocaleBase(locale)}/search/`), label: locale === "zh" ? "搜索" : "Search" }
 ];
 
 if (aboutPage) {
-  navItems.push({ href: aboutPage.url, label: locale === "zh" ? "关于" : "About" });
+  navItems.push({ href: sitePath(aboutPage.url), label: locale === "zh" ? "关于" : "About" });
 }
 const brandSubtitle = siteConfig.brand.subtitle || siteConfig.author.name;
 const compactLocaleSelector = siteConfig.locales.length > 2;
@@ -24,7 +24,7 @@ const compactLocaleSelector = siteConfig.locales.length > 2;
 
 <header class="site-header">
   <div class="header-top">
-    <a class="brand" href={`${getLocaleBase(locale)}/`} aria-label={siteConfig.title}>
+    <a class="brand" href={sitePath(`${getLocaleBase(locale)}/`)} aria-label={siteConfig.title}>
       <span class="brand-mark" aria-hidden="true">{siteConfig.brand.mark}</span>
       <span>
         <strong>{siteConfig.title}</strong>
@@ -39,7 +39,7 @@ const compactLocaleSelector = siteConfig.locales.length > 2;
             <summary>{getLocaleLabel(locale)}</summary>
             <nav aria-label="Languages">
               {siteConfig.locales.map((item) => (
-                <a class:list={[item.code === locale && "is-active"]} href={`${getLocaleBase(item.code)}/`}>
+                <a class:list={[item.code === locale && "is-active"]} href={sitePath(`${getLocaleBase(item.code)}/`)}>
                   {getLocaleLabel(item.code)}
                 </a>
               ))}
@@ -48,7 +48,7 @@ const compactLocaleSelector = siteConfig.locales.length > 2;
         ) : (
           <nav class="locale-nav" aria-label="Languages">
             {siteConfig.locales.map((item) => (
-              <a class:list={[item.code === locale && "is-active"]} href={`${getLocaleBase(item.code)}/`}>
+              <a class:list={[item.code === locale && "is-active"]} href={sitePath(`${getLocaleBase(item.code)}/`)}>
                 {getLocaleLabel(item.code)}
               </a>
             ))}

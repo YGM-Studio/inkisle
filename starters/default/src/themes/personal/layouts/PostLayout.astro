@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import { categoryUrl, formatDate, tagUrl, type ContentEntry } from "../../../lib/content";
+import { categoryHref, formatDate, tagHref, type ContentEntry } from "../../../lib/content";
 
 type Props = {
   post: ContentEntry;
@@ -21,14 +21,14 @@ const { post } = Astro.props;
       <div class="post-meta">
         {post.date && <time datetime={post.date}>{formatDate(post.date, post.locale)}</time>}
         {post.updated && <span>Updated {formatDate(post.updated, post.locale)}</span>}
-        {post.category && <a href={categoryUrl(post.locale, post.category)}>{post.category}</a>}
+        {post.category && <a href={categoryHref(post.locale, post.category)}>{post.category}</a>}
       </div>
       {post.summary && <p class="post-summary">{post.summary}</p>}
       {
         post.tags.length > 0 && (
           <nav class="tag-row" aria-label="Tags">
             {post.tags.map((tag) => (
-              <a href={tagUrl(post.locale, tag)}>{tag}</a>
+              <a href={tagHref(post.locale, tag)}>{tag}</a>
             ))}
           </nav>
         )

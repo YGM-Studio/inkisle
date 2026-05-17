@@ -1,5 +1,5 @@
 ---
-import { getLocaleBase, getSiteDescription, siteConfig } from "../../../config";
+import { getLocaleBase, getSiteDescription, siteConfig, sitePath } from "../../../config";
 
 type Props = {
   locale: string;
@@ -15,10 +15,10 @@ const icpFiling = siteConfig.filing.icp?.number?.trim()
     }
   : undefined;
 const footerLinks = [
-  { href: `${getLocaleBase(locale)}/search/`, label: isZh ? "搜索" : "Search" },
-  { href: "/rss.xml", label: "RSS" },
-  { href: "/feed.json", label: "JSON Feed" },
-  { href: "/llms.txt", label: "llms.txt" }
+  { href: sitePath(`${getLocaleBase(locale)}/search/`), label: isZh ? "搜索" : "Search" },
+  { href: sitePath("/rss.xml"), label: "RSS" },
+  { href: sitePath("/feed.json"), label: "JSON Feed" },
+  { href: sitePath("/llms.txt"), label: "llms.txt" }
 ];
 ---
 

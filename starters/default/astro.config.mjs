@@ -19,6 +19,7 @@ const cacheDir = process.env.INKISLE_RENDER_CACHE_DIR
   : path.join(siteRoot, ".astro");
 const siteConfig = parseSiteConfig(process.env.INKISLE_SITE_CONFIG);
 const site = process.env.SITE_URL || siteConfig.site || "https://inkisle.example";
+const base = normalizeBase(siteConfig.base);
 const defaultLocale = siteConfig.defaultLocale || "zh";
 const prefixDefaultLocale = siteConfig.prefixDefaultLocale ?? false;
 
@@ -29,6 +30,7 @@ export default defineConfig({
   outDir,
   cacheDir,
   site,
+  base,
   output: "static",
   trailingSlash: "always",
   integrations: [sitemap({ filter: shouldIncludeInSitemap }), deploymentFilesIntegration(siteConfig)],
@@ -42,7 +44,7 @@ export default defineConfig({
 });
 
 function shouldIncludeInSitemap(page) {
-  const pathname = new URL(page).pathname;
+  const pathname = stripBasePath(new URL(page).pathname, base);
 
   if (!prefixDefaultLocale) {
     return pathname !== `/${defaultLocale}/` && !pathname.startsWith(`/${defaultLocale}/`);
@@ -67,6 +69,35 @@ function parseSiteConfig(rawConfig) {
   } catch {
     return {};
   }
+}
+
+function normalizeBase(value) {
+  if (!value || typeof value !== "string") {
+    return "/";
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === "/") {
+    return "/";
+  }
+
+  return `/${trimmed.replace(/^\/+|\/+$/g, "")}`;
+}
+
+function stripBasePath(pathname, normalizedBase) {
+  if (normalizedBase === "/") {
+    return pathname;
+  }
+
+  if (pathname === normalizedBase) {
+    return "/";
+  }
+
+  if (pathname.startsWith(`${normalizedBase}/`)) {
+    return pathname.slice(normalizedBase.length) || "/";
+  }
+
+  return pathname;
 }
 
 function deploymentFilesIntegration(config) {

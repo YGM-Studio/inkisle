@@ -1,5 +1,5 @@
 ---
-import { categoryUrl, formatDate, tagUrl, type ContentEntry } from "../../../lib/content";
+import { categoryHref, contentHref, formatDate, tagHref, type ContentEntry } from "../../../lib/content";
 
 type Props = {
   posts: ContentEntry[];
@@ -17,17 +17,17 @@ const { posts, emptyLabel = "No posts yet." } = Astro.props;
           <article class="resource-card">
             <div class="resource-meta">
               {post.date && <time datetime={post.date}>{formatDate(post.date, post.locale)}</time>}
-              {post.category && <a href={categoryUrl(post.locale, post.category)}>{post.category}</a>}
+              {post.category && <a href={categoryHref(post.locale, post.category)}>{post.category}</a>}
             </div>
             <div class="resource-body">
               <h2>
-                <a href={post.url}>{post.title}</a>
+                <a href={contentHref(post)}>{post.title}</a>
               </h2>
               {(post.summary || post.excerpt) && <p>{post.summary || post.excerpt}</p>}
               {post.tags.length > 0 && (
                 <nav class="tag-row" aria-label={`Tags for ${post.title}`}>
                   {post.tags.slice(0, 4).map((tag) => (
-                    <a href={tagUrl(post.locale, tag)}>{tag}</a>
+                    <a href={tagHref(post.locale, tag)}>{tag}</a>
                   ))}
                 </nav>
               )}

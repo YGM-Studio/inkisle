@@ -25,7 +25,7 @@ export function toRssXml(posts: ContentEntry[]) {
     '<rss version="2.0">',
     "<channel>",
     `<title>${escapeXml(siteConfig.title)}</title>`,
-    `<link>${escapeXml(siteConfig.site)}</link>`,
+    `<link>${escapeXml(absoluteUrl("/"))}</link>`,
     `<description>${escapeXml(description)}</description>`,
     items,
     "</channel>",
@@ -39,7 +39,7 @@ export function toJsonFeed(posts: ContentEntry[]) {
   return {
     version: "https://jsonfeed.org/version/1.1",
     title: siteConfig.title,
-    home_page_url: siteConfig.site,
+    home_page_url: absoluteUrl("/"),
     feed_url: absoluteUrl("/feed.json"),
     description,
     authors: [{ name: siteConfig.author.name, url: siteConfig.author.url }],

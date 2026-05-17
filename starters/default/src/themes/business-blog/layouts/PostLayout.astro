@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import { getLocaleBase } from "../../../config";
-import { categoryUrl, formatDate, tagUrl, type ContentEntry } from "../../../lib/content";
+import { getLocaleBase, sitePath } from "../../../config";
+import { categoryHref, formatDate, tagHref, type ContentEntry } from "../../../lib/content";
 
 type Props = {
   post: ContentEntry;
@@ -25,14 +25,14 @@ const localeBase = getLocaleBase(post.locale);
       <div class="article-meta">
         {post.date && <time datetime={post.date}>{formatDate(post.date, post.locale)}</time>}
         {post.updated && <span>{isZh ? "更新于" : "Updated"} {formatDate(post.updated, post.locale)}</span>}
-        {post.category && <a href={categoryUrl(post.locale, post.category)}>{post.category}</a>}
+        {post.category && <a href={categoryHref(post.locale, post.category)}>{post.category}</a>}
       </div>
       {post.summary && <p class="article-summary">{post.summary}</p>}
       {
         post.tags.length > 0 && (
           <nav class="tag-row" aria-label="Tags">
             {post.tags.map((tag) => (
-              <a href={tagUrl(post.locale, tag)}>{tag}</a>
+              <a href={tagHref(post.locale, tag)}>{tag}</a>
             ))}
           </nav>
         )
@@ -46,7 +46,7 @@ const localeBase = getLocaleBase(post.locale);
         <span>{isZh ? "继续探索" : "More insight"}</span>
         <h2>{isZh ? "查找更多相关内容" : "Find more relevant content"}</h2>
       </div>
-      <a href={`${localeBase}/search/`}>
+      <a href={sitePath(`${localeBase}/search/`)}>
         {isZh ? "搜索资源" : "Search resources"}
       </a>
     </section>

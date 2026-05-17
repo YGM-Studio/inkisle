@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getLocaleBase } from "../../../config";
+import { getLocaleBase, sitePath } from "../../../config";
 
 type Props = {
   locale: string;
@@ -8,7 +8,7 @@ type Props = {
 
 const { locale } = Astro.props;
 const isZh = locale === "zh";
-const homeUrl = `${getLocaleBase(locale)}/`;
+const homeUrl = sitePath(`${getLocaleBase(locale)}/`);
 ---
 
 <BaseLayout

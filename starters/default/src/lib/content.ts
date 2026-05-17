@@ -7,6 +7,7 @@ import {
   getLocaleBase,
   isKnownLocale,
   joinUrl,
+  sitePath,
   siteConfig
 } from "../config";
 
@@ -147,6 +148,22 @@ export function tagUrl(locale: string, tag: string) {
 
 export function categoryUrl(locale: string, category: string) {
   return withTrailingSlash(joinUrl(getLocaleBase(locale), "categories", taxonomyToSlug(category)));
+}
+
+export function postHref(post: Pick<ContentEntry, "url">) {
+  return sitePath(post.url);
+}
+
+export function contentHref(entry: Pick<ContentEntry, "url">) {
+  return sitePath(entry.url);
+}
+
+export function tagHref(locale: string, tag: string) {
+  return sitePath(tagUrl(locale, tag));
+}
+
+export function categoryHref(locale: string, category: string) {
+  return sitePath(categoryUrl(locale, category));
 }
 
 export function tagToSlug(tag: string) {
