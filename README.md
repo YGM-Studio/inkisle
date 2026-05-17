@@ -1,5 +1,7 @@
 # 墨屿 / InkIsle
 
+[Website](https://ygm-studio.github.io/inkisle/) · [npm](https://www.npmjs.com/package/inkisle) · [GitHub](https://github.com/YGM-Studio/inkisle)
+
 InkIsle is an AI-native Markdown publishing system.
 
 It is designed as a static-first blog and content publishing product layer on top of Astro and Vite. The goal is not to rebuild a full web framework, but to provide a clean content model, CLI workflow, theme boundary, and AI-friendly outputs for personal blogs, business content sites, documentation sites, and future publishing scenarios.
@@ -53,12 +55,25 @@ npm exec inkisle -- check links
 npm run check
 npm run build
 npm run check:links
+npm run site:build
+npm run site:check:links
 npm audit --audit-level=high
 ```
 
 `npm run ci` runs the same checks used by GitHub Actions.
 
 Chinese ICP filing text can be shown in the footer by setting `filing.icp.number` in `inkisle.config.mjs`. It is hidden by default and only renders when a filing number is configured.
+
+GitHub Pages project sites can use `base` for repository subpaths:
+
+```js
+export default {
+  site: "https://ygm-studio.github.io",
+  base: "/inkisle"
+};
+```
+
+InkIsle uses `base` for browser-facing links, static assets, feeds, sitemap URLs, search indexes, and `llms.txt` while keeping the generated file layout rooted at `dist/`.
 
 ## Release
 
