@@ -32,7 +32,7 @@ npm run dev
 
 The root scripts run against `starters/default` through npm workspaces.
 
-Requires Node.js 20.19 or newer.
+Requires Node.js 22.12 or newer.
 
 Useful CLI commands:
 
