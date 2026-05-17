@@ -1,0 +1,13 @@
+{
+  "name": "inkisle-docs-site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node ../bin/inkisle.mjs dev",
+    "build": "node ../bin/inkisle.mjs build",
+    "check": "node ../bin/inkisle.mjs check",
+    "check:links": "node ../bin/inkisle.mjs check links",
+    "preview": "node ../bin/inkisle.mjs preview"
+  }
+}
