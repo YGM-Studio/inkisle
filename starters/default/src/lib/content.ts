@@ -17,6 +17,18 @@ const markdown = new MarkdownIt({
   typographer: true
 });
 
+const defaultTableOpen =
+  markdown.renderer.rules.table_open ??
+  ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
+const defaultTableClose =
+  markdown.renderer.rules.table_close ??
+  ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
+
+markdown.renderer.rules.table_open = (tokens, idx, options, env, self) =>
+  `<div class="table-scroll">${defaultTableOpen(tokens, idx, options, env, self)}`;
+markdown.renderer.rules.table_close = (tokens, idx, options, env, self) =>
+  `${defaultTableClose(tokens, idx, options, env, self)}</div>`;
+
 export type ContentKind = "post" | "page";
 
 export type ContentEntry = {

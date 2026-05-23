@@ -485,14 +485,17 @@ html[data-inkisle-theme="personal"] .prose li {
   background: color-mix(in oklch, var(--surface-raised) 70%, var(--moss) 6%);
   color: var(--moss-strong);
   padding: 0.08em 0.32em;
-}html[data-inkisle-theme="personal"] .prose table {
-  display: block;
+}html[data-inkisle-theme="personal"] .prose .table-scroll {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
+}html[data-inkisle-theme="personal"] .prose table {
+  width: max-content;
+  min-width: 100%;
   border: 1px solid color-mix(in oklch, var(--line) 88%, var(--ink) 12%);
   border-radius: 8px;
   border-spacing: 0;
+  border-collapse: separate;
   background: color-mix(in oklch, var(--surface-raised) 92%, transparent);
   box-shadow: 0 1px 0 var(--inset-highlight) inset;
   font-size: var(--step--1);
