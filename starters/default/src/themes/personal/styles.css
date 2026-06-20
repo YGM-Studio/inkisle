@@ -340,44 +340,50 @@ html[data-inkisle-theme="personal"] .post-summary {
   font-size: var(--step-1);
 }html[data-inkisle-theme="personal"] .post-summary {
   position: relative;
-  width: min(100%, 46rem);
-  margin: clamp(1.35rem, 3vw, 2rem) 0 0;
-  padding: 1.1rem 1.45rem 1.15rem 1.85rem;
-  border-block: 1px solid color-mix(in oklch, var(--moss) 22%, var(--line));
+  width: min(100%, 48rem);
+  margin: clamp(1.2rem, 2.6vw, 1.8rem) 0 0;
+  padding: clamp(1rem, 2vw, 1.35rem) clamp(1.1rem, 2.4vw, 1.55rem) clamp(1.05rem, 2vw, 1.4rem)
+    clamp(1.4rem, 2.8vw, 2rem);
+  border: 1px solid color-mix(in oklch, var(--moss) 34%, var(--line));
+  border-left: clamp(0.35rem, 0.8vw, 0.52rem) solid color-mix(in oklch, var(--seal) 88%, var(--moss));
+  border-radius: 8px;
   background:
-    linear-gradient(90deg, color-mix(in oklch, var(--surface-raised) 86%, transparent), color-mix(in oklch, var(--surface) 72%, transparent)),
-    color-mix(in oklch, var(--surface-raised) 70%, transparent);
-  box-shadow: 0 1px 0 var(--inset-highlight) inset;
-  color: color-mix(in oklch, var(--ink) 70%, var(--ink-muted));
-  font-size: 1.14rem;
-  font-weight: 500;
-  line-height: 1.82;
+    linear-gradient(135deg, color-mix(in oklch, var(--surface-raised) 96%, var(--moss) 4%) 0 58%, color-mix(in oklch, var(--surface) 88%, var(--seal) 5%) 100%),
+    var(--surface-raised);
+  box-shadow:
+    0 1px 0 var(--inset-highlight) inset,
+    0 14px 32px color-mix(in oklch, var(--ink) 9%, transparent);
+  color: color-mix(in oklch, var(--ink) 82%, var(--moss));
+  font-size: clamp(1.05rem, 0.98rem + 0.22vw, 1.18rem);
+  font-weight: 650;
+  line-height: 1.75;
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }html[data-inkisle-theme="personal"] .post-summary::before {
   position: absolute;
-  top: 1.45rem;
-  left: 0.45rem;
-  width: 0.5rem;
+  top: 0.85rem;
+  right: 0.9rem;
+  width: clamp(2.6rem, 7vw, 4.1rem);
   aspect-ratio: 1;
-  background: color-mix(in oklch, var(--seal) 82%, var(--surface));
-  box-shadow: 0 0 0 3px color-mix(in oklch, var(--surface-raised) 78%, transparent);
+  border: 1px solid color-mix(in oklch, var(--moss) 14%, transparent);
+  background:
+    linear-gradient(90deg, color-mix(in oklch, var(--moss) 12%, transparent) 1px, transparent 1px) 0 0 / 0.62rem 0.62rem,
+    linear-gradient(0deg, color-mix(in oklch, var(--moss) 10%, transparent) 1px, transparent 1px) 0 0 / 0.62rem 0.62rem;
   content: "";
-  transform: rotate(45deg);
+  opacity: 0.56;
+  pointer-events: none;
 }html[data-inkisle-theme="personal"] .post-summary::after {
   position: absolute;
-  top: 2.3rem;
-  bottom: 1.25rem;
-  left: 0.69rem;
-  width: 1px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklch, var(--seal) 48%, transparent),
-    color-mix(in oklch, var(--moss) 18%, transparent)
-  );
+  top: 0.68rem;
+  left: -0.22rem;
+  width: 0.44rem;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--seal);
+  box-shadow: 0 0 0 0.28rem var(--surface);
   content: "";
 }html[data-inkisle-theme="personal"] .post-hero > .tag-row {
-  margin-top: 1rem;
+  margin-top: clamp(1rem, 2vw, 1.35rem);
 }html[data-inkisle-theme="personal"] .hero-panel {
   border-top: 2px solid var(--ink);
   padding-top: 1.1rem;
@@ -738,17 +744,14 @@ html[data-inkisle-theme="personal"] .page-title h1,
 html[data-inkisle-theme="personal"] .not-found h1 {
     line-height: 1.12;
   }html[data-inkisle-theme="personal"] .post-summary {
-    padding: 0.95rem 1.05rem 1rem 1.55rem;
+    padding: 0.95rem 1rem 1rem 1.15rem;
     font-size: 1.04rem;
-    line-height: 1.76;
+    line-height: 1.72;
   }html[data-inkisle-theme="personal"] .post-summary::before {
-    top: 1.25rem;
-    left: 0.35rem;
-    width: 0.42rem;
+    display: none;
   }html[data-inkisle-theme="personal"] .post-summary::after {
-    top: 2rem;
-    bottom: 1.1rem;
-    left: 0.55rem;
+    top: 0.72rem;
+    left: -0.2rem;
   }html[data-inkisle-theme="personal"] .post-card h2,
 html[data-inkisle-theme="personal"] .prose h2,
 html[data-inkisle-theme="personal"] .prose h3 {
