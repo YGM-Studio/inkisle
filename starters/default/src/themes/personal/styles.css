@@ -299,6 +299,15 @@ html[data-inkisle-theme="personal"] .theme-toggle[data-theme="dark"] .theme-togg
   font-weight: 450;
   letter-spacing: 0;
   line-height: 1.18;
+}html[data-inkisle-theme="personal"] .motto-typewriter[data-typewriter-ready="true"] [data-typewriter-text]::after {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.9em;
+  margin-left: 0.12em;
+  transform: translateY(0.08em);
+  background: color-mix(in oklch, var(--seal) 84%, var(--ink-muted));
+  content: "";
+  animation: inkisle-typewriter-caret 1s steps(1, end) infinite;
 }html[data-inkisle-theme="personal"] .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
@@ -725,6 +734,9 @@ html[data-inkisle-theme="personal"] .theme-toggle::before {
       color 180ms ease,
       transform 180ms ease;
   }
+}@media (prefers-reduced-motion: reduce) {html[data-inkisle-theme="personal"] .motto-typewriter[data-typewriter-ready="true"] [data-typewriter-text]::after {
+    animation: none;
+  }
 }@media (max-width: 780px) {html[data-inkisle-theme="personal"] .home-intro,
 html[data-inkisle-theme="personal"] .hero,
 html[data-inkisle-theme="personal"] .post-card,
@@ -765,5 +777,14 @@ html[data-inkisle-theme="personal"] .site-footer nav {
   }html[data-inkisle-theme="personal"] .pagination-step:first-child,
 html[data-inkisle-theme="personal"] .pagination-step:last-child {
     justify-self: stretch;
+  }
+}@keyframes inkisle-typewriter-caret {
+  0%,
+  48% {
+    opacity: 1;
+  }
+  49%,
+  100% {
+    opacity: 0;
   }
 }

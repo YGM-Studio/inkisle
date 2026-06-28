@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import MottoTypewriter from "../../../components/MottoTypewriter.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
 import { getLocaleBase, getSiteDescription, siteConfig, sitePath } from "../../../config";
@@ -26,7 +27,7 @@ const localeBase = getLocaleBase(locale);
     <div class="hero-copy">
       <span class="eyebrow">{isZh ? "商业内容中心" : "Business Knowledge Hub"}</span>
       <h1 id="home-intro-title">{siteConfig.title}</h1>
-      <p>{homeDescription}</p>
+      <MottoTypewriter locale={locale} />
       <div class="hero-actions">
         <a class="button-primary" href="#latest-posts">{isZh ? "阅读最新文章" : "Read latest"}</a>
         <a class="button-secondary" href={sitePath(`${localeBase}/search/`)}>{isZh ? "搜索资源" : "Search resources"}</a>

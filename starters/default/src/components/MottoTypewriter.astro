@@ -1,0 +1,110 @@
+---
+import { getHomeMottos, getSiteDescription, siteConfig } from "../config";
+
+type MottoTypewriterProps = {
+  locale: string;
+  as?: "h1" | "p";
+  id?: string;
+};
+
+const { locale, as: Tag = "p", id } = Astro.props as MottoTypewriterProps;
+const homeDescription = getSiteDescription(locale);
+const homeMottos = getHomeMottos(locale);
+const enableTypewriter = siteConfig.home.typewriter.enabled && homeMottos.length > 1;
+const typewriterConfig = {
+  mottos: homeMottos,
+  typeSpeed: siteConfig.home.typewriter.typeSpeed,
+  deleteSpeed: siteConfig.home.typewriter.deleteSpeed,
+  pauseDelay: siteConfig.home.typewriter.pauseDelay,
+  nextDelay: siteConfig.home.typewriter.nextDelay
+};
+---
+
+<Tag
+  id={id}
+  class:list={[enableTypewriter && "motto-typewriter"]}
+  data-typewriter-config={enableTypewriter ? JSON.stringify(typewriterConfig) : undefined}
+>
+  <span data-typewriter-text>{homeDescription}</span>
+</Tag>
+
+{
+  enableTypewriter && (
+    <script>
+      (() => {
+        const target = document.querySelector("[data-typewriter-config]");
+        const textNode = target?.querySelector("[data-typewriter-text]");
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!(target instanceof HTMLElement) || !(textNode instanceof HTMLElement) || reduceMotion) {
+          return;
+        }
+
+        let config: { mottos?: unknown; typeSpeed?: unknown; deleteSpeed?: unknown; pauseDelay?: unknown; nextDelay?: unknown };
+        try {
+          config = JSON.parse(target.dataset.typewriterConfig || "{}");
+        } catch {
+          return;
+        }
+
+        const mottos: string[] = Array.isArray(config.mottos)
+          ? config.mottos.map((item: unknown) => String(item).trim()).filter(Boolean)
+          : [];
+
+        if (mottos.length < 2) {
+          return;
+        }
+
+        const typeSpeed = Number(config.typeSpeed) || 44;
+        const deleteSpeed = Number(config.deleteSpeed) || 24;
+        const pauseDelay = Number(config.pauseDelay) || 1800;
+        const nextDelay = Number(config.nextDelay) || 320;
+        let mottoIndex = 0;
+        let charIndex = mottos[0].length;
+        let deleting = true;
+
+        const originalText = textNode.textContent || "";
+        const maxHeight = mottos.reduce((height: number, motto: string) => {
+          textNode.textContent = motto;
+          return Math.max(height, target.getBoundingClientRect().height);
+        }, target.getBoundingClientRect().height);
+        textNode.textContent = originalText;
+        target.style.minHeight = `${Math.ceil(maxHeight)}px`;
+        target.dataset.typewriterReady = "true";
+
+        const tick = () => {
+          const current = mottos[mottoIndex];
+
+          if (deleting) {
+            charIndex -= 1;
+            textNode.textContent = current.slice(0, Math.max(0, charIndex));
+
+            if (charIndex <= 0) {
+              deleting = false;
+              mottoIndex = (mottoIndex + 1) % mottos.length;
+              window.setTimeout(tick, nextDelay);
+              return;
+            }
+
+            window.setTimeout(tick, deleteSpeed);
+            return;
+          }
+
+          const next = mottos[mottoIndex];
+          charIndex += 1;
+          textNode.textContent = next.slice(0, charIndex);
+
+          if (charIndex >= next.length) {
+            deleting = true;
+            window.setTimeout(tick, pauseDelay);
+            return;
+          }
+
+          window.setTimeout(tick, typeSpeed);
+        };
+
+        window.setTimeout(tick, pauseDelay);
+      })();
+    </script>
+  )
+}

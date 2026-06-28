@@ -37,6 +37,12 @@ Site identity is configured in `src/config.ts`. Update `siteConfig.title`,
 homepage hero, and favicon. The default favicon lives at `public/favicon.svg`
 and can be replaced or pointed to another asset path.
 
+Homepage motto text can be expanded with `siteConfig.home.mottos`. The
+rendered HTML keeps `siteConfig.description` as the default visible text for
+SEO and no-JavaScript visitors, while `siteConfig.home.typewriter.enabled`
+progressively enhances the homepage with a client-side typewriter effect when
+multiple mottos are configured.
+
 Visual theme and color mode are configured with `siteConfig.theme`. Set `name`
 to `"personal"` or `"business-blog"`. Set `defaultMode` to `"system"`,
 `"light"`, or `"dark"`, and set `allowUserToggle` to `false` when the site

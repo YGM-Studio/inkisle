@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import MottoTypewriter from "../../../components/MottoTypewriter.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
 import { getLocaleBase, getSiteDescription } from "../../../config";
@@ -19,7 +20,7 @@ const homeDescription = getSiteDescription(locale);
 
 <BaseLayout locale={locale} canonicalPath={`${getLocaleBase(locale)}/`} description={homeDescription}>
   <section class="home-intro" aria-labelledby="home-intro-title">
-    <h1 id="home-intro-title">{homeDescription}</h1>
+    <MottoTypewriter as="h1" id="home-intro-title" locale={locale} />
   </section>
 
   <section aria-labelledby="latest-posts">

@@ -5,6 +5,7 @@ export type LocaleConfig = {
 
 export type ThemeMode = "system" | "light" | "dark";
 export type LocalizedText = string | Record<string, string>;
+export type LocalizedTextList = Array<LocalizedText> | Record<string, string[]>;
 
 export type StaticFileConfig = {
   path: string;
@@ -55,6 +56,16 @@ type DeepPartial<T> = {
 export type InkIsleConfig = {
   title: string;
   description: LocalizedText;
+  home: {
+    mottos: LocalizedTextList;
+    typewriter: {
+      enabled: boolean;
+      typeSpeed: number;
+      deleteSpeed: number;
+      pauseDelay: number;
+      nextDelay: number;
+    };
+  };
   site: string;
   base?: string;
   brand: {
@@ -100,6 +111,16 @@ const defaultSiteConfig: InkIsleConfig = {
   description: {
     zh: "为静态博客和内容站打造的 AI 友好 Markdown 发布系统。",
     en: "AI-native Markdown publishing system for static-first blogs and content sites."
+  },
+  home: {
+    mottos: [],
+    typewriter: {
+      enabled: false,
+      typeSpeed: 44,
+      deleteSpeed: 24,
+      pauseDelay: 1800,
+      nextDelay: 320
+    }
   },
   site: process.env.SITE_URL || "https://inkisle.example",
   base: "/",
@@ -167,6 +188,16 @@ export function getSiteDescription(locale = siteConfig.defaultLocale) {
   return resolveLocalizedText(siteConfig.description, locale);
 }
 
+export function getHomeMottos(locale = siteConfig.defaultLocale) {
+  const mottos = resolveLocalizedTextList(siteConfig.home.mottos, locale);
+  const description = getSiteDescription(locale);
+  const normalized = [description, ...mottos]
+    .map((motto) => motto.trim())
+    .filter(Boolean);
+
+  return Array.from(new Set(normalized));
+}
+
 export function isKnownLocale(code: string) {
   return getLocaleCodes().includes(code);
 }
@@ -224,6 +255,14 @@ function resolveLocalizedText(value: LocalizedText, locale: string) {
   return value[locale] ?? value[siteConfig.defaultLocale] ?? Object.values(value).find(Boolean) ?? "";
 }
 
+function resolveLocalizedTextList(value: LocalizedTextList, locale: string) {
+  if (Array.isArray(value)) {
+    return value.map((item) => resolveLocalizedText(item, locale));
+  }
+
+  return value[locale] ?? value[siteConfig.defaultLocale] ?? Object.values(value).find((items) => items.length > 0) ?? [];
+}
+
 function loadSiteConfigFromEnv(): DeepPartial<InkIsleConfig> {
   const rawConfig = process.env.INKISLE_SITE_CONFIG;
 
@@ -248,7 +287,7 @@ function mergeConfig<T extends Record<string, unknown>>(base: T, override: DeepP
       continue;
     }
 
-    if (key !== "description" && isRecord(base[key]) && isRecord(value) && !Array.isArray(value)) {
+    if (!["description", "mottos"].includes(String(key)) && isRecord(base[key]) && isRecord(value) && !Array.isArray(value)) {
       next[key] = mergeConfig(base[key], value as DeepPartial<Record<string, unknown>>) as T[keyof T];
       continue;
     }
