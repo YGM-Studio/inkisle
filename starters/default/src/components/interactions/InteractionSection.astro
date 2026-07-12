@@ -1,0 +1,31 @@
+---
+import type { ContentEntry } from "../../lib/content";
+import { getInteractionState } from "../../lib/interactions";
+import GiscusProvider from "./GiscusProvider.astro";
+import WalineProvider from "./WalineProvider.astro";
+
+type Props = {
+  post: ContentEntry;
+};
+
+const { post } = Astro.props;
+const state = getInteractionState(post);
+---
+
+{
+  state && (
+    <section
+      class="comment-mount interaction-section"
+      data-inkisle-comments
+      data-interaction-provider={state.provider}
+      data-interaction-key={state.key}
+      aria-label={state.locale === "zh" ? "文章讨论" : "Article discussion"}
+    >
+      {state.provider === "waline" ? (
+        <WalineProvider state={state} />
+      ) : (
+        <GiscusProvider state={state} />
+      )}
+    </section>
+  )
+}

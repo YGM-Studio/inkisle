@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import InteractionSection from "../../../components/interactions/InteractionSection.astro";
 import { getLocaleBase, sitePath } from "../../../config";
 import { categoryHref, formatDate, tagHref, type ContentEntry } from "../../../lib/content";
 
@@ -51,8 +52,6 @@ const localeBase = getLocaleBase(post.locale);
       </a>
     </section>
 
-    <section class="comment-mount" data-inkisle-comments>
-      <slot name="comments" />
-    </section>
+    <InteractionSection post={post} />
   </article>
 </BaseLayout>

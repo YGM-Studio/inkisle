@@ -1,0 +1,66 @@
+---
+import { siteConfig, sitePath } from "../../config";
+import { getWalineLanguage, type InteractionState } from "../../lib/interactions";
+
+type Props = {
+  state: InteractionState;
+};
+
+const { state } = Astro.props;
+const config = siteConfig.interactions.waline;
+const lang = getWalineLanguage(state.locale);
+const reaction = state.reactions ? config.reaction : false;
+const loadingLabel = state.locale === "zh" ? "正在加载讨论..." : "Loading discussion...";
+const errorLabel = state.locale === "zh" ? "讨论加载失败。" : "Discussion failed to load.";
+const retryLabel = state.locale === "zh" ? "重新加载" : "Reload";
+const retryURL = sitePath(state.retryURL);
+---
+
+<link rel="stylesheet" href={config.cssURL} data-inkisle-waline-styles />
+<div class="interaction-provider waline-provider" data-inkisle-waline>
+  <p class="interaction-status" data-interaction-status role="status">{loadingLabel}</p>
+  <div data-waline-root></div>
+  <p class="interaction-error" data-interaction-error hidden>
+    {errorLabel} <a href={retryURL}>{retryLabel}</a>
+  </p>
+</div>
+
+<script
+  type="module"
+  is:inline
+  define:vars={{
+    clientURL: config.clientURL,
+    serverURL: config.serverURL,
+    interactionKey: state.key,
+    lang,
+    reaction
+  }}
+>
+  const root = document.querySelector("[data-inkisle-waline]:not([data-initialized])");
+
+  if (root) {
+    root.dataset.initialized = "true";
+    const status = root.querySelector("[data-interaction-status]");
+    const error = root.querySelector("[data-interaction-error]");
+    const target = root.querySelector("[data-waline-root]");
+
+    try {
+      const client = await import(clientURL);
+      client.init({
+        el: target,
+        serverURL,
+        path: interactionKey,
+        lang,
+        reaction,
+        pageview: false,
+        dark: 'html[data-theme="dark"]'
+      });
+      status.hidden = true;
+      root.dataset.ready = "true";
+    } catch {
+      status.hidden = true;
+      error.hidden = false;
+      root.dataset.failed = "true";
+    }
+  }
+</script>

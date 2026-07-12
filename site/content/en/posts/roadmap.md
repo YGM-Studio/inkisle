@@ -8,6 +8,7 @@ tags:
   - Alpha
 category: "Project"
 published: true
+interactionId: "roadmap"
 ---
 
 InkIsle is still alpha software. The current priority is a solid Markdown publishing workflow, not a full CMS.

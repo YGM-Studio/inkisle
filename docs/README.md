@@ -9,6 +9,7 @@ InkIsle, 中文名“墨屿”，是一个 AI-native Markdown publishing system�
 - [Product Brief](product-brief.md)：项目背景、定位、价值判断、MVP 范围和命名。
 - [Technical Plan](technical-plan.md)：内容结构、多语言、主题、CLI、AI 友好输出和部署策略。
 - [Theme System](theme-system.md)：starter/theme 边界、内置多主题契约、配置方式和后续扩展路径。
+- [Interactions Plan](interactions.md)：点赞与留言的 Provider 边界、配置契约、数据标识和交付计划。
 
 ## 当前结论
 

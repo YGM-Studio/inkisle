@@ -7,6 +7,7 @@ tags:
   - InkIsle
   - Markdown
 category: "Product"
+interactionId: "hello-inkisle"
 published: true
 ---
 
@@ -19,4 +20,3 @@ Main-language content lives directly in `content/posts/` and `content/pages/`. T
 ## Next step
 
 The next validation step is to migrate the real Hexo blog content and check whether routes, visual design, and machine-readable outputs match the publishing workflow.
-

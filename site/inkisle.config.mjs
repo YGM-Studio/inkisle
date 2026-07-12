@@ -20,6 +20,16 @@ export default {
     name: "YGM Studio",
     url: "https://github.com/YGM-Studio"
   },
+  interactions: {
+    provider: "giscus",
+    localeScope: "shared",
+    giscus: {
+      repo: "YGM-Studio/inkisle",
+      repoId: "R_kgDOSSLLLg",
+      category: "InkIsle Blog",
+      categoryId: "DIC_kwDOSSLLLs4DBBG_"
+    }
+  },
   theme: {
     name: "business-blog",
     defaultMode: "system",

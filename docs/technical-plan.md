@@ -254,9 +254,10 @@ Default: static output with pre-rendered HTML.
 
 SSR is not a V0 priority. Possible future SSR use cases:
 
-- Comments.
 - Login state.
 - Dynamic preview.
 - Runtime personalization.
 
-For V0, comments should only use a unified mount slot. Built-in comment providers can come later.
+Comments and article reactions use a unified renderer-owned mount with
+client-side Waline and Giscus adapters. Provider state remains external, so
+enabling interactions does not require SSR. See [Interactions Plan](interactions.md).

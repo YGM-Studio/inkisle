@@ -8,6 +8,7 @@ tags:
   - Theme
 category: "Guide"
 published: true
+interactionId: "configuration"
 ---
 
 InkIsle runs with defaults, but real sites usually add `inkisle.config.mjs` at the project root.
@@ -34,6 +35,7 @@ export default {
 - `locales` and `defaultLocale` control multilingual content directories.
 - `theme.name` selects `personal` or `business-blog`.
 - `base` supports subpath deployments such as `/inkisle`.
+- `interactions` can opt into Waline or Giscus; no third-party comment script loads by default.
 - `pwa`, `analytics`, `verificationFiles`, and `redirects` handle browser integration, analytics, verification files, and migration redirects.
 
 `base` changes browser-facing URLs. It does not change Markdown paths or the generated file layout.

@@ -8,6 +8,7 @@ tags:
   - CLI
 category: "Guide"
 published: true
+interactionId: "quick-start"
 ---
 
 The default InkIsle project is content-only. You maintain `content/`, optional `public/`, and optional `inkisle.config.mjs`; the renderer and Astro internals stay inside the InkIsle package.

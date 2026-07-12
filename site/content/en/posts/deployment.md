@@ -8,6 +8,7 @@ tags:
   - GitHub Pages
 category: "Deploy"
 published: true
+interactionId: "github-pages-deployment"
 ---
 
 GitHub Pages project sites usually live under a repository subpath, such as `https://ygm-studio.github.io/inkisle/`. Configure both `site` and `base` for that shape.

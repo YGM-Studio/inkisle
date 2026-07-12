@@ -580,6 +580,30 @@ html[data-inkisle-theme="personal"] .prose td:last-child {
   margin-top: clamp(2rem, 5vw, 4rem);
   border-top: 1px solid var(--line);
   padding-top: 1.5rem;
+}html[data-inkisle-theme="personal"] .interaction-provider {
+  min-width: 0;
+}html[data-inkisle-theme="personal"] .interaction-status,
+html[data-inkisle-theme="personal"] .interaction-error {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--step--1);
+}html[data-inkisle-theme="personal"] .interaction-error a {
+  color: var(--moss-strong);
+  font-weight: 700;
+}html[data-inkisle-theme="personal"] .interaction-provider [hidden] {
+  display: none;
+}html[data-inkisle-theme="personal"] .waline-provider {
+  --waline-theme-color: var(--moss);
+  --waline-active-color: var(--moss-strong);
+  --waline-color: var(--ink-muted);
+  --waline-bg-color: var(--surface);
+  --waline-bg-color-light: var(--surface-raised);
+  --waline-bg-color-hover: color-mix(in oklch, var(--surface-raised) 80%, var(--moss) 6%);
+  --waline-border-color: var(--line);
+  --waline-disable-bg-color: color-mix(in oklch, var(--surface) 88%, var(--line));
+  --waline-disable-color: var(--ink-muted);
+  --waline-info-bg-color: var(--surface-raised);
+  --waline-info-color: var(--ink-muted);
 }html[data-inkisle-theme="personal"] .not-found {
   display: grid;
   gap: 1rem;

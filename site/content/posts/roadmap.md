@@ -8,6 +8,7 @@ tags:
   - Alpha
 category: "Project"
 published: true
+interactionId: "roadmap"
 ---
 
 InkIsle 仍处于 alpha 阶段。当前重点是把 Markdown 发布的基础体验做扎实，而不是急着扩展成完整 CMS。

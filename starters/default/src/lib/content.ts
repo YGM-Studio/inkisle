@@ -44,6 +44,9 @@ export type ContentEntry = {
   category?: string;
   draft: boolean;
   published: boolean;
+  interactionId: string;
+  comments: boolean;
+  reactions: boolean;
   body: string;
   html: string;
   text: string;
@@ -68,6 +71,9 @@ type Frontmatter = {
   draft?: unknown;
   published?: unknown;
   slug?: unknown;
+  interactionId?: unknown;
+  comments?: unknown;
+  reactions?: unknown;
 };
 
 let contentCache: Promise<ContentStore> | undefined;
@@ -310,6 +316,9 @@ function normalizeEntry(
     category: asString(frontmatter.category) ?? asStringArray(frontmatter.categories)[0],
     draft: frontmatter.draft === true,
     published: frontmatter.published !== false,
+    interactionId: asString(frontmatter.interactionId) || `${parsedPath.kind}:${fileSlug}`,
+    comments: frontmatter.comments !== false,
+    reactions: frontmatter.reactions !== false,
     body: bodyWithoutMoreMarker,
     html,
     text: toPlainText(html),

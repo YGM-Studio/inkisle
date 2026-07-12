@@ -8,6 +8,7 @@ tags:
   - Theme
 category: "Guide"
 published: true
+interactionId: "configuration"
 ---
 
 InkIsle 的默认配置已经可以直接运行。需要定制时，在项目根目录添加 `inkisle.config.mjs`。
@@ -34,6 +35,7 @@ export default {
 - `locales` 和 `defaultLocale` 控制多语言内容目录。
 - `theme.name` 可以选择 `personal` 或 `business-blog`。
 - `base` 用于 GitHub Pages 这类子路径部署，例如 `/inkisle`。
+- `interactions` 可按需接入 Waline 或 Giscus，默认不会加载第三方评论脚本。
 - `pwa`、`analytics`、`verificationFiles` 和 `redirects` 处理浏览器集成、统计、搜索验证文件和迁移跳转。
 
 `base` 只影响浏览器可访问 URL，不改变 Markdown 内容路径，也不改变构建目录里的文件结构。

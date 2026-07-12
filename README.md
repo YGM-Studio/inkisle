@@ -97,6 +97,7 @@ The script updates `package.json`, `package-lock.json`, and the content-only sta
 - [Documentation Index](docs/README.md)
 - [Product Brief](docs/product-brief.md)
 - [Technical Plan](docs/technical-plan.md)
+- [Interactions Plan](docs/interactions.md)
 
 ## Contributing
 

@@ -8,6 +8,7 @@ tags:
   - GitHub Pages
 category: "Deploy"
 published: true
+interactionId: "github-pages-deployment"
 ---
 
 GitHub Pages 项目页通常部署在仓库名子路径下，例如 `https://ygm-studio.github.io/inkisle/`。这种场景需要同时配置 `site` 和 `base`。

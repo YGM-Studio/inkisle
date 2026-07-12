@@ -114,7 +114,7 @@ V0 should support:
 - Full-site JSON feed.
 - Simple `llms.txt` index.
 - i18n routing.
-- Comment mount slot.
+- Optional Waline and Giscus interaction providers.
 - Default personal blog theme.
 
 Configurable but not default:
@@ -131,7 +131,6 @@ Later:
 - Server-side search.
 - SSR pages.
 - Login state.
-- Built-in comment providers.
 - Theme component override.
 - Theme marketplace.
 

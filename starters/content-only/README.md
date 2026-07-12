@@ -105,3 +105,57 @@ export default {
   }
 };
 ```
+
+## Comments and reactions
+
+Interactions are disabled by default and do not require InkIsle to run in SSR
+mode. Waline is the recommended provider for general readers. Deploy a Waline
+server and configure its public URL:
+
+```js
+export default {
+  interactions: {
+    provider: "waline",
+    localeScope: "separate",
+    waline: {
+      serverURL: "https://comments.example.com",
+      reaction: true
+    }
+  }
+};
+```
+
+Use Giscus when readers can sign in with GitHub and repository-backed
+discussions are preferred:
+
+```js
+export default {
+  interactions: {
+    provider: "giscus",
+    giscus: {
+      repo: "owner/repository",
+      repoId: "R_...",
+      category: "Announcements",
+      categoryId: "DIC_..."
+    }
+  }
+};
+```
+
+Posts created by `inkisle new post` receive an `interactionId`. Keep that ID
+stable after publication even when the file, title, or URL changes. Existing
+posts derive an ID from their original content path. A post can override the
+defaults in frontmatter:
+
+```yaml
+interactionId: permanent-post-id
+comments: true
+reactions: false
+```
+
+Set `comments: false` to remove the complete interaction section. Set
+`localeScope: "shared"` to share one discussion between translations that use
+the same `interactionId`; the default `"separate"` mode keeps languages apart.
+
+See `docs/interactions.md` in the InkIsle package for the architecture,
+resource overrides, and migration rules.

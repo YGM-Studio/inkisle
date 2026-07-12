@@ -141,6 +141,7 @@ async function newContent(input) {
           'summary: ""',
           "tags: []",
           "category:",
+          `interactionId: "${escapeYaml(slug)}"`,
           `published: ${options.published ? "true" : "false"}`,
           "---",
           ""

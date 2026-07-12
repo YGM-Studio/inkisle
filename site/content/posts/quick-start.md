@@ -8,6 +8,7 @@ tags:
   - CLI
 category: "Guide"
 published: true
+interactionId: "quick-start"
 ---
 
 InkIsle 的默认项目是 content-only 形态。你维护 `content/`、可选的 `public/` 和 `inkisle.config.mjs`，渲染器和 Astro 细节留在 InkIsle 包里。

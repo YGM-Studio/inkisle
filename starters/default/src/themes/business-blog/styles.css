@@ -642,8 +642,39 @@ html[data-inkisle-theme="business-blog"] .article-cta span {
 html[data-inkisle-theme="business-blog"] .article-cta h2 {
   font-size: 1.35rem;
 }
-html[data-inkisle-theme="business-blog"] .comment-mount:empty {
+html[data-inkisle-theme="business-blog"] .comment-mount {
+  margin-top: clamp(2rem, 5vw, 4rem);
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+}
+html[data-inkisle-theme="business-blog"] .interaction-provider {
+  min-width: 0;
+}
+html[data-inkisle-theme="business-blog"] .interaction-status,
+html[data-inkisle-theme="business-blog"] .interaction-error {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.86rem;
+}
+html[data-inkisle-theme="business-blog"] .interaction-error a {
+  color: var(--green-strong);
+  font-weight: 800;
+}
+html[data-inkisle-theme="business-blog"] .interaction-provider [hidden] {
   display: none;
+}
+html[data-inkisle-theme="business-blog"] .waline-provider {
+  --waline-theme-color: var(--green);
+  --waline-active-color: var(--green-strong);
+  --waline-color: var(--ink-muted);
+  --waline-bg-color: var(--page);
+  --waline-bg-color-light: var(--panel);
+  --waline-bg-color-hover: color-mix(in oklch, var(--panel) 82%, var(--green) 6%);
+  --waline-border-color: var(--line);
+  --waline-disable-bg-color: var(--panel-strong);
+  --waline-disable-color: var(--ink-muted);
+  --waline-info-bg-color: var(--panel);
+  --waline-info-color: var(--ink-muted);
 }
 html[data-inkisle-theme="business-blog"] .search-form {
   display: grid;

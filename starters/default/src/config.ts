@@ -45,6 +45,32 @@ export type AnalyticsConfig = {
   };
 };
 
+export type InteractionProvider = "none" | "waline" | "giscus";
+export type InteractionLocaleScope = "separate" | "shared";
+
+export type InteractionsConfig = {
+  provider: InteractionProvider;
+  localeScope: InteractionLocaleScope;
+  waline: {
+    serverURL: string;
+    reaction: boolean | string[];
+    lang?: LocalizedText;
+    clientURL: string;
+    cssURL: string;
+  };
+  giscus: {
+    host: string;
+    repo: string;
+    repoId: string;
+    category: string;
+    categoryId: string;
+    lang?: LocalizedText;
+    strict: boolean;
+    inputPosition: "top" | "bottom";
+    loading: "lazy" | "eager";
+  };
+};
+
 type DeepPartial<T> = {
   [Property in keyof T]?: T[Property] extends Array<unknown>
     ? T[Property]
@@ -92,6 +118,7 @@ export type InkIsleConfig = {
     pageContentUsesTheme: boolean;
   };
   analytics: AnalyticsConfig;
+  interactions: InteractionsConfig;
   verificationFiles: StaticFileConfig[];
   redirects: RedirectRuleConfig[];
   pwa: PwaConfig;
@@ -145,6 +172,26 @@ const defaultSiteConfig: InkIsleConfig = {
     pageContentUsesTheme: true
   },
   analytics: {},
+  interactions: {
+    provider: "none",
+    localeScope: "separate",
+    waline: {
+      serverURL: "",
+      reaction: true,
+      clientURL: "https://unpkg.com/@waline/client@3.15.2/dist/waline.js",
+      cssURL: "https://unpkg.com/@waline/client@3.15.2/dist/waline.css"
+    },
+    giscus: {
+      host: "https://giscus.app",
+      repo: "",
+      repoId: "",
+      category: "",
+      categoryId: "",
+      strict: true,
+      inputPosition: "top",
+      loading: "lazy"
+    }
+  },
   verificationFiles: [],
   redirects: [],
   pwa: {
@@ -196,6 +243,10 @@ export function getHomeMottos(locale = siteConfig.defaultLocale) {
     .filter(Boolean);
 
   return Array.from(new Set(normalized));
+}
+
+export function resolveLocalizedConfig(value: LocalizedText | undefined, locale: string, fallback: string) {
+  return value ? resolveLocalizedText(value, locale) : fallback;
 }
 
 export function isKnownLocale(code: string) {

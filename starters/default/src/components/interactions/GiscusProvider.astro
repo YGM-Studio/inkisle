@@ -1,0 +1,96 @@
+---
+import { siteConfig, sitePath } from "../../config";
+import { getGiscusLanguage, type InteractionState } from "../../lib/interactions";
+
+type Props = {
+  state: InteractionState;
+};
+
+const { state } = Astro.props;
+const config = siteConfig.interactions.giscus;
+const lang = getGiscusLanguage(state.locale);
+const host = config.host.replace(/\/+$/, "");
+const loadingLabel = state.locale === "zh" ? "正在加载讨论..." : "Loading discussion...";
+const errorLabel = state.locale === "zh" ? "讨论加载失败。" : "Discussion failed to load.";
+const retryLabel = state.locale === "zh" ? "重新加载" : "Reload";
+const retryURL = sitePath(state.retryURL);
+---
+
+<div class="interaction-provider giscus-provider" data-inkisle-giscus>
+  <p class="interaction-status" data-interaction-status role="status">{loadingLabel}</p>
+  <div data-giscus-root></div>
+  <p class="interaction-error" data-interaction-error hidden>
+    {errorLabel} <a href={retryURL}>{retryLabel}</a>
+  </p>
+</div>
+
+<script
+  is:inline
+  define:vars={{
+    host,
+    repo: config.repo,
+    repoId: config.repoId,
+    category: config.category,
+    categoryId: config.categoryId,
+    interactionKey: state.key,
+    reactionsEnabled: state.reactions ? "1" : "0",
+    strict: config.strict ? "1" : "0",
+    inputPosition: config.inputPosition,
+    loading: config.loading,
+    lang
+  }}
+>
+  (() => {
+    const root = document.querySelector("[data-inkisle-giscus]:not([data-initialized])");
+    if (!root) return;
+
+    root.dataset.initialized = "true";
+    const status = root.querySelector("[data-interaction-status]");
+    const error = root.querySelector("[data-interaction-error]");
+    const target = root.querySelector("[data-giscus-root]");
+    const script = document.createElement("script");
+    const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+    let giscusOrigin;
+
+    try {
+      giscusOrigin = new URL(host).origin;
+    } catch {
+      giscusOrigin = "https://giscus.app";
+    }
+
+    script.src = `${host}/client.js`;
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.dataset.repo = repo;
+    script.dataset.repoId = repoId;
+    script.dataset.category = category;
+    script.dataset.categoryId = categoryId;
+    script.dataset.mapping = "specific";
+    script.dataset.term = interactionKey;
+    script.dataset.strict = strict;
+    script.dataset.reactionsEnabled = reactionsEnabled;
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = inputPosition;
+    script.dataset.theme = currentTheme;
+    script.dataset.lang = lang;
+    script.dataset.loading = loading;
+
+    script.addEventListener("load", () => {
+      status.hidden = true;
+      root.dataset.ready = "true";
+    });
+    script.addEventListener("error", () => {
+      status.hidden = true;
+      error.hidden = false;
+      root.dataset.failed = "true";
+    });
+
+    window.addEventListener("inkisle-theme-change", (event) => {
+      const frame = root.querySelector("iframe.giscus-frame");
+      const theme = event.detail?.theme === "dark" ? "dark" : "light";
+      frame?.contentWindow?.postMessage({ giscus: { setConfig: { theme } } }, giscusOrigin);
+    });
+
+    target.append(script);
+  })();
+</script>

@@ -7,6 +7,7 @@ tags:
   - InkIsle
   - Markdown
 category: "Product"
+interactionId: "hello-inkisle"
 published: true
 ---
 
@@ -19,4 +20,3 @@ published: true
 ## 下一步
 
 接下来可以把真实 Hexo 文章迁移进来，用站点构建结果验证路由、样式和机器可读输出是否符合预期。
-
