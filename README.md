@@ -1,6 +1,6 @@
 # 墨屿 / InkIsle
 
-[Website](https://ygm-studio.github.io/inkisle/) · [Canary](https://ygm-studio.github.io/inkisle-canary/) · [npm](https://www.npmjs.com/package/inkisle) · [GitHub](https://github.com/YGM-Studio/inkisle)
+[Website](https://ygm-studio.github.io/inkisle/) · [Giscus Canary](https://ygm-studio.github.io/inkisle-canary/) · [Waline Canary](https://ygm-studio.github.io/inkisle-waline-canary/) · [npm](https://www.npmjs.com/package/inkisle) · [GitHub](https://github.com/YGM-Studio/inkisle)
 
 InkIsle is an AI-native Markdown publishing system.
 
@@ -98,6 +98,7 @@ The script updates `package.json`, `package-lock.json`, and the content-only sta
 - [Product Brief](docs/product-brief.md)
 - [Technical Plan](docs/technical-plan.md)
 - [Interactions Plan](docs/interactions.md)
+- [Canary Sites](docs/canary-sites.md)
 
 ## Contributing
 

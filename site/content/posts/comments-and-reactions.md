@@ -39,6 +39,11 @@ Provider 使用 `interactionId`，而不是公开 URL，来查找文章对应的
 
 InkIsle 官方站运行在 GitHub Pages 上，使用 Giscus 把文章互动保存到 `YGM-Studio/inkisle` 的 `InkIsle Blog` Discussions 分类。中英文翻译共用讨论，明暗主题切换也会同步到 Giscus。
 
-我们还维护了一个[独立 npm canary](https://ygm-studio.github.io/inkisle-canary/)。它不引用源码工作区，而是从 npm 安装固定版本，用另一套主题和部署仓库持续验证发布包。
+我们还维护了两个独立 npm canary。它们都不引用源码工作区，而是从 npm 安装固定版本，再通过各自的仓库和 GitHub Pages 工作流验证发布包：
+
+- [Giscus canary](https://ygm-studio.github.io/inkisle-canary/)验证 npm 安装、Pages 子路径和 GitHub Discussions 互动。
+- [Waline canary](https://ygm-studio.github.io/inkisle-waline-canary/)验证独立 Vercel 服务端、Neon 数据库、留言表单和 reaction。
+
+两个站点的维护边界、数据归属和版本升级流程记录在[Canary Sites](https://github.com/YGM-Studio/inkisle/blob/main/docs/canary-sites.md)中。
 
 这篇文章本身就是长期运行的公开验收页面。你可以在下方留下反馈，帮助我们继续验证真实环境下的加载、登录、回复和 reaction 体验。
