@@ -1,6 +1,6 @@
 # 墨屿 / InkIsle
 
-[Website](https://ygm-studio.github.io/inkisle/) · [npm](https://www.npmjs.com/package/inkisle) · [GitHub](https://github.com/YGM-Studio/inkisle)
+[Website](https://ygm-studio.github.io/inkisle/) · [Canary](https://ygm-studio.github.io/inkisle-canary/) · [npm](https://www.npmjs.com/package/inkisle) · [GitHub](https://github.com/YGM-Studio/inkisle)
 
 InkIsle is an AI-native Markdown publishing system.
 

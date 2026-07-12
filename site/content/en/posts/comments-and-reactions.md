@@ -39,4 +39,6 @@ Translated articles can share one discussion or keep separate discussions per la
 
 The InkIsle site runs on GitHub Pages and uses Giscus to store article interactions in the `InkIsle Blog` Discussions category of `YGM-Studio/inkisle`. Chinese and English translations share a discussion, and the Giscus interface follows the site's light and dark themes.
 
+We also maintain an [independent npm canary](https://ygm-studio.github.io/inkisle-canary/). It installs a pinned release from npm instead of referencing the source workspace, then validates the package with a different theme and deployment repository.
+
 This article is also a long-running public acceptance page. Leave feedback below to help us keep validating loading, sign-in, replies, and reactions in a real deployment.
