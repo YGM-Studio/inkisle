@@ -18,6 +18,7 @@ const navItems = [
 if (aboutPage) {
   navItems.push({ href: sitePath(aboutPage.url), label: locale === "zh" ? "关于" : "About" });
 }
+navItems.push({ href: sitePath("/rss.xml"), label: "RSS" });
 const brandSubtitle = siteConfig.brand.subtitle || siteConfig.author.name;
 const compactLocaleSelector = siteConfig.locales.length > 2;
 ---

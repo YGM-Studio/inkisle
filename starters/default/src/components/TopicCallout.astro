@@ -1,0 +1,23 @@
+---
+import { sitePath, type ResolvedHomeTopic } from "../config";
+
+type Props = {
+  locale: string;
+  topic: ResolvedHomeTopic;
+};
+
+const { locale, topic } = Astro.props;
+const isZh = locale === "zh";
+---
+
+<aside class="topic-callout" aria-labelledby={`topic-callout-${topic.id}`} data-topic-id={topic.id}>
+  <div class="topic-callout-copy">
+    <span class="topic-callout-kicker">{isZh ? "继续阅读这个主题" : "Continue with this topic"}</span>
+    <h2 id={`topic-callout-${topic.id}`}>{topic.title}</h2>
+    {topic.summary && <p>{topic.summary}</p>}
+  </div>
+  <a class="topic-callout-link" href={sitePath(topic.href)}>
+    {isZh ? "查看主题中心" : "Open topic guide"}
+    <span aria-hidden="true">→</span>
+  </a>
+</aside>

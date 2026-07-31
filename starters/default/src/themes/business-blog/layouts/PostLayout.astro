@@ -1,7 +1,8 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import InteractionSection from "../../../components/interactions/InteractionSection.astro";
-import { getLocaleBase, sitePath } from "../../../config";
+import TopicCallout from "../../../components/TopicCallout.astro";
+import { getHomeTopic, getLocaleBase, sitePath } from "../../../config";
 import { categoryHref, formatDate, tagHref, type ContentEntry } from "../../../lib/content";
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 const { post } = Astro.props;
 const isZh = post.locale === "zh";
 const localeBase = getLocaleBase(post.locale);
+const topic = post.topic ? getHomeTopic(post.topic, post.locale) : undefined;
 ---
 
 <BaseLayout
@@ -42,15 +44,21 @@ const localeBase = getLocaleBase(post.locale);
 
     <div class="prose" set:html={post.html} />
 
-    <section class="article-cta" aria-label={isZh ? "继续浏览" : "Continue browsing"}>
-      <div>
-        <span>{isZh ? "继续探索" : "More insight"}</span>
-        <h2>{isZh ? "查找更多相关内容" : "Find more relevant content"}</h2>
-      </div>
-      <a href={sitePath(`${localeBase}/search/`)}>
-        {isZh ? "搜索资源" : "Search resources"}
-      </a>
-    </section>
+    {
+      topic ? (
+        <TopicCallout locale={post.locale} topic={topic} />
+      ) : (
+        <section class="article-cta" aria-label={isZh ? "继续浏览" : "Continue browsing"}>
+          <div>
+            <span>{isZh ? "继续探索" : "More insight"}</span>
+            <h2>{isZh ? "查找更多相关内容" : "Find more relevant content"}</h2>
+          </div>
+          <a href={sitePath(`${localeBase}/search/`)}>
+            {isZh ? "搜索资源" : "Search resources"}
+          </a>
+        </section>
+      )
+    }
 
     <InteractionSection post={post} />
   </article>

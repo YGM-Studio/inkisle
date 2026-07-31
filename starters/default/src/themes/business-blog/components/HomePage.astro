@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import MottoTypewriter from "../../../components/MottoTypewriter.astro";
+import TopicList from "../../../components/TopicList.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
 import { getLocaleBase, getSiteDescription, siteConfig, sitePath } from "../../../config";
@@ -63,6 +64,8 @@ const localeBase = getLocaleBase(locale);
       </section>
     )
   }
+
+  <TopicList locale={locale} posts={posts} />
 
   <section class="content-band" aria-labelledby="latest-posts">
     <div class="section-header">

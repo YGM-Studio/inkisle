@@ -42,6 +42,7 @@ export type ContentEntry = {
   excerpt: string;
   tags: string[];
   category?: string;
+  topic?: string;
   draft: boolean;
   published: boolean;
   interactionId: string;
@@ -68,6 +69,7 @@ type Frontmatter = {
   tags?: unknown;
   category?: unknown;
   categories?: unknown;
+  topic?: unknown;
   draft?: unknown;
   published?: unknown;
   slug?: unknown;
@@ -314,6 +316,7 @@ function normalizeEntry(
     excerpt,
     tags: asStringArray(frontmatter.tags),
     category: asString(frontmatter.category) ?? asStringArray(frontmatter.categories)[0],
+    topic: asString(frontmatter.topic),
     draft: frontmatter.draft === true,
     published: frontmatter.published !== false,
     interactionId: asString(frontmatter.interactionId) || `${parsedPath.kind}:${fileSlug}`,

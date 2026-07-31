@@ -7,6 +7,20 @@ export type ThemeMode = "system" | "light" | "dark";
 export type LocalizedText = string | Record<string, string>;
 export type LocalizedTextList = Array<LocalizedText> | Record<string, string[]>;
 
+export type HomeTopicConfig = {
+  id: string;
+  title: LocalizedText;
+  summary: LocalizedText;
+  href: LocalizedText;
+};
+
+export type ResolvedHomeTopic = {
+  id: string;
+  title: string;
+  summary: string;
+  href: string;
+};
+
 export type StaticFileConfig = {
   path: string;
   content: string;
@@ -91,6 +105,11 @@ export type InkIsleConfig = {
       pauseDelay: number;
       nextDelay: number;
     };
+    topics: {
+      enabled: boolean;
+      heading: LocalizedText;
+      items: HomeTopicConfig[];
+    };
   };
   site: string;
   base?: string;
@@ -147,6 +166,14 @@ const defaultSiteConfig: InkIsleConfig = {
       deleteSpeed: 24,
       pauseDelay: 1800,
       nextDelay: 320
+    },
+    topics: {
+      enabled: false,
+      heading: {
+        zh: "主题中心",
+        en: "Topic Guides"
+      },
+      items: []
     }
   },
   site: process.env.SITE_URL || "https://inkisle.example",
@@ -243,6 +270,29 @@ export function getHomeMottos(locale = siteConfig.defaultLocale) {
     .filter(Boolean);
 
   return Array.from(new Set(normalized));
+}
+
+export function getHomeTopics(locale = siteConfig.defaultLocale): ResolvedHomeTopic[] {
+  if (!siteConfig.home.topics.enabled) {
+    return [];
+  }
+
+  return siteConfig.home.topics.items
+    .map((topic) => ({
+      id: topic.id.trim(),
+      title: resolveLocalizedText(topic.title, locale).trim(),
+      summary: resolveLocalizedText(topic.summary, locale).trim(),
+      href: resolveLocalizedText(topic.href, locale).trim()
+    }))
+    .filter((topic) => topic.id && topic.title && topic.href);
+}
+
+export function getHomeTopic(topicId: string, locale = siteConfig.defaultLocale) {
+  return getHomeTopics(locale).find((topic) => topic.id === topicId);
+}
+
+export function getHomeTopicsHeading(locale = siteConfig.defaultLocale) {
+  return resolveLocalizedText(siteConfig.home.topics.heading, locale);
 }
 
 export function resolveLocalizedConfig(value: LocalizedText | undefined, locale: string, fallback: string) {

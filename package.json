@@ -53,9 +53,10 @@
     "check": "npm run -w @inkisle/starter-default check",
     "check:links": "node bin/inkisle.mjs check links --dist starters/default/dist",
     "test:interactions": "node --test tests/interactions.test.mjs",
+    "test:topics": "node --test tests/topics.test.mjs",
     "site:build": "cd site && npm run build",
     "site:check:links": "cd site && npm run check:links",
-    "ci": "npm run check && npm run test:interactions && npm run build && npm run check:links && npm run site:build && npm run site:check:links && npm audit --audit-level=high",
+    "ci": "npm run check && npm run test:interactions && npm run test:topics && npm run build && npm run check:links && npm run site:build && npm run site:check:links && npm audit --audit-level=high",
     "preview": "npm run -w @inkisle/starter-default preview",
     "release": "node scripts/release.mjs"
   },

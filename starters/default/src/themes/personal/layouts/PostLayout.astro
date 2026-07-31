@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import InteractionSection from "../../../components/interactions/InteractionSection.astro";
+import TopicCallout from "../../../components/TopicCallout.astro";
+import { getHomeTopic } from "../../../config";
 import { categoryHref, formatDate, tagHref, type ContentEntry } from "../../../lib/content";
 
 type Props = {
@@ -8,6 +10,7 @@ type Props = {
 };
 
 const { post } = Astro.props;
+const topic = post.topic ? getHomeTopic(post.topic, post.locale) : undefined;
 ---
 
 <BaseLayout
@@ -37,6 +40,8 @@ const { post } = Astro.props;
     </header>
 
     <div class="prose" set:html={post.html} />
+
+    {topic && <TopicCallout locale={post.locale} topic={topic} />}
 
     <InteractionSection post={post} />
   </article>
