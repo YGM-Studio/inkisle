@@ -54,7 +54,7 @@ function shouldIncludeInSitemap(page) {
     return false;
   }
 
-  return !["/posts/", "/pages/", "/page/", "/search/", "/tags/", "/categories/"].some((pathPrefix) => {
+  return !["/posts/", "/pages/", "/page/", "/search/", "/topics/", "/tags/", "/categories/"].some((pathPrefix) => {
     return pathname === pathPrefix || pathname.startsWith(pathPrefix);
   });
 }

@@ -12,6 +12,7 @@ export type InkIsleTheme = {
     MarkdownPage: AstroComponentFactory;
     TaxonomyPage: AstroComponentFactory;
     SearchPage: AstroComponentFactory;
+    TopicIndexPage: AstroComponentFactory;
     NotFoundPage: AstroComponentFactory;
   };
 };

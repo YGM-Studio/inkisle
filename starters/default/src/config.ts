@@ -7,14 +7,14 @@ export type ThemeMode = "system" | "light" | "dark";
 export type LocalizedText = string | Record<string, string>;
 export type LocalizedTextList = Array<LocalizedText> | Record<string, string[]>;
 
-export type HomeTopicConfig = {
+export type TopicConfig = {
   id: string;
   title: LocalizedText;
   summary: LocalizedText;
   href: LocalizedText;
 };
 
-export type ResolvedHomeTopic = {
+export type ResolvedTopic = {
   id: string;
   title: string;
   summary: string;
@@ -105,11 +105,11 @@ export type InkIsleConfig = {
       pauseDelay: number;
       nextDelay: number;
     };
-    topics: {
-      enabled: boolean;
-      heading: LocalizedText;
-      items: HomeTopicConfig[];
-    };
+  };
+  topics: {
+    enabled: boolean;
+    label: LocalizedText;
+    items: TopicConfig[];
   };
   site: string;
   base?: string;
@@ -166,15 +166,15 @@ const defaultSiteConfig: InkIsleConfig = {
       deleteSpeed: 24,
       pauseDelay: 1800,
       nextDelay: 320
-    },
-    topics: {
-      enabled: false,
-      heading: {
-        zh: "主题中心",
-        en: "Topic Guides"
-      },
-      items: []
     }
+  },
+  topics: {
+    enabled: false,
+    label: {
+      zh: "专题",
+      en: "Topics"
+    },
+    items: []
   },
   site: process.env.SITE_URL || "https://inkisle.example",
   base: "/",
@@ -272,12 +272,12 @@ export function getHomeMottos(locale = siteConfig.defaultLocale) {
   return Array.from(new Set(normalized));
 }
 
-export function getHomeTopics(locale = siteConfig.defaultLocale): ResolvedHomeTopic[] {
-  if (!siteConfig.home.topics.enabled) {
+export function getTopics(locale = siteConfig.defaultLocale): ResolvedTopic[] {
+  if (!siteConfig.topics.enabled) {
     return [];
   }
 
-  return siteConfig.home.topics.items
+  return siteConfig.topics.items
     .map((topic) => ({
       id: topic.id.trim(),
       title: resolveLocalizedText(topic.title, locale).trim(),
@@ -287,12 +287,12 @@ export function getHomeTopics(locale = siteConfig.defaultLocale): ResolvedHomeTo
     .filter((topic) => topic.id && topic.title && topic.href);
 }
 
-export function getHomeTopic(topicId: string, locale = siteConfig.defaultLocale) {
-  return getHomeTopics(locale).find((topic) => topic.id === topicId);
+export function getTopic(topicId: string, locale = siteConfig.defaultLocale) {
+  return getTopics(locale).find((topic) => topic.id === topicId);
 }
 
-export function getHomeTopicsHeading(locale = siteConfig.defaultLocale) {
-  return resolveLocalizedText(siteConfig.home.topics.heading, locale);
+export function getTopicsLabel(locale = siteConfig.defaultLocale) {
+  return resolveLocalizedText(siteConfig.topics.label, locale);
 }
 
 export function resolveLocalizedConfig(value: LocalizedText | undefined, locale: string, fallback: string) {

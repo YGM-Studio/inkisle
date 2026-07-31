@@ -1,0 +1,15 @@
+---
+import RedirectPage from "../../components/RedirectPage.astro";
+import { getLocaleBase, getLocaleCodes, shouldRedirectDefaultLocalePrefix, siteConfig } from "../../config";
+import { getActiveTheme } from "../../themes/registry";
+
+export async function getStaticPaths() {
+  return getLocaleCodes().map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const redirectTarget = shouldRedirectDefaultLocalePrefix(lang) ? `${getLocaleBase(lang)}/topics/` : undefined;
+const TopicIndexPage = (await getActiveTheme(siteConfig.theme.name)).components.TopicIndexPage;
+---
+
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <TopicIndexPage locale={lang} />}

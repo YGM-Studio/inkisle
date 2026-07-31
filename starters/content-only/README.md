@@ -53,25 +53,23 @@ Define long-lived topic entry pages in `inkisle.config.mjs`:
 
 ```js
 export default {
-  home: {
-    topics: {
-      enabled: true,
-      heading: { zh: "主题中心", en: "Topic Guides" },
-      items: [
-        {
-          id: "deployment",
-          title: { zh: "部署指南", en: "Deployment Guide" },
-          summary: {
-            zh: "从方案选择到上线维护。",
-            en: "From choosing a path to maintaining it in production."
-          },
-          href: {
-            zh: "/pages/deployment/",
-            en: "/en/pages/deployment/"
-          }
+  topics: {
+    enabled: true,
+    label: { zh: "专题", en: "Topics" },
+    items: [
+      {
+        id: "deployment",
+        title: { zh: "部署指南", en: "Deployment Guide" },
+        summary: {
+          zh: "从方案选择到上线维护。",
+          en: "From choosing a path to maintaining it in production."
+        },
+        href: {
+          zh: "/pages/deployment/",
+          en: "/en/pages/deployment/"
         }
-      ]
-    }
+      }
+    ]
   }
 };
 ```
@@ -82,9 +80,10 @@ Associate a post by adding the stable topic ID to its frontmatter:
 topic: deployment
 ```
 
-The homepage counts matching posts automatically. Related article pages link
-back to the configured topic center. Posts without a topic, or with an unknown
-topic ID, continue to render normally.
+The primary navigation links to a generated topic index for each locale. Each
+index counts matching posts and lists up to five recent articles. Related
+article pages link back to the configured topic destination. Posts without a
+topic, or with an unknown topic ID, continue to render normally.
 
 Footer ICP filing text is optional. Add it to `inkisle.config.mjs` only when you have a filing number:
 

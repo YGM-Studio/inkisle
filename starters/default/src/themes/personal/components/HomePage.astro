@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import MottoTypewriter from "../../../components/MottoTypewriter.astro";
-import TopicList from "../../../components/TopicList.astro";
 import Pagination from "./Pagination.astro";
 import PostList from "./PostList.astro";
 import { getLocaleBase, getSiteDescription } from "../../../config";
@@ -23,8 +22,6 @@ const homeDescription = getSiteDescription(locale);
   <section class="home-intro" aria-labelledby="home-intro-title">
     <MottoTypewriter as="h1" id="home-intro-title" locale={locale} />
   </section>
-
-  <TopicList locale={locale} posts={posts} />
 
   <section aria-labelledby="latest-posts">
     <div class="section-header">

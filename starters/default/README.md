@@ -43,11 +43,12 @@ SEO and no-JavaScript visitors, while `siteConfig.home.typewriter.enabled`
 progressively enhances the homepage with a client-side typewriter effect when
 multiple mottos are configured.
 
-Topic centers can be maintained in `siteConfig.home.topics`. Each item has a
-stable `id`, localized title, summary, and destination. Add the same ID as
-`topic` in related post frontmatter. Both built-in themes then show topic rows
-on the homepage, count matching posts automatically, and add a continuation
-link after each related article. Unknown topic IDs are ignored.
+Topic centers can be maintained in `siteConfig.topics`. Each item has a stable
+`id`, localized title, summary, and destination. Add the same ID as `topic` in
+related post frontmatter. Both built-in themes add a localized Topics link to
+the primary navigation and generate `/topics/` indexes with post counts and up
+to five recent related articles. Related articles keep a continuation link to
+the configured destination. Unknown topic IDs are ignored.
 
 Visual theme and color mode are configured with `siteConfig.theme`. Set `name`
 to `"personal"` or `"business-blog"`. Set `defaultMode` to `"system"`,

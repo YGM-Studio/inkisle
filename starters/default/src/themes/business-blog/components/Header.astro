@@ -1,6 +1,6 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro";
-import { getLocaleBase, getLocaleLabel, siteConfig, sitePath } from "../../../config";
+import { getLocaleBase, getLocaleLabel, getTopics, getTopicsLabel, siteConfig, sitePath } from "../../../config";
 import { getPages } from "../../../lib/content";
 
 type Props = {
@@ -13,8 +13,13 @@ const pages = await getPages(locale);
 const aboutPage = pages.find((page) => page.slug === "about");
 const navItems = [
   { href: sitePath(`${getLocaleBase(locale)}/`), label: isZh ? "洞察" : "Insights" },
-  { href: sitePath(`${getLocaleBase(locale)}/search/`), label: isZh ? "资源搜索" : "Search" }
 ];
+
+if (getTopics(locale).length > 0) {
+  navItems.push({ href: sitePath(`${getLocaleBase(locale)}/topics/`), label: getTopicsLabel(locale) });
+}
+
+navItems.push({ href: sitePath(`${getLocaleBase(locale)}/search/`), label: isZh ? "资源搜索" : "Search" });
 
 if (aboutPage) {
   navItems.push({ href: sitePath(aboutPage.url), label: isZh ? "关于" : "About" });

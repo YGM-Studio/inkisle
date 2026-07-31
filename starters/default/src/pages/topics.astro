@@ -1,0 +1,10 @@
+---
+import RedirectPage from "../components/RedirectPage.astro";
+import { getLocaleBase, siteConfig } from "../config";
+import { getActiveTheme } from "../themes/registry";
+
+const redirectTarget = siteConfig.prefixDefaultLocale ? `${getLocaleBase(siteConfig.defaultLocale)}/topics/` : undefined;
+const TopicIndexPage = (await getActiveTheme(siteConfig.theme.name)).components.TopicIndexPage;
+---
+
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <TopicIndexPage locale={siteConfig.defaultLocale} />}

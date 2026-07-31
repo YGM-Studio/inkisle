@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getLocaleBase, getTopicsLabel, sitePath } from "../../../config";
+import { contentHref, formatDate } from "../../../lib/content";
+import { getTopicGroups } from "../../../lib/topics";
+
+type Props = {
+  locale: string;
+};
+
+const { locale } = Astro.props;
+const isZh = locale === "zh";
+const title = getTopicsLabel(locale);
+const topics = await getTopicGroups(locale);
+const description = isZh
+  ? "按专题浏览持续更新的文章与实践记录。"
+  : "Browse evolving collections of articles and field notes.";
+
+function articleCount(count: number) {
+  if (isZh) {
+    return `${count} 篇文章`;
+  }
+
+  return `${count} ${count === 1 ? "article" : "articles"}`;
+}
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  locale={locale}
+  canonicalPath={`${getLocaleBase(locale)}/topics/`}
+>
+  <section class="topic-directory" aria-labelledby="topic-directory-title">
+    <header class="page-title">
+      <span class="eyebrow">{isZh ? "内容导航" : "Content Directory"}</span>
+      <h1 id="topic-directory-title">{title}</h1>
+      <p>{description}</p>
+    </header>
+
+    {
+      topics.length > 0 ? (
+        <div class="topic-directory-list">
+          {topics.map((topic, index) => (
+            <article class="topic-directory-item" data-topic-id={topic.id}>
+              <span class="topic-directory-index" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <header class="topic-directory-heading">
+                <span class="topic-directory-count">{articleCount(topic.postCount)}</span>
+                <h2><a href={sitePath(topic.href)}>{topic.title}</a></h2>
+                {topic.summary && <p>{topic.summary}</p>}
+                <a class="topic-directory-link" href={sitePath(topic.href)}>
+                  {isZh ? "进入专题" : "Open topic"}
+                  <span aria-hidden="true">→</span>
+                </a>
+              </header>
+
+              {topic.posts.length > 0 && (
+                <div class="topic-directory-posts">
+                  <h3>{isZh ? "最近文章" : "Recent articles"}</h3>
+                  <ol>
+                    {topic.posts.map((post) => (
+                      <li>
+                        <a href={contentHref(post)}>{post.title}</a>
+                        {post.date && <time datetime={post.date}>{formatDate(post.date, locale)}</time>}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-state">{isZh ? "还没有公开专题。" : "No published topics yet."}</p>
+      )
+    }
+  </section>
+</BaseLayout>
