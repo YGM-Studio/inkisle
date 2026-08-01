@@ -4,6 +4,7 @@ import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { auditContent, formatAuditMarkdown, formatAuditText } from "./content-audit.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
@@ -23,6 +24,7 @@ Usage:
   inkisle build
   inkisle check
   inkisle check links [--dist dist] [--base /base]
+  inkisle audit content [--format text|markdown|json] [--stale-days 730] [--check-external] [--strict]
   inkisle preview
 `;
 
@@ -54,6 +56,11 @@ async function main() {
 
   if (command === "check") {
     await checkSite(args.slice(1));
+    return;
+  }
+
+  if (command === "audit") {
+    await auditSite(args.slice(1));
     return;
   }
 
@@ -230,6 +237,41 @@ async function checkSite(input) {
   }
 
   throw new Error("Use `inkisle check` or `inkisle check links [--dist dist] [--base /base]`.");
+}
+
+async function auditSite(input) {
+  if (input[0] !== "content") {
+    throw new Error("Use `inkisle audit content`.");
+  }
+
+  const { options } = parseArgs(input.slice(1));
+  const format = options.format || "text";
+  if (!["text", "markdown", "json"].includes(format)) {
+    throw new Error("Audit format must be text, markdown, or json.");
+  }
+
+  const staleDays = parsePositiveNumber(options.staleDays, 730, "--stale-days");
+  const externalTimeout = parsePositiveNumber(options.externalTimeout, 8000, "--external-timeout");
+  const siteRoot = process.cwd();
+  const report = await auditContent({
+    siteRoot,
+    config: await loadUserSiteConfig(siteRoot),
+    staleDays,
+    externalTimeout,
+    checkExternal: options.checkExternal === true
+  });
+
+  if (format === "json") {
+    console.log(JSON.stringify(report, null, 2));
+  } else if (format === "markdown") {
+    console.log(formatAuditMarkdown(report));
+  } else {
+    console.log(formatAuditText(report));
+  }
+
+  if (options.strict && (report.totals.errors > 0 || report.totals.warnings > 0)) {
+    process.exitCode = 1;
+  }
 }
 
 async function checkInternalLinks({ distDir, base = "/" }) {
@@ -532,8 +574,8 @@ function parseArgs(input) {
       continue;
     }
 
-    if (value === "--full") {
-      options.full = true;
+    if (["--full", "--strict", "--check-external"].includes(value)) {
+      options[value.slice(2).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())] = true;
       continue;
     }
 
@@ -552,6 +594,15 @@ function parseArgs(input) {
   }
 
   return { positional, options };
+}
+
+function parsePositiveNumber(value, fallback, optionName) {
+  if (value === undefined) return fallback;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    throw new Error(`${optionName} must be a non-negative number.`);
+  }
+  return parsed;
 }
 
 function slugify(value) {

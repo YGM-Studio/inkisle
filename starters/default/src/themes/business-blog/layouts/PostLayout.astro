@@ -1,15 +1,17 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import InteractionSection from "../../../components/interactions/InteractionSection.astro";
+import RelatedPosts from "../../../components/RelatedPosts.astro";
 import TopicCallout from "../../../components/TopicCallout.astro";
 import { getLocaleBase, getTopic, sitePath } from "../../../config";
 import { categoryHref, formatDate, tagHref, type ContentEntry } from "../../../lib/content";
 
 type Props = {
   post: ContentEntry;
+  relatedPosts?: ContentEntry[];
 };
 
-const { post } = Astro.props;
+const { post, relatedPosts = [] } = Astro.props;
 const isZh = post.locale === "zh";
 const localeBase = getLocaleBase(post.locale);
 const topic = post.topic ? getTopic(post.topic, post.locale) : undefined;
@@ -47,7 +49,7 @@ const topic = post.topic ? getTopic(post.topic, post.locale) : undefined;
     {
       topic ? (
         <TopicCallout locale={post.locale} topic={topic} />
-      ) : (
+      ) : relatedPosts.length === 0 ? (
         <section class="article-cta" aria-label={isZh ? "继续浏览" : "Continue browsing"}>
           <div>
             <span>{isZh ? "继续探索" : "More insight"}</span>
@@ -57,8 +59,10 @@ const topic = post.topic ? getTopic(post.topic, post.locale) : undefined;
             {isZh ? "搜索资源" : "Search resources"}
           </a>
         </section>
-      )
+      ) : null
     }
+
+    <RelatedPosts locale={post.locale} posts={relatedPosts} />
 
     <InteractionSection post={post} />
   </article>

@@ -47,6 +47,8 @@ npm exec inkisle -- new page "About"
 npm exec inkisle -- build
 npm exec inkisle -- check
 npm exec inkisle -- check links
+npm exec inkisle -- audit content
+npm exec inkisle -- audit content --format markdown
 ```
 
 ## Quality Checks
@@ -55,12 +57,21 @@ npm exec inkisle -- check links
 npm run check
 npm run build
 npm run check:links
+npm run test:audit
 npm run site:build
 npm run site:check:links
 npm audit --audit-level=high
 ```
 
 `npm run ci` runs the same checks used by GitHub Actions.
+
+`inkisle audit content` reports content health issues without failing the
+command by default. It checks frontmatter, duplicate routes, broken content
+links, orphan posts, unknown topics, stale posts, and one-off taxonomy values.
+Use `--strict` when errors and warnings should fail CI, `--stale-days` to
+change the two-year default, and `--check-external` to make live network
+requests for external links. Text, Markdown, and JSON output formats are
+available.
 
 Chinese ICP filing text can be shown in the footer by setting `filing.icp.number` in `inkisle.config.mjs`. It is hidden by default and only renders when a filing number is configured.
 

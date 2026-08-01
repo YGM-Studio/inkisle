@@ -1,0 +1,37 @@
+---
+import { formatDate, postHref, type ContentEntry } from "../lib/content";
+
+type Props = {
+  locale: string;
+  posts: ContentEntry[];
+};
+
+const { locale, posts } = Astro.props;
+const isZh = locale === "zh";
+const titleId = `related-reading-${locale}`;
+---
+
+{
+  posts.length > 0 && (
+    <nav class="related-reading" aria-labelledby={titleId}>
+      <header class="related-reading-header">
+        <span>{isZh ? "从这里继续" : "Continue from here"}</span>
+        <h2 id={titleId}>{isZh ? "相关阅读" : "Related reading"}</h2>
+      </header>
+      <ol>
+        {posts.map((post, index) => (
+          <li>
+            <a href={postHref(post)} data-related-post-url={post.url}>
+              <span class="related-reading-index" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <strong>{post.title}</strong>
+              {post.date && <time datetime={post.date}>{formatDate(post.date, locale)}</time>}
+              <span class="related-reading-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

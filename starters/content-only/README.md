@@ -26,6 +26,7 @@ npm run dev
 npm run build
 npm run check
 npm run check:links
+npm run audit:content
 npm run preview
 ```
 
@@ -84,6 +85,42 @@ The primary navigation links to a generated topic index for each locale. Each
 index counts matching posts and lists up to five recent articles. Related
 article pages link back to the configured topic destination. Posts without a
 topic, or with an unknown topic ID, continue to render normally.
+
+## Related reading
+
+InkIsle can add a quiet related-reading list to the end of each article:
+
+```js
+export default {
+  relatedPosts: {
+    enabled: true,
+    limit: 3
+  }
+};
+```
+
+Candidates stay within the current language. InkIsle ranks them by matching
+topic, shared tags, matching category, and publication date, and omits posts
+that have no relationship signal.
+
+## Content audit
+
+Run the reusable editorial audit locally or in scheduled CI:
+
+```bash
+npm run audit:content
+npm run audit:content -- --format markdown
+npm run audit:content -- --format json
+npm run audit:content -- --stale-days 365
+npm run audit:content -- --check-external
+npm run audit:content -- --strict
+```
+
+The default command reports invalid or incomplete frontmatter, duplicate
+routes, broken internal content links, orphan posts, unknown topics, stale
+posts, and one-off tags or categories without failing the process. `--strict`
+returns a non-zero status when errors or warnings exist. External URLs are
+only requested when `--check-external` is supplied.
 
 Footer ICP filing text is optional. Add it to `inkisle.config.mjs` only when you have a filing number:
 

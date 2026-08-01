@@ -1,15 +1,17 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import InteractionSection from "../../../components/interactions/InteractionSection.astro";
+import RelatedPosts from "../../../components/RelatedPosts.astro";
 import TopicCallout from "../../../components/TopicCallout.astro";
 import { getTopic } from "../../../config";
 import { categoryHref, formatDate, tagHref, type ContentEntry } from "../../../lib/content";
 
 type Props = {
   post: ContentEntry;
+  relatedPosts?: ContentEntry[];
 };
 
-const { post } = Astro.props;
+const { post, relatedPosts = [] } = Astro.props;
 const topic = post.topic ? getTopic(post.topic, post.locale) : undefined;
 ---
 
@@ -42,6 +44,8 @@ const topic = post.topic ? getTopic(post.topic, post.locale) : undefined;
     <div class="prose" set:html={post.html} />
 
     {topic && <TopicCallout locale={post.locale} topic={topic} />}
+
+    <RelatedPosts locale={post.locale} posts={relatedPosts} />
 
     <InteractionSection post={post} />
   </article>

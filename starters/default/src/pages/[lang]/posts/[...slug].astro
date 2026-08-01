@@ -2,6 +2,7 @@
 import RedirectPage from "../../../components/RedirectPage.astro";
 import { shouldRedirectDefaultLocalePrefix, getLocaleCodes, siteConfig } from "../../../config";
 import { getPosts } from "../../../lib/content";
+import { getRelatedPosts } from "../../../lib/related-posts";
 import { getActiveTheme } from "../../../themes/registry";
 
 export async function getStaticPaths() {
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
     paths.push(
       ...posts.map((post) => ({
         params: { lang, slug: post.slug },
-        props: { post }
+        props: { post, relatedPosts: getRelatedPosts(post, posts) }
       }))
     );
   }
@@ -20,9 +21,9 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { post } = Astro.props;
+const { post, relatedPosts } = Astro.props;
 const redirectTarget = shouldRedirectDefaultLocalePrefix(post.locale) ? post.url : undefined;
 const PostLayout = (await getActiveTheme(siteConfig.theme.name)).components.PostLayout;
 ---
 
-{redirectTarget ? <RedirectPage to={redirectTarget} /> : <PostLayout post={post} />}
+{redirectTarget ? <RedirectPage to={redirectTarget} /> : <PostLayout post={post} relatedPosts={relatedPosts} />}

@@ -111,6 +111,10 @@ export type InkIsleConfig = {
     label: LocalizedText;
     items: TopicConfig[];
   };
+  relatedPosts: {
+    enabled: boolean;
+    limit: number;
+  };
   site: string;
   base?: string;
   brand: {
@@ -175,6 +179,10 @@ const defaultSiteConfig: InkIsleConfig = {
       en: "Topics"
     },
     items: []
+  },
+  relatedPosts: {
+    enabled: true,
+    limit: 3
   },
   site: process.env.SITE_URL || "https://inkisle.example",
   base: "/",
