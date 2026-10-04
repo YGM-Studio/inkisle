@@ -52,7 +52,9 @@ export async function applyCachePatch(packageDir = resolveCachePackage()) {
   if (cache.digest !== vulnerableHash) {
     throw new Error(`Unrecognized HTTP cache source: ${packageDir}. Review it before applying the InkIsle backport.`);
   }
-  const source = await fs.readFile(replacement);
+  // Git may check out this bundled source with CRLF on Windows. The installed
+  // replacement and its checksum always use the reviewed canonical LF bytes.
+  const source = Buffer.from((await fs.readFile(replacement, "utf8")).replace(/\r\n/g, "\n"));
   if (hash(source) !== patchedHash) throw new Error("The bundled HTTP cache backport was modified.");
 
   // Replace the directory entry, preserving the original mode and leaving any
