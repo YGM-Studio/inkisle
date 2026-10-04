@@ -5,10 +5,11 @@
   "type": "module",
   "description": "Default InkIsle Astro starter.",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro check && astro build",
-    "check": "astro check",
-    "preview": "astro preview"
+    "dev": "node scripts/run-astro.mjs dev",
+    "build": "node scripts/run-astro.mjs check && node scripts/run-astro.mjs build",
+    "check": "node scripts/run-astro.mjs check",
+    "preview": "node scripts/run-astro.mjs preview",
+    "postinstall": "node scripts/http-cache-security.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

@@ -5,6 +5,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { auditContent, formatAuditMarkdown, formatAuditText } from "./content-audit.mjs";
+import { applyCachePatch, resolveAstroEntrypoint } from "../starters/default/scripts/http-cache-security.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
@@ -160,9 +161,10 @@ async function newContent(input) {
 }
 
 async function runAstro(script, extraArgs) {
+  await applyCachePatch();
   const siteRoot = process.cwd();
   const fullProject = isFullProjectRoot(siteRoot);
-  const astroBin = getAstroBin();
+  const astroBin = resolveAstroEntrypoint();
   const userSiteConfig = await loadUserSiteConfig(siteRoot);
   const renderWorkDir = path.join(fullStarterRoot, ".inkisle-build", path.basename(siteRoot));
   const renderOutDir = !fullProject && script === "build" ? path.join(renderWorkDir, "dist") : undefined;
@@ -189,11 +191,11 @@ async function runAstro(script, extraArgs) {
         : ["--config", "astro.config.mjs"]),
       ...extraArgs
     ];
-    const child = spawn(astroBin, astroArgs, {
+    const child = spawn(process.execPath, [astroBin, ...astroArgs], {
       cwd: fullProject ? siteRoot : fullStarterRoot,
       env,
       stdio: "inherit",
-      shell: process.platform === "win32"
+      shell: false
     });
 
     child.on("error", reject);
@@ -482,13 +484,6 @@ function isFullProjectRoot(siteRoot) {
     existsSync(path.join(siteRoot, "astro.config.mjs")) &&
     existsSync(path.join(siteRoot, "src", "pages"))
   );
-}
-
-function getAstroBin() {
-  const command = process.platform === "win32" ? "astro.cmd" : "astro";
-  const localBin = path.join(packageRoot, "node_modules", ".bin", command);
-
-  return existsSync(localBin) ? localBin : "astro";
 }
 
 function isInstalledPackage() {
