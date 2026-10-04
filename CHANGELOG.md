@@ -4,6 +4,13 @@ All notable changes to InkIsle will be documented in this file.
 
 This project follows semantic versioning after the public API stabilizes. During the 0.x alpha period, minor and patch releases may include breaking changes.
 
+## 0.0.22 - 2026-10-04
+
+- Replaced the vulnerable glob dependency chain with `tinyglobby` and refreshed compatible locked dependencies.
+- Backported the restricted HTTP cache fix from the pinned upstream proposal, with source verification before installation and Astro execution in both project modes.
+- Added cache security regression tests and precise audit handling that verifies the backport while continuing to block unrelated high-severity findings. The original registry audit still reports the affected dependency version until an official fixed release is available.
+- Documented the live InkIsle blog and its migration retrospective in the README and bilingual documentation.
+
 ## 0.0.18 - 2026-07-12
 
 - Added opt-in Waline and Giscus providers for article comments and reactions.
