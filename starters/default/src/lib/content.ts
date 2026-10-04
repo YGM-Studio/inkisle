@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import fg from "fast-glob";
+import { glob } from "tinyglobby";
 import matter from "gray-matter";
 import MarkdownIt from "markdown-it";
 import {
@@ -219,7 +219,7 @@ function withTrailingSlash(pathname: string) {
 
 async function loadContent(): Promise<ContentStore> {
   const contentRoot = path.join(getSiteRoot(), "content");
-  const files = await fg(["**/*.{md,markdown}"], {
+  const files = await glob(["**/*.{md,markdown}"], {
     cwd: contentRoot,
     onlyFiles: true,
     dot: false
