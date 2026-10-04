@@ -14,7 +14,9 @@ The product direction is content-first: default user projects should be lightwei
 
 The renderer reads Markdown from a site's `content/` directory, pre-renders localized static pages, publishes the default language without a URL prefix by default, supports built-in `personal` and `business-blog` themes, and generates RSS, sitemap, static search index, JSON Feed, full-site posts JSON, and `llms.txt`.
 
-The first validation milestone is still to replace the existing Hexo personal blog with this implementation.
+## Live Example
+
+[Muyu's Blog](https://www.lihuanyu.com/en/) runs on InkIsle with Chinese and English content, topic collections, feeds, search, and legacy URL redirects. The author describes the move from Hexo and the publishing system's design choices in the [migration retrospective (Chinese)](https://www.lihuanyu.com/posts/2026/墨屿-InkIsle-我为什么又写了一个博客系统/).
 
 ## Repository Layout
 

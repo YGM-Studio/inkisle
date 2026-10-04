@@ -11,6 +11,10 @@ InkIsle is maintained by YGM Studio. It wraps Astro's static rendering foundatio
 - Content sites that need RSS, JSON Feed, search indexes, and `llms.txt`.
 - Teams that want personal blogs, product blogs, or docs to share one Markdown content model.
 
+## Live example
+
+[Muyu's Blog](https://www.lihuanyu.com/en/) uses InkIsle for Chinese and English articles, topic collections, feeds, search, and legacy URL redirects. The [migration retrospective (Chinese)](https://www.lihuanyu.com/posts/2026/墨屿-InkIsle-我为什么又写了一个博客系统/) explains the move from Hexo and the system's design choices.
+
 ## Links
 
 - [GitHub](https://github.com/YGM-Studio/inkisle)
