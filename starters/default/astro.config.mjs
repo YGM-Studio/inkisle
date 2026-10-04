@@ -28,7 +28,8 @@ export default defineConfig({
   srcDir: path.join(rendererRoot, "src"),
   publicDir,
   outDir,
-  cacheDir,
+  // Keep assets produced before the cache policy fix outside the new cache.
+  cacheDir: path.join(cacheDir, "http-cache-security-v1"),
   site,
   base,
   output: "static",

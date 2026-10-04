@@ -42,7 +42,8 @@
     "starters/default/public/",
     "starters/default/README.md",
     "starters/default/src/",
-    "starters/default/tsconfig.json"
+    "starters/default/tsconfig.json",
+    "starters/default/scripts/"
   ],
   "workspaces": [
     "starters/default"
@@ -58,9 +59,12 @@
     "test:audit": "node --test tests/content-audit.test.mjs",
     "site:build": "cd site && npm run build",
     "site:check:links": "cd site && npm run check:links",
-    "ci": "npm run check && npm run test:interactions && npm run test:topics && npm run test:related && npm run test:audit && npm run build && npm run check:links && npm run site:build && npm run site:check:links && npm audit --audit-level=high",
+    "ci": "npm run check && npm run test:interactions && npm run test:topics && npm run test:related && npm run test:audit && npm run test:cache && npm run build && npm run check:links && npm run site:build && npm run site:check:links && npm run audit:dependencies",
     "preview": "npm run -w @inkisle/starter-default preview",
-    "release": "node scripts/release.mjs"
+    "release": "node scripts/release.mjs",
+    "postinstall": "node starters/default/scripts/http-cache-security.mjs",
+    "test:cache": "node --test tests/http-cache-security.test.mjs",
+    "audit:dependencies": "node scripts/audit-dependencies.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
